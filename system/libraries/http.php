@@ -5,7 +5,8 @@
   *
   * Eventing PHP Framework by Alexander Baldwin <zanders@zafr.net>.
   * http://eventing.zafr.net/
-  * The Eventing Framework is an object-orientated PHP Framework, designed to rapidly build applications.
+  * This library was created after a need to fetch webpages on a PHP application where cURL was not available on
+  * the server it resided on. Simple, but effective.
   *
   * @category   Eventing
   * @package    Libraries
