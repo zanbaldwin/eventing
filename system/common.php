@@ -550,6 +550,15 @@
     }
 
     if(!function_exists('elapsed_time')) {
+      /**
+       * Elapsed Time
+       * Return the elapsed time in seconds, between the time specified time
+       * passed to the function (must be the return of the function microtime)
+       * and now.
+       *
+       * @param  string|float $start
+       * @return false|float
+       */
       function elapsed_time($start) {
         // Grab the time now, so we can compare.
         $end = microtime(true);
