@@ -570,7 +570,8 @@
         if (!is_float($start) || !is_float($end)) {
           return false;
         }
-        return (string) round($end - $start, 3);
+        $elapsed_time = round($end - $start, 3);
+        return $elapsed_time;
       }
     }
 
