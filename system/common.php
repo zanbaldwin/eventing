@@ -1,122 +1,119 @@
 <?php
 
-/**
-  * Eventing Framework Common Functions
-  *
-  * Eventing PHP Framework by Alexander Baldwin <zanders@zafr.net>.
-  * http://eventing.zafr.net/
-  * The Eventing Framework is an object-orientated PHP Framework, designed to rapidly build applications.
-  * !--- Quick line to explain file....
-  *
-  * @category   Eventing
-  * @package    Core
-  * @subpackage common
-  * @copyright  2009 Alexander Baldwin
-  * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
-  * @version    v0.4
-  * @link       http://eventing.zafr.net/source/system/common.php
-  * @since      v0.1
- */
+  /**
+    * Eventing Framework Common Functions
+    *
+    * Eventing PHP Framework by Alexander Baldwin <zanders@zafr.net>.
+    * http://eventing.zafr.net/
+    * The Eventing Framework is an object-orientated PHP Framework, designed to
+    * rapidly build applications.
+    * Common functions used throughout the framework.
+    *
+    * @category   Eventing
+    * @package    Core
+    * @subpackage common
+    * @copyright  2009 Alexander Baldwin
+    * @license    http://www.gnu.org/licenses/gpl.txt GNU General Public License
+    * @version    v0.4
+    * @link       http://eventing.zafr.net/source/system/common.php
+    * @since      v0.1
+   */
 
-    if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
+  if (!defined('E_FRAMEWORK')) {
+    headers_sent() || header('HTTP/1.1 404 Not Found',true,404);
+    exit('Direct script access is disallowed.');
+  }
 
-    // Some older versions of PHP don't define the E_STRICT constant, so for the convinience of the next function:
-    defined('E_STRICT') || define('E_STRICT', 2048);
+  // Some older versions of PHP don't define the E_STRICT constant, so for the
+  // convinience of the next function:
+  defined('E_STRICT') || define('E_STRICT', 2048);
 
-    if(!function_exists('E_Error_Handler'))
-    {
-        /**
-         * Eventing Error Handler
-         */
-        function E_Error_Handler($num, $msg, $file, $line)
-        {
-            $types = array(
-                2 => 'Warning',
-                // 8 => 'Notice',
-                // 32 => 'Core Warning',
-                // 128 => 'Compile Warning',
-                512 => 'User Generated Warning',
-                1024 => 'User Generated Notice',
-                // 2048 => 'Strict',
-                4096 => 'Recoverable Error',
-                // 8192 => 'Depreciated',
-                16384 => 'User Define Depreciated'
-            );
-            if(isset($types[$num]))
-            {
-                ?>
-                <div class="error" style="display:block;border:2px solid #900;padding:10px;margin:10px;background-color:#FFF;">
-                    <h2 style="margin:0 0 0.4em;color:#600;">Error <?php echo $num . ' (' . $types[$num]; ?>)</h2>
-                    <p style="margin:0 0 0.4em;font-family:monospace;color:#000;">
-                        <strong>File:</strong> <?php echo $file; ?><br />
-                        <strong>Line:</strong> <?php echo $line; ?>
-                    </p>
-                    <p style="margin:0 0 0 1em;color:#000;"><?php echo $msg; ?></p>
-                </div>
-                <?php
-            }
-        }
-    }
-
+  if (!function_exists('E_Error_Handler')) {
     /**
-     * Set PHP's error handler to the Eventing error handler.
+     * Eventing Error Handler
      */
-    set_error_handler('E_Error_Handler');
-
-    if(!function_exists('load_class'))
-    {
-        /**
-         * Load Class
-         *
-         * For loading classes/libraries. Objects in PHP are returned by reference anyway, so we don't need to declare
-         * that part. This also saves on the amount of strict (2048) warnings when returning a boolean (eg. the library
-         * doesn't exist.
-         *
-         * @param string $lib
-         * @param bool $return
-         * @return boolean|object
-         */
-        function load_class($lib, $return = true)
-        {
-            static $objects = array();
-            if(!is_string($lib))
-            {
-                return false;
-            }
-            $lib = trim(filter_path(strtolower($lib)), '/');
-            $class = 'E_' . end(explode('/', $lib));
-            // Check that we haven't already loaded this class. That would be pretty stupid.
-            if(isset($objects[$lib]) && $objects[$lib] !== false)
-            {
-                return $objects[$lib];
-            }
-            // Default. If we can't load it the first time, there is no point trying again!
-            $objects[$lib] = false;
-            // Let's go get it!
-            $file = SYS . 'libraries/' . $lib . EXT;
-            if(!file_exists($file))
-            {
-                return false;
-            }
-            require_once $file;
-            if(!class_exists($class))
-            {
-                return false;
-            }
-            // Do we want to initiate the class, or just load it?
-            if(bool($return))
-            {
-                // Initiate.
-                $objects[$lib] = new $class;
-            }
-            else
-            {
-                // Load, but do not initiate.
-                $objects[$lib] = true;
-            }
-            return $objects[$lib];
-        }
+    function E_Error_Handler($num, $msg, $file, $line) {
+      $types = array(
+        2 => 'Warning',
+     // 8 => 'Notice',
+     // 32 => 'Core Warning',
+     // 128 => 'Compile Warning',
+        512 => 'User Generated Warning',
+        1024 => 'User Generated Notice',
+     // 2048 => 'Strict',
+        4096 => 'Recoverable Error',
+     // 8192 => 'Depreciated',
+        16384 => 'User Define Depreciated'
+      );
+      if (isset($types[$num])) {
+        ?>
+          <div class="error" style="display:block;border:2px solid #900;padding:10px;margin:10px;background-color:#FFF;">
+            <h2 style="margin:0 0 0.4em;color:#600;">Error <?php echo $num . ' (' . $types[$num]; ?>)</h2>
+            <p style="margin:0 0 0.4em;font-family:monospace;color:#000;">
+              <strong>File:</strong> <?php echo $file; ?><br />
+              <strong>Line:</strong> <?php echo $line; ?>
+            </p>
+            <p style="margin:0 0 0 1em;color:#000;"><?php echo $msg; ?></p>
+          </div>
+        <?php
+      }
     }
+  }
+
+  /**
+   * Set PHP's error handler to the Eventing error handler.
+   */
+  set_error_handler('E_Error_Handler');
+
+  if (!function_exists('load_class')) {
+    /**
+     * Load Class
+     *
+     * For loading classes/libraries. Objects in PHP are returned by reference
+     * anyway, so we don't need to declare that part. This also saves on the
+     * amount of strict (2048) warnings when returning a boolean (eg. the
+     * library doesn't exist).
+     *
+     * @param string $lib
+     * @param bool $return
+     * @return boolean|object
+     */
+    function load_class($lib, $return = true) {
+      static $objects = array();
+      if (!is_string($lib)) {
+        return false;
+      }
+      $lib = trim(filter_path(strtolower($lib)), '/');
+      $class = 'E_' . end(explode('/', $lib));
+      // Check that we haven't already loaded this class. That would be pretty
+      // stupid.
+      if (isset($objects[$lib]) && $objects[$lib] !== false) {
+        return $objects[$lib];
+      }
+      // Default. If we can't load it the first time, there is no point trying
+      // again!
+      $objects[$lib] = false;
+      // Let's go get it!
+      $file = SYS . 'libraries/' . $lib . EXT;
+      if (!file_exists($file)) {
+        return false;
+      }
+      require_once $file;
+      if (!class_exists($class)) {
+        return false;
+      }
+      // Do we want to initiate the class, or just load it?
+      if (bool($return)) {
+        // Initiate.
+        $objects[$lib] = new $class;
+      }
+      else {
+        // Load, but do not initiate.
+        $objects[$lib] = true;
+      }
+      return $objects[$lib];
+    }
+  }
     
     if(!function_exists('get_called_class'))
     {
@@ -532,7 +529,8 @@
         /**
          * Xplode
          *
-         * Same as the PHP explode() function, except if the second paramter is an empty string it will return an empty
+         * Same as the PHP explode() function, except if the second paramter is
+         * an empty string it will return an empty
          * array, instead of an array containing an empty string.
          *
          * @param string $delimiter
@@ -547,6 +545,42 @@
             unset($array[0]);
             return $array;
         }
+    }
+
+    if(!function_exists('elapsed_time')) {
+      /**
+       * Elapsed Time
+       *
+       * Return the elapsed time in seconds, between the time specified time
+       * passed to the function (must be the return of the function microtime)
+       * and now.
+       *
+       * @param  string|float $start
+       * @return false|float
+       */
+      function elapsed_time($start) {
+        // Grab the time now, so we can compare.
+        $end = microtime(true);
+        // The user probably passed the microtime as a string.
+        $regex = '/^0\\.([0-9]+) ([0-9]+)$/';
+        if (is_string($start)) {
+          $start = preg_match($regex, $start)
+                 ? (float) preg_replace($regex, '$2.$1', $start)
+                 : false;
+        }
+        // We should also check the end time, because microtime(true) will
+        // return a string is PHP is less than 5.
+        if (is_string($end)) {
+          $end = preg_match($regex, $end)
+               ? (float) preg_replace($regex, '$2.$1', $end)
+               : false;
+        }
+        if (!is_float($start) || !is_float($end)) {
+          return false;
+        }
+        $elapsed_time = round($end - $start, 3);
+        return $elapsed_time;
+      }
     }
 
     // That's it for common functions, now just a couple of hard coded settings / configurations:

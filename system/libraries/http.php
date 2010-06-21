@@ -30,7 +30,7 @@
 
     private $requests = array();
 
-    public function fetch($name, $url, $headers = false) {
+    public function fetch($name, $url, $post_data = false, $headers = false) {
       if (isset($this->requests[$name])) {
         // That one already exists. Think of another name... It can't be that
         // hard, surely?
@@ -41,7 +41,7 @@
         // witchcraft names!
         return false;
       }
-      $this->requests[$name] = new E_http_request($url, $headers);
+      $this->requests[$name] = new E_http_request($url, $post_data, $headers);
       return $this->requests[$name]->valid();
     }
 
@@ -65,7 +65,8 @@
 
     private $url_host = false,
             $url_path = false,
-            $headers = array(),
+            $headers = array(),,
+            $post_data = false,
             $response_headers = false,
             $response_body = false,
             $status_code = 0,
@@ -80,13 +81,16 @@
      * @param string|array $headers
      * @return void
      */
-    public function __construct($url, $headers) {
+    public function __construct($url, $post_data = false, $headers = false) {
       if (!is_string($url)) {
         return false;
       }
       $this->url_host = parse_url($url, PHP_URL_HOST);
       $this->url_path = parse_url($url, PHP_URL_PATH);
       $this->headers = (array) $headers;
+      if (is_array($post_data)) {
+        $this->post_data = $post_data;
+      }
       $this->_fetch();
     }
 
@@ -111,8 +115,10 @@
      */
     private function _fetch() {
       // Compile the headers into a string.
-      $headers = "GET {$this->url_path} HTTP/1.0\r\n";
+      $method = is_array($this->post_data) ? 'POST' : 'GET';
+      $headers = "{$method} {$this->url_path} HTTP/1.0\r\n";
       $headers .= implode("\r\n", $this->headers) . "\r\n\r\n";
+      $headers .= $this->post_string();
       // Open up a connection to the domain. Timeout of 30 seconds anyone?
       $socket = fsockopen($this->url_host, 80, $error_no, $error_msg, 30);
       if (!$socket) {
@@ -148,6 +154,20 @@
       $this->response_body = substr($response, $bottleneck + 4);
       $this->valid = true;
       return true;
+    }
+
+    protected function post_string() {
+      $post_str = '';
+      if (!is_array($this->post_data)) {
+        return $post_str;
+      }
+      foreach ($this->post_data as $var => $value) {
+        if (!is_string($var)) {
+          continue;
+        }
+        $post_str .= urlencode($var) . '=' . urlencode($value) . '&';
+      }
+      return substr($post_str, 0, -1);
     }
 
     /**
@@ -208,23 +228,3 @@
     }
 
   }
-
-  /**
-  $data = array(
-    'd' => 'directory',
-    'c' => 'controller',
-    'm' => 'method'
-  );
-  if(is_array($data))
-  {
-    $post_data = '';
-    foreach($data as $var => $value)
-    {
-      if(is_string($var))
-      {
-        $post_data .= urlencode($var) . '=' . urlencode($value) . '&';
-      }
-    }
-    $post_data = substr($post_data, 0, -1);
-  }
-  /**/
