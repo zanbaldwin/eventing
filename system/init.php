@@ -49,15 +49,11 @@
   }
 
   defined('E_FRAMEWORK')
-    || E_Core_Error('Direct script access is disallowed.', __FILE__, __LINE__);
+    || trigger_error(E_USER_ERROR, 'E_FRAMEWORK has not been defined.');
   isset($main_file)
-    || E_Core_Error('Main file is not specified.', __FILE__, __LINE__);
+    || trigger_error(E_USER_ERROR, 'Main file is not specified.');
   file_exists($main_file)
-    || E_Core_Error(
-         'The main file specified does not point to a file.',
-         __FILE__,
-         __LINE__
-       );
+    || trigger_error(E_USER_ERROR, 'The main file does not exist.');
 
   $main_config = array(
     'system_folder'     => 'system',
