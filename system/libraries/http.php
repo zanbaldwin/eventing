@@ -37,7 +37,8 @@
         return false;
       }
       if (!is_string($name) || !preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name)) {
-        // Invalid name. We don't trust you. Go somewhere else with your witchcraft names!
+        // Invalid name. We don't trust you. Go somewhere else with your
+        // witchcraft names!
         return false;
       }
       $this->requests[$name] = new E_http_request($url, $headers);
@@ -92,7 +93,8 @@
     /**
      * Is Valid
      *
-     * Returns a boolean value of whether the request completed successfully or not.
+     * Returns a boolean value of whether the request completed successfully or
+     * not.
      *
      * @access public
      * @return boolean
