@@ -3,7 +3,8 @@
  /**
   * Initialisation Script
   *
-  * This is where we start all our settings, libraries and other odd-jobs to get the ball rolling...
+  * This is where we start all our settings, libraries and other odd-jobs to get
+  * the ball rolling...
   *
   * @category   Eventing
   * @package    Core
@@ -15,119 +16,142 @@
   * @since      v0.1
  */
 
-    if(!function_exists('E_Core_Error'))
-    {
-        /**
-         * Eventing Core Error
-         *
-         * This is the fall back function for fatal framework errors, before the show_error() and set_error_handler()
-         * functions have been defined. Very primitive, and hopefully it will never be seen in a production environment.
-         * At least it's a little better than trigger_error(E_USER_ERROR)...
-         *
-         * @param string $msg
-         * @param int $file
-         * @param int $line
-         * @return void
-         */
-        function E_Core_Error($msg, $file = false, $line = false)
-        {
-            if(!headers_sent())
-            {
-                header('HTTP/1.1 500 Internal Application Error', true, 500);
-                header('Content-Type: text/plain');
-            }
-            $msg = implode("\n          ", str_split($msg, 60));
-            $error_msg = "Internal Application Error\n\nMessage: \"{$msg}\"\n"
-                       . $file !== false ? "File:    {$file}\n" : ''
-                       . is_int($line) ? "Line:    E_Core_Error() called on Line {$line}\n" : ''
-                       . "\nApplication Terminated.\n";
-            exit($error_msg);
-        }
+  if (!function_exists('E_Core_Error')) {
+    /**
+     * Eventing Core Error
+     *
+     * I think this file is now obsolete. Is going to be deleted soon.
+     * This is the fall back function for fatal framework errors, before the
+     * show_error() and set_error_handler() functions have been defined. Very
+     * primitive, and hopefully it will never be seen in a production
+     * environment. At least it's a little better than
+     * trigger_error(E_USER_ERROR)
+     *
+     * @param string $msg
+     * @param int $file
+     * @param int $line
+     * @return void
+     */
+    function E_Core_Error($msg, $file = false, $line = false) {
+      if (!headers_sent()) {
+        header('HTTP/1.1 500 Internal Application Error', true, 500);
+        header('Content-Type: text/plain');
+      }
+      $msg = implode("\n          ", str_split($msg, 60));
+      $error_msg = "Internal Application Error\n\nMessage: \"{$msg}\"\n"
+                 . $file !== false ? "File:    {$file}\n" : ''
+                 . is_int($line)
+                   ? "Line:    E_Core_Error() called on Line {$line}\n"
+                   : ''
+                 . "\nApplication Terminated.\n";
+      exit($error_msg);
     }
+  }
 
-    defined('E_FRAMEWORK') || E_Core_Error('Direct script access is disallowed.', __FILE__, __LINE__);
-    isset($main_file) || E_Core_Error('Main file is not specified.', __FILE__, __LINE__);
-    file_exists($main_file) || E_Core_Error('The main file specified does not point to a file.', __FILE__, __LINE__);
+  defined('E_FRAMEWORK')
+    || E_Core_Error('Direct script access is disallowed.', __FILE__, __LINE__);
+  isset($main_file)
+    || E_Core_Error('Main file is not specified.', __FILE__, __LINE__);
+  file_exists($main_file)
+    || E_Core_Error(
+         'The main file specified does not point to a file.',
+         __FILE__,
+         __LINE__
+       );
 
-    $main_config = array(
-        'system_folder'     => 'system',
-        'default_app'       => 'app',
-        'content_folder'    => 'public',
-        'config_type'       => 'array'
-    );
+  $main_config = array(
+    'system_folder'     => 'system',
+    'default_app'       => 'app',
+    'content_folder'    => 'public',
+    'config_type'       => 'array'
+  );
 
-    // Incorporate the user's settings into the default settings. We trust the user to have all the right stuff there...
-    // Well, almost...
-    if(is_array($user_config))
-    {
-        foreach($user_config as $key => $value)
-        {
-            if(array_key_exists($key, $main_config))
-            {
-                $main_config[$key] = is_string($value) ? strtolower($value) : $value;
-            }
-        }
+  // Incorporate the user's settings into the default settings. We trust the
+  // user to have all the right stuff there... Well, almost...
+  if (is_array($user_config)) {
+    foreach ($user_config as $key => $value) {
+      if (array_key_exists($key, $main_config)) {
+        $main_config[$key] = is_string($value) ? strtolower($value) : $value;
+      }
     }
+  }
 
-    // Bring them... ALIVE!!!
-    @extract($main_config);
-    $c = array();
+  // Bring them... ALIVE!!!
+  @extract($main_config);
+  $c = array();
 
-    // We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's don't set this *cough* Windows *cough*
-    if(!isset($_SERVER['DOCUMENT_ROOT']))
-    {
-        if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === 0)
-        {
-            $path_length = strlen($_SERVER['PATH_TRANSLATED']) - strlen($_SERVER['SCRIPT_NAME']);
-            $_SERVER['DOCUMENT_ROOT'] = rtrim(substr($_SERVER['PATH_TRANSLATED'], 0, $path_length), '\\');
-        }
+  // We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's
+  // don't set this *cough* Windows *cough*
+  if (!isset($_SERVER['DOCUMENT_ROOT'])) {
+    if (isset($_SERVER['SERVER_SOFTWARE'])
+        && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === 0) {
+      $path_length = strlen($_SERVER['PATH_TRANSLATED'])
+                   - strlen($_SERVER['SCRIPT_NAME']);
+      $_SERVER['DOCUMENT_ROOT'] = rtrim(
+        substr($_SERVER['PATH_TRANSLATED'], 0, $path_length),
+        '\\'
+      );
     }
+  }
 
-    // File and System Constants.
-    $c['config']    = $config_type == 'ini' ? 'ini' : 'array';
-    $c['self']      = basename($main_file);
-    $c['ext']       = '.'.end(explode('.', $c['self']));
+  // File and System Constants.
+  $c['config']    = $config_type == 'ini' ? 'ini' : 'array';
+  $c['self']      = basename($main_file);
+  $c['ext']       = '.'.end(explode('.', $c['self']));
 
-    // URL Constants.
-    $c['server']    = (isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)
-                    ? 'https://'.$_SERVER['SERVER_NAME']
-                    : 'http://'.$_SERVER['SERVER_NAME'];
-    $c['url']       = preg_replace('|/+|', '/', '/'.trim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/').'/');
-    $c['baseurl']   = $c['server'].$c['url'];
+  // URL Constants.
+  $c['server']    = (isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)
+                  ? 'https://'.$_SERVER['SERVER_NAME']
+                  : 'http://'.$_SERVER['SERVER_NAME'];
+  $c['url']       = preg_replace(
+                      '|/+|',
+                      '/',
+                      '/'
+                    . trim(
+                        str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])),
+                        '/'
+                      )
+                    . '/'
+                    );
+  $c['baseurl']   = $c['server'].$c['url'];
 
-    // Directory Constants.
-    $c['basepath']  = rtrim(str_replace('\\', '/', realpath(dirname($main_file))), '/') . '/';
-    $c['sys']       = rtrim(str_replace('\\', '/', realpath($system_folder)), '/') . '/';
-    $c['app']       = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
-    $c['contentpath']   = rtrim(str_replace('\\', '/', realpath($content_folder)), '/') . '/';
-    // Check that the content directory is a sub-directory of the web root. If it is not, set it as null.
-    $c['content'] = null;
-    if(is_string($_SERVER['DOCUMENT_ROOT']))
+  // Directory Constants.
+  $c['basepath']  = rtrim(
+                      str_replace('\\', '/', realpath(dirname($main_file))),
+                      '/'
+                    )
+                  . '/';
+  $c['sys']       = rtrim(str_replace('\\', '/', realpath($system_folder)), '/') . '/';
+  $c['app']       = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
+  $c['contentpath']   = rtrim(str_replace('\\', '/', realpath($content_folder)), '/') . '/';
+  // Check that the content directory is a sub-directory of the web root. If it is not, set it as null.
+  $c['content'] = null;
+  if(is_string($_SERVER['DOCUMENT_ROOT']))
+  {
+    $len = strlen($_SERVER['DOCUMENT_ROOT']);
+    if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT'])
     {
-        $len = strlen($_SERVER['DOCUMENT_ROOT']);
-        if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT'])
-        {
-            $c['content'] = $c['server'] . '/' . trim(substr($c['contentpath'], $len), '/') . '/';
-        }
+      $c['content'] = $c['server'] . '/' . trim(substr($c['contentpath'], $len), '/') . '/';
     }
-    // If the contenturl cannot be established, or it is outside the web root, there is no point having the content path.
-    if(is_null($c['content']))
-    {
-        $c['contentpath'] = null;
-    }
+  }
+  // If the contenturl cannot be established, or it is outside the web root, there is no point having the content path.
+  if(is_null($c['content']))
+  {
+    $c['contentpath'] = null;
+  }
 
-    // All our constants are really great, but they're a little soft at the moment... Shall we make them hardcore?
-    foreach($c as $name => $const)
-    {
-        $name = strtoupper($name);
-        defined($name) || define($name, $const);
-    }
+  // All our constants are really great, but they're a little soft at the moment... Shall we make them hardcore?
+  foreach($c as $name => $const)
+  {
+    $name = strtoupper($name);
+    defined($name) || define($name, $const);
+  }
 
-    // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
-    unset(
-        $main_config, $user_config, $key, $value, $system_folder, $default_app, $content_folder, $skeleton_mode,
-        $config_type, $c, $name, $const
-    );
+  // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
+  unset(
+    $main_config, $user_config, $key, $value, $system_folder, $default_app,
+    $content_folder, $skeleton_mode, $config_type, $c, $name, $const
+  );
 
     // Right, we have all out constants defined, with no loose variables floating about... I think we're doing pretty
     // well! Shall we load some common functions? Let's!
@@ -174,3 +198,4 @@
     // Right, that's everything done! Just dump the output to the client end finish the script!
     $E =& get_instance();
     $E->output->display();
+
