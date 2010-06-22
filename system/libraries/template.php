@@ -42,7 +42,8 @@
             $sections = array(),
             $folder = '',
             $prefix = '',
-            $_last_created = '', $E;
+            $_last_created = '',
+            $E;
 
     /**
      * E_Template Constructor Function
@@ -178,8 +179,7 @@
      * @param array $views
      * @return CI_Template_Section|void
      */
-    public function create($views)
-    {
+    public function create($views) {
       if (is_string($views)) {
         $views = array($views);
       }
@@ -217,8 +217,7 @@
      * @param  string $section_name
      * @return CI_Template_Section|void
      */
-    public function section($section_name = '')
-    {
+    public function section($section_name = '') {
       if ($this->_section_exists($section_name)) {
         return $this->sections[$section_name];
       }
@@ -237,8 +236,7 @@
      * @params strings|array
      * @return void|boolean
      */
-    public function link()
-    {
+    public function link() {
       $args = func_get_args();
       switch (func_num_args())
       {
@@ -294,8 +292,7 @@
      * @param string $start_section
      * @return string
      */
-    private function _link($start_section)
-    {
+    private function _link($start_section) {
       if (!$this->_section_exists($start_section)) {
         return false;
       }
@@ -316,8 +313,7 @@
      * @param string $section_name
      * @return boolean
      */
-    public function swap($section_name)
-    {
+    public function swap($section_name) {
       if ($this->_section_exists($section_name)) {
         $this->_last_created = $section_name;
         return true;
@@ -333,8 +329,7 @@
      * @param  string $section_name
      * @return void
      */
-    public function load($section_name)
-    {
+    public function load($section_name) {
       if (!$this->_section_exists($section_name)) {
         return false;
       }
