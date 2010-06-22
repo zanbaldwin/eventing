@@ -37,6 +37,7 @@
    * multiple view with one call.
    */
   class E_Template {
+
     private $links = array(),
             $sections = array(),
             $folder = '',
@@ -347,101 +348,96 @@
 
 //------------------------------------------------------------------------------
 
+  /**
+   * Template Sections Class
+   *
+   * A class for creating section objects for the Template library.
+   *
+   * @package     Eventing
+   * @subpackage  Libraries
+   * @category    template
+   * @author      Alexander Baldwin
+   * @link        http://eventing.zafr.net/source/system/libraries/template.php
+   */
+  class E_Template_Section {
+
+    public  $view,
+            $path;
+    private $data = array(),
+            $E;
+
     /**
-     * Template Sections Class
+     * Constructor Function
      *
-     * A class for creating section objects for the Template library.
+     * Defines $view and $path, and links to Eventing's super object.
      *
-     * @package     Eventing
-     * @subpackage  Libraries
-     * @category    template
-     * @author      Alexander Baldwin
-     * @link        http://eventing.zafr.net/source/system/libraries/template.php
+     * @param string $view
+     * @param  $path
+     * @return void
      */
-    class E_Template_Section
-    {
-        public $view, $path;
-        private $data = array(), $E;
-
-        /**
-         * Constructor Function
-         *
-         * Defines $view and $path, and links to Eventing's super object.
-         *
-         * @param string $view
-         * @param  $path
-         * @return void
-         */
-        public function __construct($view, $path)
-        {
-            $this->view = $view;
-            $this->path = is_string($path) ? $path : '';
-            $this->E =& get_instance();
-        }
-
-        /**
-         * Variable Name Checker
-         *
-         * Checks a string to see if it can be used as a valid variable name.
-         *
-         * @access private
-         * @param string $varname
-         * @return boolean
-         */
-        private function _check_varname($varname)
-        {
-            return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
-        }
-
-        /**
-         * Section Content
-         *
-         * Returns a views content, with data passed to it.
-         *
-         * @access public
-         * @return string
-         */
-        public function content()
-        {
-            return $this->E->load->view($this->path . $this->view, $this->data);
-        }
-
-        /**
-         * Add Data
-         *
-         * Add data to be included in the view.
-         *
-         * @return boolean
-         */
-        public function add()
-        {
-            $args = func_get_args();
-            array_unshift($args, null);
-            unset($args[0]);
-            switch(count($args))
-            {
-                case 1:
-                    if(!is_array($args[1]))
-                    {
-                        return false;
-                    }
-                    break;
-                case 2:
-                    $args[1] = array($args[1] => $args[2]);
-                    break;
-                default:
-                    // Incorrect number of arguments!
-                    return false;
-                    break;
-            }
-            foreach($args[1] as $varname => $vardata)
-            {
-                if(!is_string($varname) || !$this->_check_varname($varname))
-                {
-                    continue;
-                }
-                $this->data[$varname] = $vardata;
-            }
-        }
-
+    public function __construct($view, $path) {
+      $this->view = $view;
+      $this->path = is_string($path) ? $path : '';
+      $this->E =& get_instance();
     }
+
+    /**
+     * Variable Name Checker
+     *
+     * Checks a string to see if it can be used as a valid variable name.
+     *
+     * @access private
+     * @param string $varname
+     * @return boolean
+     */
+    private function _check_varname($varname) {
+      return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
+    }
+
+    /**
+     * Section Content
+     *
+     * Returns a views content, with data passed to it.
+     *
+     * @access public
+     * @return string
+     */
+    public function content() {
+      return $this->E->load->view($this->path . $this->view, $this->data);
+    }
+
+    /**
+     * Add Data
+     *
+     * Add data to be included in the view.
+     *
+     * @return boolean
+     */
+    public function add() {
+      $args = func_get_args();
+      array_unshift($args, null);
+      unset($args[0]);
+      switch (count($args)) {
+        case 1:
+          if (!is_array($args[1])) {
+            return false;
+          }
+          break;
+        case 2:
+          $args[1] = array($args[1] => $args[2]);
+          break;
+        default:
+          // Incorrect number of arguments!
+          return false;
+          break;
+      }
+      foreach ($args[1] as $varname => $vardata)
+      {
+        if (!is_string($varname) || !$this->_check_varname($varname)) {
+          continue;
+        }
+        $this->data[$varname] = $vardata;
+      }
+    }
+
+  }
