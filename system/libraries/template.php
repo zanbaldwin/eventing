@@ -36,7 +36,7 @@
    * A simple library for Eventing, building over views to create links to load
    * multiple view with one call.
    */
-  class E_Template {
+  class E_template {
 
     private $links = array(),
             $sections = array(),
@@ -66,9 +66,9 @@
      * @param  boolean $global
      * @return boolean
      */
-    private function view_exists($view, $global = false) {
+    protected function view_exists($view, $global = false) {
       $theme = is_string($theme) ? $theme : c('default_theme');
-      $view = $global ? $view : $this->_view_path($view);
+      $view = $global ? $view : $this->path($view);
       return file_exists(APP . 'themes/' . $theme . '/' . $view . EXT);
     }
 
@@ -81,7 +81,7 @@
      * @param  string $section_name
      * @return boolean
      */
-    private function _section_exists($section_name) {
+    protected function section_exists($section_name) {
       if (!is_string($section_name)) {
         return false;
       }
@@ -97,7 +97,7 @@
      * @param  string|object $section
      * @return false|string
      */
-    private function _section_name($section)
+    protected function _section_name($section)
     {
       if (is_string($section)) {
         return $section;
@@ -120,7 +120,7 @@
      * @param  string $view
      * @return string
      */
-    private function _view_path($view) {
+    protected function path($view) {
       return $this->folder . $this->prefix . $view;
     }
 
@@ -133,7 +133,7 @@
      * @param string $varname
      * @return boolean
      */
-    private function _check_varname($varname) {
+    protected function is_varname($varname) {
       return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
     }
 
@@ -186,7 +186,7 @@
       foreach ($views as $name => $view) {
         // If the section already exists, there is no point creating a new one;
         // you'd lose all your data!
-        if ($this->_section_exists($view)) {
+        if ($this->section_exists($view)) {
           continue;
         }
         // Shortcut for those lazy people, if no array key is given, use the
@@ -195,7 +195,7 @@
           $name = $view;
         }
         // You can't make a section if the view doesn't exist!
-        if (!$this->_check_varname($name) || !$this->view_exists($view)) {
+        if (!$this->is_varname($name) || !$this->view_exists($view)) {
           continue;
         }
         // All checks have passed, let's create that section!
@@ -218,10 +218,10 @@
      * @return CI_Template_Section|void
      */
     public function section($section_name = '') {
-      if ($this->_section_exists($section_name)) {
+      if ($this->section_exists($section_name)) {
         return $this->sections[$section_name];
       }
-      elseif ($section_name == '' && $this->_section_exists($this->_last_created)) {
+      elseif ($section_name == '' && $this->section_exists($this->_last_created)) {
         return $this->sections[$this->_last_created];
       }
     }
@@ -262,7 +262,7 @@
         // We can't use a foreach loop if it's not an array!
         $imports = is_array($imports) ? $imports : array($imports);
         // If the parent section does not exist, we can't link it!
-        if (!$this->_section_exists($section)) {
+        if (!$this->section_exists($section)) {
           continue;
         }
         // Make sure the parent section has a link array.
@@ -272,7 +272,7 @@
         // Right, lets loop through the imports array we created.
         foreach ($imports as $import) {
           $import = $this->_section_name($import);
-          if ($this->_section_exists($import)) {
+          if ($this->section_exists($import)) {
             // Make sure we haven't linked the two together already.
             if (!in_array($import, $this->links[$section])) {
               // Create a symbolic link between the two.
@@ -292,8 +292,8 @@
      * @param string $start_section
      * @return string
      */
-    private function _link($start_section) {
-      if (!$this->_section_exists($start_section)) {
+    protected function _link($start_section) {
+      if (!$this->section_exists($start_section)) {
         return false;
       }
       $content = $this->section($start_section)->content();
@@ -314,7 +314,7 @@
      * @return boolean
      */
     public function swap($section_name) {
-      if ($this->_section_exists($section_name)) {
+      if ($this->section_exists($section_name)) {
         $this->_last_created = $section_name;
         return true;
       }
@@ -330,7 +330,7 @@
      * @return void
      */
     public function load($section_name) {
-      if (!$this->_section_exists($section_name)) {
+      if (!$this->section_exists($section_name)) {
         return false;
       }
       $content = $this->_link($section_name);
@@ -385,7 +385,7 @@
      * @param string $varname
      * @return boolean
      */
-    private function _check_varname($varname) {
+    protected function is_varname($varname) {
       return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
     }
 
@@ -428,7 +428,7 @@
       }
       foreach ($args[1] as $varname => $vardata)
       {
-        if (!is_string($varname) || !$this->_check_varname($varname)) {
+        if (!is_string($varname) || !$this->is_varname($varname)) {
           continue;
         }
         $this->data[$varname] = $vardata;
