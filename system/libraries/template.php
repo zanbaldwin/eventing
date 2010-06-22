@@ -66,7 +66,7 @@
      * @param  boolean $global
      * @return boolean
      */
-    protected function view_exists($view, $global = false) {
+    public function view_exists($view, $global = false) {
       $theme = is_string($theme) ? $theme : c('default_theme');
       $view = $global ? $view : $this->path($view);
       return file_exists(APP . 'themes/' . $theme . '/' . $view . EXT);
@@ -77,11 +77,11 @@
      *
      * Determines whether a particular section exists or not.
      *
-     * @access private
+     * @access public
      * @param  string $section_name
      * @return boolean
      */
-    protected function section_exists($section_name) {
+    public function section_exists($section_name) {
       if (!is_string($section_name)) {
         return false;
       }
@@ -116,11 +116,11 @@
      * Takes a view and prepends the folder and suffix to it to create the path
      * for CI to load.
      *
-     * @access private
+     * @access public
      * @param  string $view
      * @return string
      */
-    protected function path($view) {
+    public function path($view) {
       return $this->folder . $this->prefix . $view;
     }
 
