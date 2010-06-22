@@ -7,7 +7,7 @@
         <title><?php echo $title; ?></title>
         <meta http-equiv="content-type" content="text/html" />
         <meta http-equiv="content-style-type" content="text/css" />
-        <!--{style}-->
+        <!--{style[]}-->
     </head>
 
     <body>
