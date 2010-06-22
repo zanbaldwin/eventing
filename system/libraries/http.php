@@ -65,7 +65,7 @@
 
     private $url_host = false,
             $url_path = false,
-            $headers = array(),,
+            $headers = array(),
             $post_data = false,
             $response_headers = false,
             $response_body = false,
