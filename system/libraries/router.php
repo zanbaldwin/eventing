@@ -13,7 +13,7 @@
      * @copyright  (c) 2009 Alexander Baldwin
      * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
      * @version    v0.4
-     * @link       http://eventing.zafr.net/source/system/libraries/router.php
+     * @link       http://github.com/mynameiszanders/eventing
      * @since      v0.1
      */
 
