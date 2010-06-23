@@ -30,19 +30,203 @@
     exit('Direct script access is disallowed.');
   }
 
+  class E_template {
+  	
+  	protected $links = array(),
+  	          $sections = array(),
+  	          $theme = false,
+  	          $subdir = '',
+  	          $prefix = '',
+  	          $active = false;
+
+    public function __construct() {
+    	$this->theme = c('default_theme');
+    }
+  	
+    /**
+     * View Exists
+     * 
+     * @access public
+     * @param  string  $view
+     * @return boolean
+     */
+    public function view_exists($view) {
+    	
+    }
+    
+    /**
+     * Section Exists
+     * 
+     * @access public
+     * @param  string  $section
+     * @return boolean
+     */
+    public function section_exists($section) {
+    	
+    }
+    
+    /**
+     * Section Name
+     * 
+     * @access protected
+     * @param  object    $section
+     * @return string|false
+     */
+    protected function section_name($section) {
+    	
+    }
+    
+    /**
+     * View Path
+     * 
+     * Return the full path to the view, including theme folder, sub directory
+     * and file prefix. Return false if the does not exist.
+     * 
+     * @access public
+     * @param  string $view
+     * @return string|false
+     */
+    public function view_path($view) {
+    	
+    }
+    
+    /**
+     * Is Varname
+     * 
+     * @access protected
+     * @param  string    $varname
+     * @return boolean
+     */
+    protected function is_varname($varname) {
+    	
+    }
+    
+    /**
+     * Set Theme
+     * 
+     * @access public
+     * @param  string $theme
+     * @return boolean
+     */
+    public function set_theme($theme) {
+    	
+    }
+    
+    /**
+     * Set Subdirectory
+     * 
+     * @access public
+     * @param  string  $dir
+     * @return boolean
+     */
+    public function set_dir($dir) {
+    	
+    }
+    
+    /**
+     * Set File Prefix
+     * 
+     * @access public
+     * @param  string  $prefix
+     * @return boolean
+     */
+    public function set_prefix($prefix) {
+    	
+    }
+    
+    /**
+     * Create Sections from Views
+     * 
+     * @access public
+     * @param  array|string $views
+     * @return void
+     */
+    public function create($views) {
+    	
+    }
+    
+    /**
+     * Get Section
+     * 
+     * @access public
+     * @param  string|object $section
+     * @return object
+     */
+    public function section($section) {
+    	
+    }
+    
+    /**
+     * Link Sections
+     * 
+     * @access public
+     * @param  array $links
+     * @return void
+     */
+    public function link($links) {
+    	
+    }
+    
+    /**
+     * Combine Sections
+     * 
+     * @access protected
+     * @return boolean
+     */
+    protected function combine() {
+    	
+    }
+    
+    /**
+     * Group Sections
+     * 
+     * @access public
+     * @param  string  $name
+     * @param  array   $sections
+     * @return boolean
+     */
+    public function group($name, $sections) {
+    	
+    }
+    
+    /**
+     * Set Active
+     * 
+     * @access public
+     * @param  string|object $section
+     * @return boolean
+     */
+    public function active($section) {
+    	
+    }
+    
+    /**
+     * Load Section Tree
+     * 
+     * @access public
+     * @param  string|object $section
+     * @return boolean
+     */
+    public function load($section) {
+    	
+    }
+    
+  }
+  
   /**
    * Template Class
    *
    * A simple library for Eventing, building over views to create links to load
    * multiple view with one call.
    */
-  class E_template {
+  class E_template1 {
 
     private $links = array(),
             $sections = array(),
             $folder = '',
             $prefix = '',
-            $_last_created = '',
+            $active = '',
+            $theme = false,
             $E;
 
     /**
@@ -53,6 +237,7 @@
     public function __construct() {
       // Load the Eventing super object.
       $this->E =& get_instance();
+      $this->theme = c('default_theme');
     }
 
     /**
@@ -201,7 +386,7 @@
         // All checks have passed, let's create that section!
         $path = $this->folder . $this->prefix;
         $this->sections[$name] = new E_Template_Section($view, $path);
-        $this->_last_created = $name;
+        $this->active = $name;
         if (count($views) == 1) {
           return $this->sections[$name];
         }
@@ -221,8 +406,8 @@
       if ($this->section_exists($section_name)) {
         return $this->sections[$section_name];
       }
-      elseif ($section_name == '' && $this->section_exists($this->_last_created)) {
-        return $this->sections[$this->_last_created];
+      elseif ($section_name == '' && $this->section_exists($this->active)) {
+        return $this->sections[$this->active];
       }
     }
 
@@ -315,7 +500,7 @@
      */
     public function swap($section_name) {
       if ($this->section_exists($section_name)) {
-        $this->_last_created = $section_name;
+        $this->active = $section_name;
         return true;
       }
       return false;
