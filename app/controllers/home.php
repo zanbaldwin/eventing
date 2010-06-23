@@ -19,14 +19,9 @@
       // This library should already be loaded, but just in case.
       $this->load->library('template');
       $this->template->create(array(
-        'welcome',
-        'shell' => 'xhtmlshell',
-        'style'
+        'shell'
       ));
       $this->template->section('shell')->add('title', 'Eventing Framework');
-      $this->template->link(array(
-        'shell' => array('welcome', 'style')
-      ));
       $this->template->load('shell');
     }
 
