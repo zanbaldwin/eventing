@@ -533,6 +533,6 @@
   class E_template_group {
 
     protected $sections = array(),
-              $name = false
+              $name = false;
 
   }
