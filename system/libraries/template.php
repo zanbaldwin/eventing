@@ -17,7 +17,7 @@
   * @copyright  (c) 2009 Alexander Baldwin
   * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
   * @version    v0.4
-  * @link       http://eventing.zafr.net/source/system/libraries/template.php
+  * @link       http://github.com/mynameiszanders/eventing
   * @since      v0.1
   * 
   * TODO: Implement <!--{link[]}-->
@@ -37,10 +37,17 @@
   	          $theme = false,
   	          $subdir = '',
   	          $prefix = '',
-  	          $active = false;
+  	          $active = false,
+  	          // The following is hard-coded, this should not be changed.
+  	          $section_class = 'E_template_section';
 
     public function __construct() {
-    	$this->theme = c('default_theme');
+    	$theme = c('default_theme');
+    	$this->theme = is_string($theme)
+    	               && $theme != ''
+    	               && is_dir(APP . 'themes/' . $theme)
+    	             ? $theme . '/'
+    	             : false;
     }
   	
     /**
@@ -51,7 +58,17 @@
      * @return boolean
      */
     public function view_exists($view) {
-    	
+    	if (!is_string($view) || !is_string($this->theme)) {
+    		return false;
+    	}
+    	$file = APP
+    	      . 'themes/'
+    	      . $this->theme
+    	      . $this->subdir
+    	      . $this->prefix
+    	      . $view
+    	      . EXT;
+      return file_exists($file);
     }
     
     /**
@@ -62,7 +79,10 @@
      * @return boolean
      */
     public function section_exists($section) {
-    	
+    	if (!is_string($section)) {
+    		return false;
+    	}
+    	return isset($this->sections[$section]);
     }
     
     /**
@@ -73,7 +93,12 @@
      * @return string|false
      */
     protected function section_name($section) {
-    	
+    	if (!is_object($section)
+    	   || !($section instanceof $this->section_class)
+    	   || get_class($section) != $this->section_class) {
+    		return false;
+    	}
+    	return $section->name();
     }
     
     /**
@@ -87,7 +112,17 @@
      * @return string|false
      */
     public function view_path($view) {
-    	
+    	if (!$this->view_exists($view)) {
+    		return false;
+    	}
+      $file = APP
+            . 'themes/'
+            . $this->theme
+            . $this->subdir
+            . $this->prefix
+            . $view
+            . EXT;
+      return $file;
     }
     
     /**
@@ -98,7 +133,12 @@
      * @return boolean
      */
     protected function is_varname($varname) {
-    	
+    	if (!is_string($varname)) {
+    		return false;
+    	}
+    	$regex = '/^[a-zA-Z_][a-zA-Z0-9_]*$/';
+    	$match = preg_match($regex, $varname);
+    	return $match ? true : false;
     }
     
     /**
@@ -109,7 +149,14 @@
      * @return boolean
      */
     public function set_theme($theme) {
-    	
+    	if (!is_string($theme) || strpos($theme, '/') !== false) {
+    		return false;
+    	}
+    	$path = APP . 'themes/' . $theme;
+    	if (!is_dir($path)) {
+    		return false;
+    	}
+    	$this->theme = $theme . '/';
     }
     
     /**
@@ -120,29 +167,69 @@
      * @return boolean
      */
     public function set_dir($dir) {
-    	
+    	if (!is_string($dir)) {
+    		return false;
+    	}
+    	$dir = trim($dir, '/');
     }
     
     /**
      * Set File Prefix
+     * 
+     * Just to be arsey, we're only going to allow valid variable names to be
+     * prefixes!
      * 
      * @access public
      * @param  string  $prefix
      * @return boolean
      */
     public function set_prefix($prefix) {
-    	
+    	if (!$this->is_varname($prefix)) {
+    		return false;
+    	}
+    	$this->prefix = $prefix;
+    	return true;
     }
     
     /**
      * Create Sections from Views
      * 
      * @access public
-     * @param  array|string $views
+     * @param  array  $views
      * @return void
      */
     public function create($views) {
-    	
+    	if(!is_array($views) || !count($views)) {
+    		return;
+    	}
+    	foreach($views as $name => $view) {
+    		// If the section already exists, there is no point creating a new one;
+    		// you'd lose all your data!
+    		if($this->section_exists($view)) {
+    			continue;
+    		}
+    		// Shortcut for lazy people, if no array key is given, use the view as
+    		// the name. If something other than a valid string is passed as the key
+    		// just continue.
+    		if(!is_string($name) || !is_int($name) || !$this->is_varname($name)) {
+    			continue;
+    		}
+    		$name = is_int($name) ? $view : $name;
+    		// You can't makea section if the view doesn't exist!
+    		if(!$this->view_exists($view)) {
+    			continue;
+    		}
+    		// All checks have passed, let's create that section!
+    		$path = APP
+              . 'themes/'
+              . $this->theme
+              . $this->subdir
+              . $this->prefix
+              . $view
+              . EXT;
+        $this->sections[$name] = new $this->section_name($name, $path);
+        $this->active = $name;
+    	}
     }
     
     /**
@@ -152,8 +239,14 @@
      * @param  string|object $section
      * @return object
      */
-    public function section($section) {
-    	
+    public function section($section = true) {
+    	if (isset($this->sections[$section])) {
+    		return $this->sections[$section];
+    	}
+    	if ($section === true && isset($this->sections[$this->active])) {
+    		return $this->sections[$this->active];
+    	}
+    	return false;
     }
     
     /**
@@ -414,7 +507,8 @@
     /**
      * Link Sections
      *
-     * Create symbolic links between two sections, so when the parent section is loaded,  all sections linked will
+     * Create symbolic links between two sections, so when the parent section is
+     * loaded,  all sections linked will
      * be included in the final output.
      *
      * @access public
@@ -537,7 +631,7 @@
    * @subpackage  Libraries
    * @category    template
    * @author      Alexander Baldwin
-   * @link        http://eventing.zafr.net/source/system/libraries/template.php
+   * @link        http://github.com/mynameiszanders/eventing
    */
   class E_Template_Section {
 
