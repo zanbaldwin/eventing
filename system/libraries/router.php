@@ -1,59 +1,63 @@
 <?php
 
+  /**
+   * Router Library
+   *
+   * Takes the URI string (segments and suffix). Checks to see if it should re-route the request to a different one.
+   * Then finds the appropriate controller and method, and determines which folder the controller class is in.
+   *
+   * @category   Eventing
+   * @package    Libraries
+   * @subpackage router
+   * @author     Alexander Baldwin
+   * @copyright  (c) 2009 Alexander Baldwin
+   * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
+   * @version    v0.4
+   * @link       http://github.com/mynameiszanders/eventing
+   * @since      v0.1
+   */
+
+  if (!defined('E_FRAMEWORK')) {
+    headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
+    exit('Direct script access is disallowed.');
+  }
+
+  /**
+   * Router Class
+   */
+  class E_router {
+
+    private $uri_string,
+            $ruri_string,
+            $suffix,
+            $rsuffix,
+            $rsegments = array(),
+            $d = '',
+            $c = '',
+            $m = '',
+            $controllers;
+
     /**
-     * Router Library
-     *
-     * Takes the URI string (segments and suffix). Checks to see if it should re-route the request to a different one.
-     * Then finds the appropriate controller and method, and determines which folder the controller class is in.
-     *
-     * @category   Eventing
-     * @package    Libraries
-     * @subpackage router
-     * @author     Alexander Baldwin
-     * @copyright  (c) 2009 Alexander Baldwin
-     * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
-     * @version    v0.4
-     * @link       http://github.com/mynameiszanders/eventing
-     * @since      v0.1
+     * Constructor Method
+     *  
+     * @return void
      */
-
-    if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
-
-    /**
-     * Router Class
-     */
-    class E_router
-    {
-
-        private $uri_string,
-                $ruri_string,
-                $suffix,
-                $rsuffix,
-                $rsegments = array(),
-                $d = '',
-                $c = '',
-                $m = '',
-                $controllers;
-
-        /**
-         * Constructor Method
-         *  
-         * @return void
-         */
-        public function __construct()
-        {
-            $this->controllers = APP . 'controllers/';
-            $this->uri_string = REQUEST;
-            $this->suffix = SUFFIX;
-            list($this->ruri_string, $this->rsuffix) = $this->_routes($this->uri_string, $this->suffix);
-            $this->rsegments = xplode('/', $this->ruri_string);
-            if(is_array($dcm = $this->_determine($this->ruri_string, $this->rsuffix)))
-            {
-                list($this->d, $this->c, $this->m) = $dcm;
-            }
-            defined('ROUTE') || define('ROUTE', $this->ruri_string);
-            defined('RSUFFIX') || define('RSUFFIX', $this->rsuffix);
-        }
+    public function __construct() {
+      $this->controllers = APP . 'controllers/';
+      $this->uri_string = REQUEST;
+      $this->suffix = SUFFIX;
+      list($this->ruri_string, $this->rsuffix) = $this->_routes(
+                                                   $this->uri_string,
+                                                   $this->suffix
+                                                 );
+      $this->rsegments = xplode('/', $this->ruri_string);
+      $dcm = $this->_determine($this->ruri_string, $this->rsuffix);
+      if(is_array($dcm)) {
+        list($this->d, $this->c, $this->m) = $dcm;
+      }
+      defined('ROUTE') || define('ROUTE', $this->ruri_string);
+      defined('RSUFFIX') || define('RSUFFIX', $this->rsuffix);
+    }
 
         /**
          * Routes
