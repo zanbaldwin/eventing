@@ -11,7 +11,7 @@
   final class home extends E_controller
   {
 
-    public function  __construct() {
+    public function __construct() {
       parent::controller();
     }
 

@@ -12,9 +12,9 @@
   *
   * @category   Eventing
   * @package    Libraries
-  * @subpackage template
+  * @subpackage Template
   * @author     Alexander Baldwin
-  * @copyright  (c) 2009 Alexander Baldwin
+  * @copyright  (c) 2010 Alexander Baldwin
   * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
   * @version    v0.4
   * @link       http://github.com/mynameiszanders/eventing
@@ -39,7 +39,8 @@
   	          $prefix = '',
   	          $active = false,
   	          // The following is hard-coded, this should not be changed.
-  	          $section_class = 'E_template_section';
+  	          $section_class = 'E_template_section',
+  	          $valid_name = '[a-zA-Z_][a-zA-Z0-9_]*';
 
     public function __construct() {
     	$theme = c('default_theme');
@@ -136,7 +137,7 @@
     	if (!is_string($varname)) {
     		return false;
     	}
-    	$regex = '/^[a-zA-Z_][a-zA-Z0-9_]*$/';
+    	$regex = '/^' . $this->valid_name . '$/';
     	$match = preg_match($regex, $varname);
     	return $match ? true : false;
     }
@@ -167,10 +168,16 @@
      * @return boolean
      */
     public function set_dir($dir) {
-    	if (!is_string($dir)) {
+    	if (!is_string($dir) || !is_string($this->theme)) {
     		return false;
     	}
     	$dir = trim($dir, '/');
+    	$path = APP . 'themes/' . $this->theme . $dir;
+    	if(!is_dir($path)) {
+    	  return false;
+    	}
+    	$this->subdir = $dir;
+    	return true;
     }
     
     /**
@@ -234,6 +241,9 @@
     
     /**
      * Get Section
+     * 
+     * Returns the section specified, else returns false. If you stick with the
+     * default value, it will return the last activated section.
      * 
      * @access public
      * @param  string|object $section
@@ -301,12 +311,26 @@
      * @return boolean
      */
     public function load($section) {
-    	
+      if(!$this->section_exists($section)) {
+        return false;
+      }
+      $rendered = $this->combine($section);
+      if(!is_string($rendered)) {
+        return false;
+      }
+    	$E =& get_instance();
+    	if(!isset($E->output)) {
+    	  echo $rendered;
+    	}
+    	else {
+    	  $E->output->append($rendered);
+    	}
+    	return true;
     }
     
   }
   
-  /**
+  /** --------------------------------------------------------------------------
    * Template Class
    *
    * A simple library for Eventing, building over views to create links to load
