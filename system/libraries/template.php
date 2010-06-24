@@ -73,7 +73,7 @@
     }
     
     /**
-     * Section Exists
+     * Section (or Group) Exists
      * 
      * @access public
      * @param  string  $section
@@ -212,16 +212,16 @@
     	foreach($views as $name => $view) {
     		// If the section already exists, there is no point creating a new one;
     		// you'd lose all your data!
-    		if($this->section_exists($view)) {
+    		if($this->section_exists($name)) {
     			continue;
     		}
     		// Shortcut for lazy people, if no array key is given, use the view as
     		// the name. If something other than a valid string is passed as the key
     		// just continue.
-    		if(!is_string($name) || !is_int($name) || !$this->is_varname($name)) {
+    		$name = is_int($name) ? $view : $name;
+    		if(!$this->is_varname($name)) {
     			continue;
     		}
-    		$name = is_int($name) ? $view : $name;
     		// You can't makea section if the view doesn't exist!
     		if(!$this->view_exists($view)) {
     			continue;
@@ -268,56 +268,28 @@
      */
     public function link($links) {
 
-    	// The following is the old methods code.
-    	// TODO: Rewrite function! It isn't effiencient! Too many parameters!
-    	
-      $args = func_get_args();
-      switch (func_num_args())
-      {
-        case 1:
-          if (!is_array($args[0])) {
-            return false;
-          }
-          $args = $args[0];
-          break;
-        case 2:
-          if (!is_string($args[0]) || !is_string($args[1])) {
-            return false;
-          }
-          $args = array($args[0] => array($args[1]));
-          break;
-        default:
-          return false;
-          break;
-      }
-      foreach ($args as $section => $imports) {
-        // Make sure we have a section name and not a section object.
-        $section = $this->_section_name($section);
-        // We can't use a foreach loop if it's not an array!
-        $imports = is_array($imports) ? $imports : array($imports);
-        // If the parent section does not exist, we can't link it!
-        if (!$this->section_exists($section)) {
-          continue;
-        }
-        // Make sure the parent section has a link array.
-        if (!is_array($this->links[$section])) {
-          $this->links[$section] = array();
-        }
-        // Right, lets loop through the imports array we created.
-        foreach ($imports as $import) {
-          $import = $this->_section_name($import);
-          if ($this->section_exists($import)) {
-            // Make sure we haven't linked the two together already.
-            if (!in_array($import, $this->links[$section])) {
-              // Create a symbolic link between the two.
-              $this->links[$section][] = $import;
-            }
-          }
-        }
-      }
-    	
-    	
-    	
+    	if(!is_array($links)) {
+    		return;
+    	}
+    	foreach($links as $section => $imports) {
+    		$section = $this->section_name($section);
+    		if(!$this->section_exists($section)) {
+    			continue;
+    		}
+    		// Make sure that it is an array!
+    		$imports = (array) $imports;
+    		if (!isset($this->links[$section]) || !is_array($this->links[$section])) {
+    			$this->links[$section] = array();
+    		}
+    		// Loop through the imports, making sure each one exists.
+    		foreach ($imports as $import) {
+    			if (!$this->section_exists($import)
+    			    || in_array($import, $this->links[$section])) {
+    				continue;
+    			}
+    			$this->links[$section][] = $import;
+    		}
+    	}	
     }
     
     /**
@@ -354,7 +326,19 @@
      * @return boolean
      */
     public function group($name, $sections) {
-    	
+    	if ($this->section_exists($name)
+    	    || !$this->is_varname($name)
+    	    || !is_array($sections)) {
+    		return false;
+    	}
+    	$this->sections[$name] = array();
+    	foreach ($sections as $section) {
+    		$section = $this->section_name($section);
+    		if(!$this->section_exists($section) && is_object($this->section($section))) {
+    			$this->sections[$name][] = $section;
+    		}
+    	}
+    	return true;
     }
     
     /**
@@ -381,7 +365,10 @@
      * @return boolean
      */
     public function load($section) {
-      if(!$this->section_exists($section)) {
+    	$section = $this->section_name($section);
+    	// You are required to pass a valid section, groups are not allowed.
+      if (!$this->section_exists($section)
+          || !is_object($this->section($section))) {
         return false;
       }
       $rendered = $this->combine($section);
@@ -398,37 +385,6 @@
     	return true;
     }
     
-  }
-  
-  /** --------------------------------------------------------------------------
-   * Template Class
-   *
-   * A simple library for Eventing, building over views to create links to load
-   * multiple view with one call.
-   */
-  class E_template1 {
-
-    private $links = array(),
-            $sections = array(),
-            $folder = '',
-            $prefix = '',
-            $active = '',
-            $theme = false,
-            $E;
-
-    /**
-     * Link Sections
-     *
-     * Create symbolic links between two sections, so when the parent section is
-     * loaded,  all sections linked will
-     * be included in the final output.
-     *
-     * @access public
-     * @params strings|array
-     * @return void|boolean
-     */
-
-
   }
 
 //------------------------------------------------------------------------------
@@ -451,6 +407,8 @@
     private $data = array(),
             $E;
 
+    // TODO: Rewrite the class to use the format:
+    //       new E_template_section($name, $path);
     /**
      * Constructor Function
      *
