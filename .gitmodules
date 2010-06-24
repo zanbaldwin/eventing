@@ -1,3 +1,3 @@
-[submodule "thirdparty"]
-  path = system/libraries
-  url = git://github.com/mynameiszanders/eventing-thirdparty
+[submodule "ThirdParty"]
+	path = system/libraries
+	url = git://github.com/mynameiszanders/eventing-thirdparty.git
