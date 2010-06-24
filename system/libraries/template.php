@@ -300,7 +300,12 @@
      * @return boolean
      */
     public function active($section) {
-    	
+    	$section = $this->section_name($section);
+    	if(!$this->section_exists($section)) {
+    		return false;
+    	}
+    	$this->active = $section;
+    	return true;
     }
     
     /**
@@ -345,134 +350,6 @@
             $active = '',
             $theme = false,
             $E;
-
-    /**
-     * E_Template Constructor Function
-     *
-     * @return void
-     */
-    public function __construct() {
-      // Load the Eventing super object.
-      $this->E =& get_instance();
-      $this->theme = c('default_theme');
-    }
-
-    /**
-     * View Exists
-     *
-     * Determines whether a particular view exists or not.
-     * You can state whether you want the preceding separators present or not.
-     *
-     * @access public
-     * @param  string $view
-     * @param  boolean $global
-     * @return boolean
-     */
-    public function view_exists($view, $global = false) {
-      $theme = is_string($theme) ? $theme : c('default_theme');
-      $view = $global ? $view : $this->path($view);
-      return file_exists(APP . 'themes/' . $theme . '/' . $view . EXT);
-    }
-
-    /**
-     * Section Exists
-     *
-     * Determines whether a particular section exists or not.
-     *
-     * @access public
-     * @param  string $section_name
-     * @return boolean
-     */
-    public function section_exists($section_name) {
-      if (!is_string($section_name)) {
-        return false;
-      }
-      return isset($this->sections[$section_name]);
-    }
-
-    /**
-     * Section Name
-     *
-     * Returns the section name if a CI_Template_Section is passed.
-     *
-     * @access private
-     * @param  string|object $section
-     * @return false|string
-     */
-    protected function _section_name($section)
-    {
-      if (is_string($section)) {
-        return $section;
-      }
-      if (is_object($section) && get_class($section) == 'E_Template_Section') {
-        return $section->view;
-      }
-      else {
-        return false;
-      }
-    }
-
-    /**
-     * View Path
-     *
-     * Takes a view and prepends the folder and suffix to it to create the path
-     * for CI to load.
-     *
-     * @access public
-     * @param  string $view
-     * @return string
-     */
-    public function path($view) {
-      return $this->folder . $this->prefix . $view;
-    }
-
-    /**
-     * Variable Name Checker
-     *
-     * Checks a string to see if it can be used as a valid variable name.
-     *
-     * @access private
-     * @param string $varname
-     * @return boolean
-     */
-    protected function is_varname($varname) {
-      return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
-    }
-
-    /**
-     * Set Folder
-     *
-     * Sets the sub-directory in which to look for views. Use to split your
-     * views into themes. Returns true on success, and false on failure (eg. the
-     * folder you specify does not exist).
-     *
-     * @param string $folder
-     * @return boolean
-     */
-    public function set_folder($folder, $theme = false) {
-      $theme = is_string($theme) ? $theme : c('default_theme');
-      $folder = trim($folder, '/') . '/';
-      if (is_dir(APP . 'themes/' . $theme . '/' . $folder)) {
-        $this->folder = $folder;
-        return true;
-      }
-      return false;
-    }
-
-    /**
-     * Set Prefix
-     *
-     * Set the prefix in which to prepend to view paths. Use to split your views
-     * into themes. Always returns true.
-     *
-     * @param  string $prefix
-     * @return true
-     */
-    public function set_prefix($prefix) {
-      $this->prefix = $prefix;
-      return true;
-    }
-
     /**
      * Create Section
      *
