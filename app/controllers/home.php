@@ -57,7 +57,7 @@
       ));
       // Create a pseudo-section. Not a section on it's own, but a collection of
       // other sections.
-      $this->template->combine('posts', array('node_1', 'node_2'));
+      $this->template->group('posts', array('node_1', 'node_2'));
       $links = array(
         'shell' => array('style', 'script', 'header', 'content', 'sidebar', 'footer'),
         'header' => array('nav'),
