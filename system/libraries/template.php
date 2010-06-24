@@ -237,7 +237,7 @@
               . $this->prefix
               . $view
               . EXT;
-        $this->sections[$name] = new $this->section_name($name, $path);
+        $this->sections[$name] = new $this->section_class($name, $path);
         $this->active = $name;
     	}
     }
