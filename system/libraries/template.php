@@ -30,6 +30,9 @@
     exit('Direct script access is disallowed.');
   }
 
+  /**
+   * Eventing Template Library
+   */
   class E_template {
   	
   	protected $links = array(),
@@ -390,9 +393,9 @@
 //------------------------------------------------------------------------------
 
   /**
-   * Template Sections Class
+   * Eventing Template Library Section
    *
-   * A class for creating section objects for the Template library.
+   * A class for creating section (not group) objects for the Template library.
    *
    * @package     Eventing
    * @subpackage  Libraries
