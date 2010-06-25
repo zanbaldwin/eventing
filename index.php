@@ -45,7 +45,7 @@
   // Killing two birds with one stone. Define a constant for other files to
   // check that they're not being called independently, and to set the core
   // benchmark. The E_FRAMEWORK constant is REQUIRED!
-  defined('E_FRAMEWORK') || define('E_FRAMEWORK', microtime());
+  defined('E_FRAMEWORK') || define('E_FRAMEWORK', microtime(true));
 
   // However, the version number doesn't really have any use in the framework at
   // all. You may discard it if you want. I'm not very good at versions. I never
