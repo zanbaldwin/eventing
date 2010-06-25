@@ -54,7 +54,7 @@
   defined('E_VERSION') || define('E_VERSION', 'Alpha1-PrePublicRelease');
 
   // Right! Let's get this party started!
-  $main_file = __FILE__;
+  
   $init = isset($user_config['system_folder'])
         ? $user_config['system_folder'] . '/init.php'
         : 'system/init.php';
@@ -65,5 +65,8 @@
   // disappointment by calling the exit function. SAD TIMES!
   file_exists($init) || exit('Initialisation script not found.');
   // Great... Everything working so far. What a boring life we live!
+  // Don't forget to say which file is calling the script.
+  // TODO: Should this be a constant?
+  $main_file = __FILE__;
   require_once $init;
 
