@@ -1,35 +1,39 @@
 <?php
 
- /**
-  * Eventing Framework Template Library
-  *
-  * Eventing PHP Framework by Alexander Baldwin <zanders@zafr.net>.
-  * http://eventing.zafr.net/
-  * The Eventing Framework is an object-orientated PHP Framework, designed to
-  * rapidly build applications. Template Library. Organises multiple views as
-  * sections, provides each one with data, and links them together to create a
-  * page.
-  *
-  * @category   Eventing
-  * @package    Libraries
-  * @subpackage Template
-  * @author     Alexander Baldwin
-  * @copyright  (c) 2010 Alexander Baldwin
-  * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
-  * @version    v0.4
-  * @link       http://github.com/mynameiszanders/eventing
-  * @since      v0.1
-  * 
-  * TODO: Implement <!--{link[]}-->
-  *       This may take quite a lot of rewriting!
-  * TODO: Decide whether we implement <!--{link[$n]}-->, where $n is max entries
- */
+  /**
+   * Eventing Framework Template Library
+   *
+   * Eventing PHP Framework by Alexander Baldwin <zanders@zafr.net>.
+   * http://eventing.zafr.net/
+   * The Eventing Framework is an object-orientated PHP Framework, designed to
+   * rapidly build applications. Template Library. Organises multiple views as
+   * sections, provides each one with data, and links them together to create a
+   * page.
+   *
+   * @category   Eventing
+   * @package    Libraries
+   * @subpackage Template
+   * @author     Alexander Baldwin
+   * @copyright  (c) 2010 Alexander Baldwin
+   * @license    http://www.gnu.org/licenses/gpl.txt GNU General Public License
+   * @license    http://www.opensource.org/licenses/mit-license.php MIT License
+   * @version    v0.4
+   * @link       http://github.com/mynameiszanders/eventing
+   * @since      v0.1
+   * 
+   * TODO: Implement <!--{link[]}-->
+   *       This may take quite a lot of rewriting!
+   * TODO: Decide whether we implement <!--{link[$n]}-->, where $n is max entries
+   */
 
   if (!defined('E_FRAMEWORK')) {
     headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
     exit('Direct script access is disallowed.');
   }
 
+  /**
+   * Eventing Template Library
+   */
   class E_template {
   	
   	protected $links = array(),
@@ -256,7 +260,8 @@
     	if ($section === true && isset($this->sections[$this->active])) {
     		return $this->sections[$this->active];
     	}
-    	return false;
+    	// If we can't find either, return nothing (void).
+    	return;
     }
     
     /**
@@ -269,17 +274,7 @@
     public function link($links) {
     	
     }
-    
-    /**
-     * Combine Sections
-     * 
-     * @access protected
-     * @return boolean
-     */
-    protected function combine() {
-    	
-    }
-    
+
     /**
      * Group Sections
      * 
@@ -291,7 +286,17 @@
     public function group($name, $sections) {
     	
     }
-    
+
+    /**
+     * Combine Sections
+     * 
+     * @access protected
+     * @return boolean
+     */
+    protected function combine() {
+    	
+    }
+
     /**
      * Set Active
      * 
@@ -302,7 +307,7 @@
     public function active($section) {
     	
     }
-    
+
     /**
      * Load Section Tree
      * 
@@ -327,7 +332,7 @@
     	}
     	return true;
     }
-    
+
   }
   
   /** --------------------------------------------------------------------------
