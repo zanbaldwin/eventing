@@ -351,10 +351,37 @@
      */
     protected function combine($section) {
 
-    	// The following is the old method.
-    	// Need to rewrite for <!--{link[n]}--> groups.
-    	
-    	      if (!$this->section_exists($start_section)) {
+      // Need to go away and think about this method. Rushing into it ends up
+      // with me thinking of something that I should of done differently 5
+      // minutes ago.
+      
+      if(!$this->section_exists($section)) {
+        return false;
+      }
+      if(is_array($this->sections[$section])) {
+        $content = $this->sections[$section];
+      }
+      elseif(is_object($this->section($section))) {
+        $content = array($this->section($section)->content());
+      }
+      else {
+        return false;
+      }
+      
+      if(isset($this->links[$section]) && is_array($this->links[$section])) {
+        foreach($this->links[$section] as $link) {
+          $link = $this->section_name($link);
+          if(!$this->section_exists($link)) {
+            continue;
+          }
+          
+          // Some fancy PCRE to find the pseudo-link tag.
+          
+        }
+      }
+
+      /* DIRTY OLD CODE:
+    	if (!$this->section_exists($start_section)) {
         return false;
       }
       $content = $this->section($start_section)->content();
@@ -364,8 +391,33 @@
         }
       }
       return $content;
+      // END DIRTY OLD CODE;
+      /**/
     }
 
+    /**
+     * Concatenate Sections
+     * 
+     * @access protected
+     * @param  array        $sections
+     * @param  integer      $max
+     * @return string|false
+     */
+    protected function concat_sections($sections, $max = 0) {
+      if(!is_array($sections) || !is_int($max)) {
+        return false;
+      }
+      $content = '';
+      foreach($sections as $section) {
+        $section = $this->section_name($section);
+        if(!$this->section_exists($section) || !is_object($this->section($section))) {
+          continue;
+        }
+        $content .= $this->section($section)->content();
+      }
+      return $content;
+    }
+    
     /**
      * Load Section Tree
      * 

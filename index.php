@@ -54,7 +54,6 @@
   defined('E_VERSION') || define('E_VERSION', 'Alpha1-PrePublicRelease');
 
   // Right! Let's get this party started!
-  
   $init = isset($user_config['system_folder'])
         ? $user_config['system_folder'] . '/init.php'
         : 'system/init.php';
@@ -67,6 +66,7 @@
   // Great... Everything working so far. What a boring life we live!
   // Don't forget to say which file is calling the script.
   // TODO: Should this be a constant?
+  //       defined('E_MAIN_FILE') || define('E_MAIN_FILE', __FILE__);
   $main_file = __FILE__;
   require_once $init;
 
