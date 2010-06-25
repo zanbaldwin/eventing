@@ -92,12 +92,18 @@
     
     /**
      * Section Name
+     *
+     * Return the section name as a string.
      * 
      * @access protected
-     * @param  object    $section
+     * @param  object|string $section
      * @return string|false
      */
     protected function section_name($section) {
+      // If the section is already passed as a string, return it straight away.
+      if (is_string($section)) {
+        return $section;
+      }
     	if (!is_object($section)
     	   || !($section instanceof $this->section_class)
     	   || get_class($section) != $this->section_class) {
