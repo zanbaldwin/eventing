@@ -254,27 +254,6 @@
             $main_config[$config_file] =& $config;
             return $main_config[$config_file];
         }
-        
-    /*    function get__config($config_file = 'config')
-        {
-            static $main_config = array();
-            if(isset($main_config[$config_file]))
-            {
-                return $main_config[$config_file];
-            }
-            // Configuration settings are in INI format.
-            if(CONFIG = 'ini')
-            {
-                function_exists('parse_ini_file') || show_error('Config settings error. INI file parse does not exist', 500);
-                $app_config = APP . 'config/' . $config_file . '.ini';
-                $sys_config = SYS . 'config/' . $config_file . '.ini';
-                $app_config = file_exists($app_config) ? parse_ini_file($app_config, false) : array();
-            }
-            else
-            {
-                
-            }
-        }*/
     }
 
     if(!function_exists('c'))
