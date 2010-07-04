@@ -362,45 +362,58 @@
       	return false;
       }
       if (is_array($this->sections[$section])) {
-        $content = $this->sections[$section];
+        $sections = $this->sections[$section];
       }
       elseif (is_object($this->section($section))) {
-        $content = array($this->section($section)->name());
+        $sections = array($this->section($section)->name());
       }
       else {
         return false;
       }
+      $content = $this->concat_sections($sections, $limit);
       
-      $i = 1;
       foreach ($this->links[$section] as $link) {
         $link = $this->section_name($link);
-        if (!$this->section_exists($link)) {
+        if (!$this->section_exists($link)
+            || !preg_match('/' . $this->valid_name . '/', $link)) {
           continue;
         }
         
         // Some fancy PCRE to find the pseudo-link tag.
-        $content = $this->concat_sections($content, $limit);
+        
         $regex = '/'
                . preg_quote('<!--{', '/')
-               . '(' . $this->valid_name . ')'
-               . '(\[([0-9]+)\])?'
+               . '(' . preg_quote($link, '/') . ')'
+               . '(\[([0-9]+)?\])?'
                . preg_quote('}-->', '/')
                . '/';
         if ($preg = preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
-        	var_dump($matches);
+        	foreach ($matches as $match) {
+        		// Determine how many interations are needed if the next section is
+        		// actually a group.
+        		// "" = 1, "[]" = 0 (unlimited), "[n]" = n.
+        		if (isset($match[2])) {
+        			if (isset($match[3])) {
+        				$n = (int) $match[3];
+        			}
+        			else {
+        				$n = 0;
+        			}
+        		}
+        		else {
+        			$n = 1;
+        		}
+        		
+        		$content = str_replace(
+        		  $match[0],
+        		  $this->combine($link, $n),
+        		  $content
+        		);
+        	}
         #	$content = str_replace();
         }
-        echo "<h2>#{$i}</h2>\nContent:<pre>\n";
-        var_dump($content);
-        echo "</pre>Matches:<pre>";
-        var_dump($matches);
-        echo "</pre>Preg Result:<pre>";
-        var_dump($preg);
-        echo "</pre><hr />";
-        $i++;
         
       }
-      echo "<h2>RegEx</h2>{$regex}";
       
       return $content;
 
@@ -428,14 +441,8 @@
      * @return string|false
      */
     protected function concat_sections($sections, $max = 0) {
-      if (!is_int($max)) {
+      if (!is_int($max) || !is_array($sections) || !count($sections)) {
         return false;
-      }
-      if (is_object($sections)) {
-      	return $this->section($sections)->content();
-      }
-      if (!is_array($sections)) {
-      	return false;
       }
       $content = '';
       foreach($sections as $section) {
@@ -471,7 +478,7 @@
     	  echo $rendered;
     	}
     	else {
-    	  $E->output->append($rendered);
+    	  $E->output->append_output($rendered);
     	}
     	return true;
     }
