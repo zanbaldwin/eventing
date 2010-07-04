@@ -115,25 +115,25 @@
          * @param array $data
          * @return string|false
          */
-        public function view($view, $_E_Load_View_data, $theme = false)
-        {
-            $theme = is_string($theme) ? $theme : c('default_theme');
-            $_E_Load_View_file = APP . 'themes/' . $theme . '/' . $view . EXT;
-            if(!file_exists($_E_Load_View_file))
-            {
-                return false;
-            }
-            ob_start();
-            if(is_array($_E_Load_View_data))
-            {
-                // Remove as many variables as possible.
-                unset($theme, $view);
-                extract($_E_Load_View_data, EXTR_SKIP);
-            }
-            require $_E_Load_View_file;
-            $output = ob_get_contents();
-            ob_end_clean();
-            return $output;
+        public function view($view, $_E_Load_View_data, $theme = false) {
+          $theme = is_string($theme) ? $theme : c('default_theme');
+          $_E_Load_View_file = file_exists($view)
+                             ? $view
+                             : APP . 'themes/' . $theme . '/' . $view . EXT;
+          unset($view, $theme);
+          if (!file_exists($_E_Load_View_file)) {
+            return false;
+          }
+          ob_start();
+          if (is_array($_E_Load_View_data)) {
+            // Remove as many variables as possible.
+            unset($theme, $view);
+            extract($_E_Load_View_data, EXTR_SKIP);
+          }
+          require $_E_Load_View_file;
+          $output = ob_get_contents();
+          ob_end_clean();
+          return $output;
         }
 
         /**
