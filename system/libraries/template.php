@@ -380,7 +380,6 @@
         }
         
         // Some fancy PCRE to find the pseudo-link tag.
-        
         $regex = '/'
                . preg_quote('<!--{', '/')
                . '(' . preg_quote($link, '/') . ')'
@@ -410,26 +409,11 @@
         		  $content
         		);
         	}
-        #	$content = str_replace();
         }
         
       }
       
       return $content;
-
-      /* DIRTY OLD CODE:
-    	if (!$this->section_exists($start_section)) {
-        return false;
-      }
-      $content = $this->section($start_section)->content();
-      if (isset($this->links[$start_section])) {
-        foreach ($this->links[$start_section] as $link) {
-          $content = str_replace('<!--{'.$link.'}-->', $this->_link($link), $content);
-        }
-      }
-      return $content;
-      // END DIRTY OLD CODE;
-      /**/
     }
 
     /**
@@ -441,16 +425,28 @@
      * @return string|false
      */
     protected function concat_sections($sections, $max = 0) {
+    	// If they have provided us with just one section object, turn it into an
+    	// array.
+    	if (is_object($sections) && $sections instanceof $this->section_class) {
+    		$sections = array($sections);
+    	}
       if (!is_int($max) || !is_array($sections) || !count($sections)) {
         return false;
       }
+      if ($max === 0) {
+      	$max = count($sections);
+      }
       $content = '';
-      foreach($sections as $section) {
-        $section = $this->section_name($section);
-        if (!$this->section_exists($section) || !is_object($this->section($section))) {
-          continue;
-        }
-        $content .= $this->section($section)->content();
+      reset($sections);
+      for ($i = 0; $i < $max; $i++) {
+      	// Grab the array element the pointer is currently at.
+      	$section = $this->section_name(current($sections));
+      	if (!$this->section_exists($section) || !is_object($this->section($section))) {
+      		continue;
+      	}
+      	$content .= $this->section($section)->content();
+      	// Move the array pointer along one.
+      	next($sections);
       }
       return $content;
     }
