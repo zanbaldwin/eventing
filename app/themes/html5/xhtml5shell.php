@@ -9,7 +9,7 @@
       <link href="<?php echo $favicon; ?>" rel="shortcut icon" type="image/png" title="Favicon" />
     <?php endif; ?>
     <!--{style}-->
-    <!--{script}-->
+    <!--{script[0]}-->
   </head>
 
   <body>

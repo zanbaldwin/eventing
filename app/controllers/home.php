@@ -41,13 +41,14 @@
         'header',
         'nav',
         'content',
+        'sidebar',
         'footer',
       
         // Content
         'node_1' => 'node',
         'node_2' => 'node'
       ));
-      // Add data to the
+      // Add data to the views.
       $this->template->section('shell')->add(array(
         'title' => 'HTML5 Eventing Template'
       ));
