@@ -371,6 +371,7 @@
         return false;
       }
       
+      $i = 1;
       foreach ($this->links[$section] as $link) {
         $link = $this->section_name($link);
         if (!$this->section_exists($link)) {
@@ -389,9 +390,17 @@
         	var_dump($matches);
         #	$content = str_replace();
         }
+        echo "<h2>#{$i}</h2>\nContent:<pre>\n";
+        var_dump($content);
+        echo "</pre>Matches:<pre>";
+        var_dump($matches);
+        echo "</pre>Preg Result:<pre>";
         var_dump($preg);
+        echo "</pre><hr />";
+        $i++;
         
       }
+      echo "<h2>RegEx</h2>{$regex}";
       
       return $content;
 
