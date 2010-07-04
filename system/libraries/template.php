@@ -183,7 +183,7 @@
     	}
     	$dir = trim($dir, '/');
     	$path = APP . 'themes/' . $this->theme . $dir;
-    	if(!is_dir($path)) {
+    	if (!is_dir($path)) {
     	  return false;
     	}
     	$this->subdir = $dir;
@@ -216,24 +216,24 @@
      * @return void
      */
     public function create($views) {
-    	if(!is_array($views) || !count($views)) {
+    	if (!is_array($views) || !count($views)) {
     		return;
     	}
     	foreach($views as $name => $view) {
     		// If the section already exists, there is no point creating a new one;
     		// you'd lose all your data!
-    		if($this->section_exists($name)) {
+    		if ($this->section_exists($name)) {
     			continue;
     		}
     		// Shortcut for lazy people, if no array key is given, use the view as
     		// the name. If something other than a valid string is passed as the key
     		// just continue.
     		$name = is_int($name) ? $view : $name;
-    		if(!$this->is_varname($name)) {
+    		if (!$this->is_varname($name)) {
     			continue;
     		}
     		// You can't makea section if the view doesn't exist!
-    		if(!$this->view_exists($view)) {
+    		if (!$this->view_exists($view)) {
     			continue;
     		}
     		// All checks have passed, let's create that section!
@@ -258,7 +258,7 @@
      */
     public function active($section) {
     	$section = $this->section_name($section);
-    	if(!$this->section_exists($section)) {
+    	if (!$this->section_exists($section)) {
     		return false;
     	}
     	$this->active = $section;
@@ -295,12 +295,12 @@
      */
     public function link($links) {
 
-    	if(!is_array($links)) {
+    	if (!is_array($links)) {
     		return;
     	}
     	foreach($links as $section => $imports) {
     		$section = $this->section_name($section);
-    		if(!$this->section_exists($section)) {
+    		if (!$this->section_exists($section)) {
     			continue;
     		}
     		// Make sure that it is an array!
@@ -336,7 +336,7 @@
     	$this->sections[$name] = array();
     	foreach ($sections as $section) {
     		$section = $this->section_name($section);
-    		if(!$this->section_exists($section) && is_object($this->section($section))) {
+    		if (!$this->section_exists($section) && is_object($this->section($section))) {
     			$this->sections[$name][] = $section;
     		}
     	}
@@ -349,7 +349,7 @@
      * @access protected
      * @return boolean
      */
-    protected function combine($section) {
+    protected function combine($section, $limit = 1) {
 
       // Need to go away and think about this method. Rushing into it ends up
       // with me thinking of something that I should of done differently 5
@@ -357,7 +357,8 @@
 
       if (!$this->section_exists($section)
        || !isset($this->links[$section])
-       || !is_array($this->links[$section])) {
+       || !is_array($this->links[$section])
+       || !is_int($limit)) {
       	return false;
       }
       if (is_array($this->sections[$section])) {
@@ -372,13 +373,27 @@
       
       foreach ($this->links[$section] as $link) {
         $link = $this->section_name($link);
-        if(!$this->section_exists($link)) {
+        if (!$this->section_exists($link)) {
           continue;
         }
         
         // Some fancy PCRE to find the pseudo-link tag.
+        $content = $this->concat_sections($content, $limit);
+        $regex = '/'
+               . preg_quote('<!--{', '/')
+               . '(' . $this->valid_name . ')'
+               . '(\[([0-9]+)\])?'
+               . preg_quote('}-->', '/')
+               . '/';
+        if ($preg = preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
+        	var_dump($matches);
+        #	$content = str_replace();
+        }
+        var_dump($preg);
         
       }
+      
+      return $content;
 
       /* DIRTY OLD CODE:
     	if (!$this->section_exists($start_section)) {
@@ -404,13 +419,19 @@
      * @return string|false
      */
     protected function concat_sections($sections, $max = 0) {
-      if(!is_array($sections) || !is_int($max)) {
+      if (!is_int($max)) {
         return false;
+      }
+      if (is_object($sections)) {
+      	return $this->section($sections)->content();
+      }
+      if (!is_array($sections)) {
+      	return false;
       }
       $content = '';
       foreach($sections as $section) {
         $section = $this->section_name($section);
-        if(!$this->section_exists($section) || !is_object($this->section($section))) {
+        if (!$this->section_exists($section) || !is_object($this->section($section))) {
           continue;
         }
         $content .= $this->section($section)->content();
@@ -433,11 +454,11 @@
         return false;
       }
       $rendered = $this->combine($section);
-      if(!is_string($rendered)) {
+      if (!is_string($rendered)) {
         return false;
       }
     	$E =& get_instance();
-    	if(!isset($E->output)) {
+    	if (!isset($E->output)) {
     	  echo $rendered;
     	}
     	else {
@@ -463,10 +484,10 @@
    */
   class E_Template_Section {
 
-    public  $view,
-            $path;
-    private $data = array(),
-            $E;
+    public    $name,
+              $path;
+    protected $data = array(),
+              $E;
 
     // TODO: Rewrite the class to use the format:
     //       new E_template_section($name, $path);
@@ -479,8 +500,8 @@
      * @param  $path
      * @return void
      */
-    public function __construct($view, $path) {
-      $this->view = $view;
+    public function __construct($name, $path) {
+      $this->name = $name;
       $this->path = is_string($path) ? $path : '';
       $this->E =& get_instance();
     }
@@ -498,6 +519,10 @@
       return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
     }
 
+    public function name() {
+    	return $this->name;
+    }
+    
     /**
      * Section Content
      *
@@ -507,7 +532,7 @@
      * @return string
      */
     public function content() {
-      return $this->E->load->view($this->path . $this->view, $this->data);
+      return $this->E->load->view($this->path, $this->data);
     }
 
     /**
