@@ -354,30 +354,30 @@
       // Need to go away and think about this method. Rushing into it ends up
       // with me thinking of something that I should of done differently 5
       // minutes ago.
-      
-      if(!$this->section_exists($section)) {
-        return false;
+
+      if (!$this->section_exists($section)
+       || !isset($this->links[$section])
+       || !is_array($this->links[$section])) {
+      	return false;
       }
-      if(is_array($this->sections[$section])) {
+      if (is_array($this->sections[$section])) {
         $content = $this->sections[$section];
       }
-      elseif(is_object($this->section($section))) {
-        $content = array($this->section($section)->content());
+      elseif (is_object($this->section($section))) {
+        $content = array($this->section($section)->name());
       }
       else {
         return false;
       }
       
-      if(isset($this->links[$section]) && is_array($this->links[$section])) {
-        foreach($this->links[$section] as $link) {
-          $link = $this->section_name($link);
-          if(!$this->section_exists($link)) {
-            continue;
-          }
-          
-          // Some fancy PCRE to find the pseudo-link tag.
-          
+      foreach ($this->links[$section] as $link) {
+        $link = $this->section_name($link);
+        if(!$this->section_exists($link)) {
+          continue;
         }
+        
+        // Some fancy PCRE to find the pseudo-link tag.
+        
       }
 
       /* DIRTY OLD CODE:
