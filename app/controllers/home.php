@@ -28,10 +28,8 @@
     public function html5()
     {
       $this->load->library('template');
-
       // Set the theme folder we have saved all these in.
       $this->template->set_theme('html5');
-      
       // Load the views into objects that we can use.
       $this->template->create(array(
         // Structure
@@ -43,7 +41,6 @@
         'content',
         'sidebar',
         'footer',
-      
         // Content
         'node_1' => 'node',
         'node_2' => 'node'
@@ -60,7 +57,9 @@
       // other sections.
       $this->template->group('posts', array('node_1', 'node_2'));
       $links = array(
-        'shell' => array('style', 'script', 'header', 'content', 'sidebar', 'footer'),
+        'shell' => array(
+          'style', 'script', 'header', 'content', 'sidebar', 'footer'
+        ),
         'header' => array('nav'),
         'content' => array('posts'),
       );
