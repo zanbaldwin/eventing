@@ -1,5 +1,5 @@
 <style>
-  body {
-    background-color: lightsteelblue;
-  }
+body {
+	background-color: lightsteelblue;
+}
 </style>
