@@ -1,1 +1,1 @@
-<?php
+<script src=""></script>

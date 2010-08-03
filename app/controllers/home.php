@@ -43,7 +43,8 @@
         'footer',
         // Content
         'node_1' => 'node',
-        'node_2' => 'node'
+        'node_2' => 'node',
+        'node_3' => 'node',
       ));
       // Add data to the views.
       $this->template->section('shell')->add(array(
@@ -56,6 +57,7 @@
       // Create a pseudo-section. Not a section on it's own, but a collection of
       // other sections.
       $this->template->group('posts', array('node_1', 'node_2'));
+      $this->template->join('posts', 'node_3');
       $links = array(
         'shell' => array(
           'style', 'script', 'header', 'content', 'sidebar', 'footer'
