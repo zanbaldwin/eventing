@@ -345,13 +345,43 @@
     	$this->sections[$name] = array();
     	foreach ($sections as $section) {
     		$section = $this->section_name($section);
-    		if (!$this->section_exists($section) && is_object($this->section($section))) {
+    		if ($this->section_exists($section) && is_object($this->section($section))) {
     			$this->sections[$name][] = $section;
     		}
     	}
     	return true;
     }
 
+    /**
+     * Join Group
+     * 
+     * Join the passed sections with the already existing group
+     * 
+     * @access public
+     * @param string $group
+     * @param string|array $sections
+     * @return boolean
+     */
+    public function join($group, $sections) {
+    	if(is_string($sections)) {
+    		$sections = array($sections);
+    	}
+    	if (!is_string($group)
+    	 || !$this->is_varname($group)
+    	 || !$this->section_exists($group)
+    	 || !is_array($this->sections[$group])
+    	 || !is_array($sections)
+    	) {
+    		return false;
+    	}
+    	foreach ($sections as $section) {
+    		if($this->section_exists($section)) {
+    			$this->sections[$group][] = $section;
+    		}
+    	}
+    	return true;
+    }
+    
     /**
      * Combine Sections
      * 
