@@ -359,17 +359,16 @@
      * @return boolean
      */
     protected function combine($section, $limit = 1) {
-
+    	
       // Need to go away and think about this method. Rushing into it ends up
       // with me thinking of something that I should of done differently 5
       // minutes ago.
 
       if (!$this->section_exists($section)
-       || !isset($this->links[$section])
-       || !is_array($this->links[$section])
        || !is_int($limit)) {
       	return false;
       }
+      
       if (is_array($this->sections[$section])) {
         $sections = $this->sections[$section];
       }
@@ -379,7 +378,12 @@
       else {
         return false;
       }
+      
       $content = $this->concat_sections($sections, $limit);
+      
+      if (!isset($this->links[$section]) || !is_array($this->links[$section])) {
+      	return $content;
+      }
       
       foreach ($this->links[$section] as $link) {
         $link = $this->section_name($link);
