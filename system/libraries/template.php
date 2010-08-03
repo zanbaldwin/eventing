@@ -33,6 +33,15 @@
 
   /**
    * Eventing Template Library
+   * 
+   * Provides simple templating methods, such as adding variables, and combining
+   * multiple views together into complex, nested sections.
+   * 
+   * @package     Eventing
+   * @subpackage  Libraries
+   * @category    template
+   * @author      Alexander Baldwin
+   * @link        http://github.com/mynameiszanders/eventing
    */
   class E_template {
   	
@@ -531,6 +540,14 @@
       return preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $varname);
     }
 
+    /**
+     * Section Name
+     * 
+     * Returns the name of the section.
+     * 
+     * @access public
+     * @return string
+     */
     public function name() {
     	return $this->name;
     }

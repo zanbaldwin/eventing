@@ -7,6 +7,6 @@
 
   $config = array(
     'library' => array(),
-    'model' => array(),
-    'plugin' => array()
+    'model'   => array(),
+    'plugin'  => array()
   );
