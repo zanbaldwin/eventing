@@ -4,7 +4,9 @@ Eventing PHP Framework
 + **Author**:
   Alexander Baldwin
 + **License**:
+
   MIT <http://www.opensource.org/licenses/mit-license.php>
+
   GPL v3+ <http://www.gnu.org/licenses/gpl.html>
 
 Eventing is a PHP Framework based on CodeIgniter.
