@@ -522,6 +522,33 @@ class E_template {
 		return true;
 	}
 
+	/**
+	 * Load Config
+	 * 
+	 * Load the template settings from a pre-defined config file.
+	 * 
+	 * @access public
+	 * @param string $config_file
+	 * @return boolean
+	 */
+	public function load_config($config) {
+		// If the config file is not a string, we won't be able to load it anyway.
+		if(!is_string($config)) {
+			return false;
+		}
+		// Grab the config array.
+		$config = c($config, 'template');
+		if(!is_array($config)) {
+			// Config file doesn't exist...
+			return false;
+		}
+    // Set the simple strings.
+		isset($config['theme'])  && $this->set_theme($config['theme']);
+		isset($config['dir'])    && $this->set_dir($config['dir']);
+		isset($config['prefix']) && $this->set_prefix($config['prefix']);
+		// Now to iterate over the rest...
+	}
+	
 }
 
 //------------------------------------------------------------------------------
