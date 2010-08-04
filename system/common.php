@@ -375,52 +375,52 @@ if(!function_exists('a'))
 	 * parameter is a non-empty string, it will wrap the link in the HTML 'a' tag with text.
 	 *
 	 * @param string $segments
+	 *    This can either be segments, or an already formatted URL.
 	 * @param string $title
 	 * @param array $options
 	 * @return string|boolean
 	 */
 	function a($segments, $title = null, $options = null)
 	{
-		$regex = '|^([a-zA-Z0-9]*\:)?([a-zA-Z0-9\/_-]*)(\?.*)?$|';
-		if(!is_string($segments) || !preg_match($regex, $segments, $matches))
-		{
-			return false;
+		if(!filter_var($segments, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
+
+			$regex = '|^([a-zA-Z0-9]*\:)?([a-zA-Z0-9\/_-]*)(\?.*)?$|';
+		  if(!is_string($segments) || !preg_match($regex, $segments, $matches)) {
+			  return false;
+		  }
+			// Start creating the final URL. Server and App Folder + Segments and Suffix
+			$segments = $matches[2];
+			switch($matches[1]) {
+				case '':
+					$suffix = '.' . c('url_default_suffix');
+					break;
+				case ':':
+					$suffix = '/';
+					break;
+				default:
+					$suffix = '.' . substr($matches[1], 0, strlen($matches[1]) - 1);
+					break;
+			}
+			if($matches[2] == '') {
+				$suffix = '';
+			}
+			$url = c('url_mod_rewrite') ? BASEURL : BASEURL . SELF . '/';
+			$url .= $segments . $suffix;
+			// Sort out the Query String. Add the variables that should be saved from one page to the other.
+			$E =& get_instance();
+			$query = array_merge($E->uri->get_saves(), $E->uri->split_query(substr($matches[3], 1)));
+			$query = $E->uri->create_query($query);
+			$url .= $query != '' ? '?' . $query : '';
 		}
-		// Start creating the final URL. Server and App Folder + Segments and Suffix
-		$segments = $matches[2];
-		switch($matches[1])
-		{
-			case '':
-				$suffix = '.' . c('url_default_suffix');
-				break;
-			case ':':
-				$suffix = '/';
-				break;
-			default:
-				$suffix = '.' . substr($matches[1], 0, strlen($matches[1]) - 1);
-				break;
+		else {
+			$url = $segments;
 		}
-		if($matches[2] == '')
-		{
-			$suffix = '';
-		}
-		$url = c('url_mod_rewrite') ? BASEURL : BASEURL . SELF . '/';
-		$url .= $segments . $suffix;
-		// Sort out the Query String. Add the variables that should be saved from one page to the other.
-		$E =& get_instance();
-		$query = array_merge($E->uri->get_saves(), $E->uri->split_query(substr($matches[3], 1)));
-		$query = $E->uri->create_query($query);
-		$url .= $query != '' ? '?' . $query : '';
 		// Check for a title, and if so, wrap the URL in an HTML Anchor tag.
-		if(is_string($title))
-		{
+		if(is_string($title)) {
 			$option_text = '';
-			if(is_array($options))
-			{
-				foreach($options as $key => $value)
-				{
-					if(is_string($key) && is_string($value))
-					{
+			if(is_array($options)) {
+				foreach($options as $key => $value)	{
+					if(is_string($key) && is_string($value)) {
 						$option_text .= ' ' . $key . '="' . $value . '"';
 					}
 				}
