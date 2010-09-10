@@ -398,7 +398,6 @@ if(!function_exists('a')) {
       }
       $path = $link;
     }
-    
     // The segment regular expression is not easy to read, so we'll break it
     // down here.
     $segment_regex['suffix'] = '[a-zA-Z0-9]*\:';
@@ -421,9 +420,6 @@ if(!function_exists('a')) {
       $regex = '(' . $regex . ')?';
     }
     $segment_regex = '~^' . implode('', $segment_regex) . '$~';
-    
-    var_dump($segment_regex);
-    
     // Filter $path.
     // Depending on what format the path is in, is how we grab the URL from it.
     switch(true) {
@@ -433,7 +429,6 @@ if(!function_exists('a')) {
         break;
       // Segments.
       case preg_match($segment_regex, $path, $matches):
-        var_dump($matches);
         if(strlen($matches[1]) == 0) {
           $matches[1] = c('url_default_suffix') . ':';
         }
@@ -462,7 +457,6 @@ if(!function_exists('a')) {
             $query = $matches[3];
           }
         }
-        var_dump($query);
         $fragment = '';
         if(strlen($matches[4]) > 1) {
           $fragment = $matches[4];
