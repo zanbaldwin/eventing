@@ -515,24 +515,27 @@ if(!function_exists('content'))
 	/**
    * Content URL
    *
-   * Takes a file path, relative to the content folder, checks that it exists, and returns the absolute URL.
+   * Takes a file path, relative to the content folder, checks that it exists,
+   * and returns the absolute URL. If $force is set to true, it will return the
+   * path regardless of whether the file exists (content path still needs to be
+   * set).
    *
+   * @access public
    * @param string $file
+   * @param boolean $force
    * @return false|string
    */
-  function content($file)
-  {
-    if(is_null(CONTENTPATH) || is_null(CONTENT))
-    {
-      return false;
-    }
-    $file = trim(preg_replace('|//+|', '/', str_replace('\\', '/', $file)), '/');
-    $filepath = realpath(CONTENTPATH . $file);
-    if(!file_exists($filepath))
-    {
-      return false;
-    }
-    return CONTENT . $file;
+  function content($file, $force = false) {
+  	$force = bool($force);
+  	if(is_null(CONTENTPATH) || is_null(CONTENT)) {
+  		return false;
+  	}
+  	$file = trim(preg_replace('|/+|', '/', str_replace('\\', '/', $file)), '/');
+  	$path = CONTENTPATH . $file;
+  	if($force) {
+  		return $path;
+  	}
+  	return file_exists($path) ? realpath($path) : false;
   }
 }
 
