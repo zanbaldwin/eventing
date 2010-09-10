@@ -432,6 +432,21 @@ if(!function_exists('a'))
 }
 
 if(!function_exists('a_new')) {
+	/**
+	 * Anchor
+	 * 
+	 * Function relating to all things Framework URL, plus a bit more! Segments to
+	 * URL, with file extension and query string support, plain old
+	 * wrap-link-in-html-tag, and fetch link from config file. If the second
+	 * parameter is a non-empty string, it will wrap the link in the HTML 'a' tag
+	 * with text.
+	 * 
+	 * @access public
+	 * @param string $path
+	 * @param string $title
+	 * @param array $options
+	 * @return string|false
+	 */
 	function a_new($path, $title = false, $options = array()) {
 		// Filter $path
 		//   URL,
