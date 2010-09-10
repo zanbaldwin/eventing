@@ -462,7 +462,7 @@ if(!function_exists('a_new')) {
 		// Rel Nofollow
 		if(in_array($url, $used_urls)) {
 			$options['rel'] = isset($options['rel'])
-			                ? trim($options['rel']) . ' nofollow';
+			                ? trim($options['rel']) . ' nofollow'
 			                : 'nofollow';
 		}
 		else {
