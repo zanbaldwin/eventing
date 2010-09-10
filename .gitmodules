@@ -1,3 +1,0 @@
-[submodule "ThirdParty"]
-	path = system/libraries
-	url = git://github.com/mynameiszanders/eventing-thirdparty.git
