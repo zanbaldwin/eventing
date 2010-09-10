@@ -461,10 +461,10 @@ if(!function_exists('a_new')) {
 				$url = $path;
 				break;
 			// Segments.
-			case preg_match('', $path, $matches):
+			case preg_match('|^$|', $path, $matches):
 				break;
 			// Config reference.
-			case preg_match('', $path, $matches):
+			case preg_match('|^~[a-zA-Z0-9_-]+$|', $path, $matches):
 				break;
 			// Anthing else.
 			default:
