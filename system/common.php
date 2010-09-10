@@ -464,6 +464,30 @@ if(!function_exists('a_new')) {
     	}
     	$path = $link;
     }
+    
+    // The segment regular expression is not easy to read, so we'll break it
+    // down here.
+    $segment_regex['suffix'] = '[a-zA-Z0-9]*\\:';
+    // Segments can only contain alphanumeric characters, underscores, hyphens
+    // and segment separators.
+    $segment_regex['segments'] = '[a-zA-Z0-9/_-]+';
+    // The query string is a bit different, because there are so many ways of
+    // including it.
+    $segment_regex['query'] = array(
+      '\?(?:[a-zA-Z][a-zA-Z\:]*)?\?',
+      '\?[^\?#]',
+    );
+    $segment_regex['query'] = '(?:' . implode('|', $segment_regex['query']) . ')';
+    // The fragment is easy. Pretty much any characters are allowed after a hash
+    // symbol.
+    $segment_regex['fragment'] = '#.*';
+    // Now combine all the part regular expressions together to form an AWESOME
+    // ALLIANCE!
+    foreach($segment_regex as &$regex) {
+    	$regex = '(' . $regex . ')?';
+    }
+    $segment_regex = '|^' . implode('', $segment_regex) . '$|';
+    
     // Filter $path.
     // Depending on what format the path is in, is how we grab the URL from it.
     switch(true) {
@@ -472,7 +496,7 @@ if(!function_exists('a_new')) {
         $url = $path;
         break;
       // Segments.
-      case preg_match('|^$|', $path, $matches):
+      case preg_match($segment_regex, $path, $matches):
       	
         break;
       // Anthing else.
