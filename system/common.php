@@ -394,8 +394,9 @@ if(!function_exists('show_doc'))
   function show_doc($error_number)
   {
     $file = APP . 'themes/errors/' . (string) $error_number . EXT;
-    file_exists($file) || show_error('Error Document for ' . $error_number . ' status code does not exist.',
-                                        '500 Internal Application Error');
+    if(!file_exists($file)) {
+    	return false;
+    }
     require_once $file;
     exit;
   }
