@@ -458,16 +458,16 @@ if(!function_exists('a_new')) {
     // If the path is a config reference, load it up so we can perform the check
     // on it as if it had been passed to the function directly.
     if(preg_match('|^~([a-zA-Z0-9_-]+)$|', $path, $matches)) {
-    	$link = c($matches[1], 'links');
-    	if(!is_string($link)) {
-    		return false;
-    	}
-    	$path = $link;
+      $link = c($matches[1], 'links');
+      if(!is_string($link)) {
+        return false;
+      }
+      $path = $link;
     }
     
     // The segment regular expression is not easy to read, so we'll break it
     // down here.
-    $segment_regex['suffix'] = '[a-zA-Z0-9]*\\:';
+    $segment_regex['suffix'] = '[a-zA-Z0-9]*\:';
     // Segments can only contain alphanumeric characters, underscores, hyphens
     // and segment separators.
     $segment_regex['segments'] = '[a-zA-Z0-9/_-]+';
@@ -475,7 +475,7 @@ if(!function_exists('a_new')) {
     // including it.
     $segment_regex['query'] = array(
       '\?(?:[a-zA-Z][a-zA-Z\:]*)?\?',
-      '\?[^\?#]',
+      '\?[^\?#]*',
     );
     $segment_regex['query'] = '(?:' . implode('|', $segment_regex['query']) . ')';
     // The fragment is easy. Pretty much any characters are allowed after a hash
@@ -484,9 +484,11 @@ if(!function_exists('a_new')) {
     // Now combine all the part regular expressions together to form an AWESOME
     // ALLIANCE!
     foreach($segment_regex as &$regex) {
-    	$regex = '(' . $regex . ')?';
+      $regex = '(' . $regex . ')?';
     }
-    $segment_regex = '|^' . implode('', $segment_regex) . '$|';
+    $segment_regex = '~^' . implode('', $segment_regex) . '$~';
+    
+    var_dump($segment_regex);
     
     // Filter $path.
     // Depending on what format the path is in, is how we grab the URL from it.
@@ -497,7 +499,42 @@ if(!function_exists('a_new')) {
         break;
       // Segments.
       case preg_match($segment_regex, $path, $matches):
-      	
+        var_dump($matches);
+        if(strlen($matches[1]) == 0) {
+          $matches[1] = c('url_default_suffix') . ':';
+        }
+        $suffix = strlen($matches[1]) > 1
+                ? '.' . substr($matches[1], 0, -1)
+                : '/';
+        $segments = trim($matches[2], '/');
+        $query = '';
+        if(strlen($matches[3]) > 1) {
+          if(substr($matches[3], -1) == '?') {
+            $matches[3] = trim($matches[3], '?');
+            if($matches[3] == '') {
+              $matches[3] = 'query_string';
+            }
+            if(isset($options[$matches[3]])) {
+              $query = is_array($options[$matches[3]])
+                     ? http_build_query($options[$matches[3]])
+                     : $options[$matches[3]];
+              unset($options[$matches[3]]);
+              if(substr($query, 0, 1) != '?') {
+                $query = '?' . $query;
+              }
+            }
+          }
+          else {
+            $query = $matches[3];
+          }
+        }
+        var_dump($query);
+        $fragment = '';
+        if(strlen($matches[4]) > 1) {
+          $fragment = $matches[4];
+        }
+        $url = c('url_mod_rewrite') ? BASEURL : BASEURL . SELF . '/';
+        $url .= $segments . $suffix . $query . $fragment;
         break;
       // Anthing else.
       default:
@@ -510,7 +547,7 @@ if(!function_exists('a_new')) {
                       ? trim($options['rel']) . ' nofollow'
                       : 'nofollow';
     }
-    else {
+    elseif(is_string($title)) {
       $used_urls[] = $url;
     }
     // Title
@@ -539,16 +576,16 @@ if(!function_exists('a_new')) {
   }
 }
 
-/**
- * Content URL
- *
- * Takes a file path, relative to the content folder, checks that it exists, and returns the absolute URL.
- *
- * @param string $file
- * @return false|string
- */
 if(!function_exists('content'))
 {
+	/**
+   * Content URL
+   *
+   * Takes a file path, relative to the content folder, checks that it exists, and returns the absolute URL.
+   *
+   * @param string $file
+   * @return false|string
+   */
   function content($file)
   {
     if(is_null(CONTENTPATH) || is_null(CONTENT))
