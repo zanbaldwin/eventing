@@ -431,6 +431,17 @@ if(!function_exists('a'))
 	}
 }
 
+if(!function_exists('a_new')) {
+	function a_new($path, $title = false, $options = array()) {
+		// Filter $path
+		//   URL,
+		//   segments,
+		//   config,
+		// Title
+		//   Options
+	}
+}
+
 /**
  * Content URL
  *
