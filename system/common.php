@@ -455,6 +455,22 @@ if(!function_exists('a_new')) {
 		if(!is_array($options)) {
 			$options = array();
 		}
+		switch(true) {
+			// Valid URL.
+			case filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED):
+				$url = $path;
+				break;
+			// Segments.
+			case preg_match('', $path, $matches):
+				break;
+			// Config reference.
+			case preg_match('', $path, $matches):
+				break;
+			// Anthing else.
+			default:
+				return false;
+				break;
+		}
 		// Filter $path
 		//   URL,
 		//   segments,
@@ -481,7 +497,7 @@ if(!function_exists('a_new')) {
 				foreach($options as $attr => $value) {
 					if (is_string($attr)
 					 && is_string($value)
-					 && preg_match('', $attr)
+					 && preg_match('|^[a-zA-Z][a-zA-Z\:]*$|', $attr)
 					 && strpos($value, '"') === false
 					) {
 						$attributes .= ' ' . $attr . '="' . $value . '"';
