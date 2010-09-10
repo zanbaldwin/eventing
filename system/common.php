@@ -440,6 +440,9 @@ if(!function_exists('a_new')) {
 	 * wrap-link-in-html-tag, and fetch link from config file. If the second
 	 * parameter is a non-empty string, it will wrap the link in the HTML 'a' tag
 	 * with text.
+	 * If the URL has already been used by this function, it will add the
+	 * attribute rel="nofollow" to prevent search engines thinking you are trying
+	 * to spam them.
 	 * 
 	 * @access public
 	 * @param string $path
@@ -448,12 +451,46 @@ if(!function_exists('a_new')) {
 	 * @return string|false
 	 */
 	function a_new($path, $title = false, $options = array()) {
+		static $used_urls = array();
+		if(!is_array($options)) {
+			$options = array();
+		}
 		// Filter $path
 		//   URL,
 		//   segments,
 		//   config,
+		// Rel Nofollow
+		if(in_array($url, $used_urls)) {
+			$options['rel'] = isset($options['rel'])
+			                ? trim($options['rel']) . ' nofollow';
+			                : 'nofollow';
+		}
+		else {
+			$used_urls[] = $url;
+		}
 		// Title
-		//   Options
+		if(is_string($title)) {
+			// Compile the options string
+			$attributes = '';
+			if(is_array($options) && count($options)) {
+				// We do not want the href attribute being overwritten.
+				if(isset($options['href'])) {
+					unset($options['href']);
+				}
+				// Loop through and add them all as a single string.
+				foreach($options as $attr => $value) {
+					if (is_string($attr)
+					 && is_string($value)
+					 && preg_match('', $attr)
+					 && strpos($value, '"') === false
+					) {
+						$attributes .= ' ' . $attr . '="' . $value . '"';
+					}
+				}
+			}
+			$url = '<a href="' . $url . '"' . $attributes . '>' . $title . '</a>';
+		}
+		return $url;
 	}
 }
 
