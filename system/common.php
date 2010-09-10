@@ -306,10 +306,19 @@ if(!function_exists('show_error'))
    *
    * Explain the function...
    *
-   * @return void
+   * @return exit
    */
-  function show_error($msg)
-  {
+  function show_error($msg, $header = '500 Framework Application Error', $format = '') {
+    if(!headers_sent()) {
+    	if(preg_match('|^[0-9]{3} |', $header, $matches)) {
+    		$code = (int) $matches[1];
+    		if($code < 600 && $code >= 100) {
+    			header($header, true, $code);
+    		}
+    	}
+    }
+    // Just just the message right now, don't have time to write anything. Those
+    // shirts aren't going to iron themselves!
     exit($msg);
   }
 }
