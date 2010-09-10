@@ -455,6 +455,17 @@ if(!function_exists('a_new')) {
     if(!is_array($options)) {
       $options = array();
     }
+    // If the path is a config reference, load it up so we can perform the check
+    // on it as if it had been passed to the function directly.
+    if(preg_match('|^~([a-zA-Z0-9_-]+)$|', $path, $matches)) {
+    	$link = c($matches[1], 'links');
+    	if(!is_string($link)) {
+    		return false;
+    	}
+    	$path = $link;
+    }
+    // Filter $path.
+    // Depending on what format the path is in, is how we grab the URL from it.
     switch(true) {
       // Valid URL.
       case filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED):
@@ -462,20 +473,13 @@ if(!function_exists('a_new')) {
         break;
       // Segments.
       case preg_match('|^$|', $path, $matches):
-        break;
-      // Config reference.
-      case preg_match('|^~[a-zA-Z0-9_-]+$|', $path, $matches):
-        
+      	
         break;
       // Anthing else.
       default:
         return false;
         break;
     }
-    // Filter $path
-    //   URL,
-    //   segments,
-    //   config,
     // Rel Nofollow
     if(in_array($url, $used_urls)) {
       $options['rel'] = isset($options['rel'])
