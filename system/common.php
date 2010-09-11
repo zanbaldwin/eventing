@@ -229,8 +229,10 @@ if(!function_exists('get_config'))
     $file = APP . 'config/' . $config_file;
     if(CONFIG == 'ini')
     {
-      function_exists('parse_ini_file')
-      || show_error('Cannot retrieve config settings. INI file parser does not exist.', 500);
+      function_exists('parse_ini_file') || show_error(
+        'Cannot retrieve config settings. INI file parser does not exist.',
+        500
+      );
       $file .= '.ini';
       if(!file_exists($file))
       {
@@ -279,7 +281,9 @@ if(!function_exists('c'))
     {
       return false;
     }
-    return isset($config_items[$file][$item]) ? $config_items[$file][$item] : null;
+    return isset($config_items[$file][$item])
+         ? $config_items[$file][$item]
+         : null;
   }
 }
 
@@ -288,7 +292,8 @@ if(!function_exists('filter_path'))
   /**
    * Filter Path
    *
-   * Converts all backslashes to forward slashes, for Unix style consistency, and removes unnecessary slashes.
+   * Converts all backslashes to forward slashes, for Unix style consistency,
+   * and removes unnecessary slashes.
    *
    * @param string $path
    * @return string|null
@@ -328,14 +333,17 @@ if(!function_exists('show_404'))
   /**
    * Show 404
    *
-   * Calls show_doc(404), trying to find a user error document. If this fails, default to the not-so-pretty
-   * show_error().
+   * Calls show_doc(404), trying to find a user error document. If this fails,
+   * default to the not-so-pretty show_error().
    *
    * @return void
    */
   function show_404()
   {
-    show_doc(404) || show_error('The page you requested does not exist.', '404 Not Found');
+    show_doc(404) || show_error(
+      'The page you requested does not exist.',
+      '404 Not Found'
+    );
   }
 }
 
@@ -344,12 +352,15 @@ if(!function_exists('show_deny'))
   /**
    * Show Deny
    *
-   * Calls show_doc(403), trying to find a user error document. If this fails, default to the not-so-pretty
-   * show_error().
+   * Calls show_doc(403), trying to find a user error document. If this fails,
+   * default to the not-so-pretty show_error().
    */
   function show_deny()
   {
-    show_doc(403) || show_error('You do not have sufficient clearance to view this page.', '403 Forbidden');
+    show_doc(403) || show_error(
+      'You do not have sufficient clearance to view this page.',
+      '403 Forbidden'
+    );
   }
 }
 
@@ -598,8 +609,8 @@ if(!function_exists('redirect'))
   /**
    * Redirect
    *
-   * Redirects the client/browser to another page. The parameter accepts the same as the first parameter for the
-   * a() function.
+   * Redirects the client/browser to another page. The parameter accepts the
+   * same as the first parameter for the a() function.
    *
    * @param string $segments
    * @return false|void
@@ -624,7 +635,8 @@ if(!function_exists('vardump'))
   /**
    * Vardump
    *
-   * Same as the PHP var_dump() function, except it returns the value, instead of dumping it to the output.
+   * Same as the PHP var_dump() function, except it returns the value, instead
+   * of dumping it to the output.
    *
    * @param mixed $var
    * @return string
@@ -698,17 +710,21 @@ if(!function_exists('elapsed_time')) {
   }
 }
 
-// That's it for common functions, now just a couple of hard coded settings / configurations:
+// That's it for common functions, now just a couple of hard coded settings
+// and/or configurations:
 
 set_magic_quotes_runtime(0);
 error_reporting(E_ALL & ~E_NOTICE);
-// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it happy :)
+// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
+// happy :)
 // You can change this in your controller, or a future library (hopefully!)
 if(function_exists('date_default_timezone_set'))
 {
   date_default_timezone_set(c('default_timezone'));
 }
-// Versions of PHP less than 5 do not have these constants, let's add them in for backwards
-// compatibility with the PHP Tokenizer.
-$tokens = defined('T_ML_COMMENT') ? array('T_DOC_COMMENT', T_ML_COMMENT) : array('T_ML_COMMENT', T_COMMENT);
+// Versions of PHP less than 5 do not have these constants, let's add them in
+// for backwards compatibility with the PHP Tokenizer.
+$tokens = defined('T_ML_COMMENT')
+        ? array('T_DOC_COMMENT', T_ML_COMMENT)
+        : array('T_ML_COMMENT', T_COMMENT);
 define($tokens[0], $tokens[1]);
