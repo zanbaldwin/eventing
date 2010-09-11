@@ -566,12 +566,43 @@ if(!function_exists('theme_path')) {
 	 * @param string $theme
 	 * @return string|false
 	 */
-	function theme_path($theme) {
+	function theme_path($theme = true) {
+		if($theme === true) {
+			$theme = '';
+		}
 		if(!is_string($theme)) {
 			return false;
 		}
 		$path = realpath(APP . 'themes/' . $theme);
 		return is_string($path) ? $path . '/' : false;
+	}
+}
+
+if(!function_exists('get_themes')) {
+	/**
+	 * Get Themes
+	 * 
+	 * Returns an array of folders that are inside the themes directory.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	function get_themes() {
+		static $themes = false;
+		if(is_array($themes)) {
+			return $themes;
+		}
+		$path = theme_path();
+		if(!is_string($path)) {
+			return array();
+		}
+		$handler = opendir($path);
+		while($file = readdir($handler)) {
+			if($file != '.' && $file != '..' && is_dir($path . $file)) {
+				$themes[] = $file;
+			}
+		}
+		return $themes;
 	}
 }
 
