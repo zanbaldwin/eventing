@@ -385,19 +385,22 @@ if(!function_exists('show_doc'))
   /**
    * Show Error Document
    *
-   * Supply it with a HTTP Status Code integer, and it will go check if the user has defined a special error
-   * document for that status code.
+   * Supply it with a HTTP Status Code integer, and it will go check if the user
+   * has defined a special error document for that status code.
+   * The function will return false if the document does not exist or headers
+   * have already been sent (the document will get mixed up with parts of the
+   * page that have already been served).
    *
    * @param int $error_number
-   * @return void
+   * @return exit|false
    */
   function show_doc($error_number)
   {
-    $file = APP . 'themes/errors/' . (string) $error_number . EXT;
-    if(!file_exists($file)) {
+    $file = theme_path('errors') . (string) $error_number . EXT;
+    if(headers_sent() || !file_exists($file)) {
     	return false;
     }
-    require_once $file;
+    require $file;
     exit;
   }
 }
