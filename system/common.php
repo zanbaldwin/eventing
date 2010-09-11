@@ -541,6 +541,26 @@ if(!function_exists('a')) {
   }
 }
 
+if(!function_exists('theme_path')) {
+	/**
+	 * Theme Path
+	 * 
+	 * Specify a theme and will return the absolute path to the theme directory.
+	 * Will return false if the theme directory does not exist.
+	 * 
+	 * @access public
+	 * @param string $theme
+	 * @return string|false
+	 */
+	function theme_path($theme) {
+		if(!is_string($theme)) {
+			return false;
+		}
+		$path = realpath(APP . 'themes/' . $theme);
+		return is_string($path) ? $path . '/' : false;
+	}
+}
+
 if(!function_exists('content'))
 {
 	/**
