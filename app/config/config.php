@@ -31,6 +31,7 @@ $config = array(
     'default_charset' => 'utf-8',
     'encryption_key' => 'lolomgwtf',
     'default_timezone' => 'GMT',
+    'error_types_trigger' => 17234,
 
 // Date Preferences:
     'time_short' => 'G:i',
