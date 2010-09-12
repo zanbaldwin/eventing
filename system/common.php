@@ -28,42 +28,95 @@ if (!defined('E_FRAMEWORK')) {
 // convinience of the next function:
 defined('E_STRICT') || define('E_STRICT', 2048);
 
-if (!function_exists('E_Error_Handler')) {
+if (!function_exists('eventing_error_handler')) {
   /**
    * Eventing Error Handler
+   * 
+   * Custom error handler for error's thrown by PHP or ones that have been
+   * triggered with trigger_error().
+   * 
+   * @access public
+   * @param integer $err
+   * @param string $msg
+   * @param string $file
+   * @param integer $line
+   * @return false|exit
    */
-  function E_Error_Handler($num, $msg, $file, $line) {
-    $types = array(
-    2 => 'Warning',
-    // 8 => 'Notice',
-    // 32 => 'Core Warning',
-    // 128 => 'Compile Warning',
-    512 => 'User Generated Warning',
-    1024 => 'User Generated Notice',
-    // 2048 => 'Strict',
-    4096 => 'Recoverable Error',
-    // 8192 => 'Depreciated',
-    16384 => 'User Define Depreciated'
-    );
-    if (isset($types[$num])) {
-      ?>
-<div class="error"
-  style="display: block; border: 2px solid #900; padding: 10px; margin: 10px; background-color: #FFF;">
-<h2 style="margin: 0 0 0.4em; color: #600;">Error <?php echo $num . ' (' . $types[$num]; ?>)</h2>
-<p style="margin: 0 0 0.4em; font-family: monospace; color: #000;"><strong>File:</strong>
-      <?php echo $file; ?><br />
-<strong>Line:</strong> <?php echo $line; ?></p>
-<p style="margin: 0 0 0 1em; color: #000;"><?php echo $msg; ?></p>
-</div>
-      <?php
-    }
+  function eventing_error_handler($err, $msg, $file, $line) {
+  	// Define the different error types.
+  	$types = array(
+  	  1          => 'Error',
+  	  2          => 'Warning',
+  	  4          => 'Parse Error',
+  	  8          => 'Notice',
+  	  16         => 'Core Error',
+  	  32         => 'Core Warning',
+  	  64         => 'Compile Error',
+  	  128        => 'Compile Warning',
+  	  256        => 'User Error',
+  	  512        => 'User Warning',
+  	  1024       => 'User Notice',
+  	  2048       => 'Strict',
+  	  4096       => 'Recoverable Error',
+  	  8192       => 'Deprecated',
+  	  16384      => 'User Deprecated',
+  	);
+  	// Define which error types we will account for.
+  	$trigger = c('error_types_trigger');
+  	if(!is_int($trigger)) {
+  		$trigger = 17237;
+  	}
+  	$triggers = binary_parts($trigger);
+  	if(!in_array($err, $triggers)) {
+  		return false;
+  	}
+  	// Build the error overwrite data array.
+  	$error = array(
+  	  'title'    => "Error {$err} ({$types[$err]})",
+  	  'file'     => $file,
+  	  'line'     => $line
+  	);
+  	// Show an error!
+  	show_error($msg, '500 Internal Server Error', $error);
   }
 }
 
 /**
  * Set PHP's error handler to the Eventing error handler.
  */
-set_error_handler('E_Error_Handler');
+set_error_handler('eventing_error_handler');
+
+if(!function_exists('binary_parts')) {
+	/**
+	 * Binary Parts
+	 * 
+	 * Returns an array of integers. Each number is a power of 2 that adds up to
+	 * the number passed to the function.
+	 * 
+	 * @access public
+	 * @param integer $int
+	 * @return array|false
+	 */
+	function binary_parts($int) {
+		if(!is_int($int)
+		   || (!is_numeric($int)
+		       || !preg_match('|^[0-9]+$|', $int))
+		   || $int < 0
+		) {
+			return false;
+		}
+		$arr = str_split(decbin((int) $int));
+		$arr = array_reverse($arr);
+		$count = count($arr);
+		$parts = array();
+		for($i = 0; $i < $count; $i++) {
+			if($arr[$i] == '1') {
+				$parts[] = pow(2, $i);
+			}
+		}
+		return $parts;
+	}
+}
 
 if (!function_exists('load_class')) {
   /**
@@ -313,7 +366,7 @@ if(!function_exists('show_error'))
    *
    * @return exit
    */
-  function show_error($msg, $header = '500 Framework Application Error') {
+  function show_error($msg, $header = '500 Framework Application Error', $user_error = false) {
     if(is_string($header)
        && preg_match('|^([0-9]{3}) |', $header, $matches)
        && (int) $matches[1] < 600
@@ -335,6 +388,13 @@ if(!function_exists('show_error'))
       'file' => $trace[0]['file'],
       'line' => $trace[0]['line']
     );
+    if(is_array($user_error)) {
+    	foreach($user_error as $overwrite => $value) {
+    		if(isset($error[$overwrite])) {
+    			$error[$overwrite] = $value;
+    		}
+    	}
+    }
     // Unset any variables that we don't want included in the error document.
     unset($msg, $header, $matches, $trace);
     if(file_exists(theme_path('errors') . 'error' . EXT)) {
@@ -346,7 +406,7 @@ if(!function_exists('show_error'))
     	// No HTML document to show? Dump out the data in an XML document instead.
     	echo '<?xml version="1.0" encoding="utf-8" ?>' . "\n<error>\n";
     	foreach($error as $element => $value) {
-    		echo "  <{$element}>\n    {$value}</{$element}>\n";
+    		echo "  <{$element}>\n    {$value}\n  </{$element}>\n";
     	}
     	echo '</error>';
     }
