@@ -45,21 +45,21 @@ if (!function_exists('eventing_error_handler')) {
   function eventing_error_handler($err, $msg, $file, $line) {
   	// Define the different error types.
   	$types = array(
-  	  1          => 'Error',
-  	  2          => 'Warning',
-  	  4          => 'Parse Error',
-  	  8          => 'Notice',
-  	  16         => 'Core Error',
-  	  32         => 'Core Warning',
-  	  64         => 'Compile Error',
-  	  128        => 'Compile Warning',
-  	  256        => 'User Error',
-  	  512        => 'User Warning',
-  	  1024       => 'User Notice',
-  	  2048       => 'Strict',
-  	  4096       => 'Recoverable Error',
-  	  8192       => 'Deprecated',
-  	  16384      => 'User Deprecated',
+  	  E_ERROR              => 'Error',
+  	  E_WARNING            => 'Warning',
+  	  E_PARSE              => 'Parse Error',
+  	  E_NOTICE             => 'Notice',
+  	  E_CORE_ERROR         => 'Core Error',
+  	  E_CORE_WARNING       => 'Core Warning',
+  	  E_COMPILE_ERROR      => 'Compile Error',
+  	  E_COMPILE_WARNING    => 'Compile Warning',
+  	  E_USER_ERROR         => 'User Error',
+  	  E_USER_WARNING       => 'User Warning',
+  	  E_USER_NOTICE        => 'User Notice',
+  	  E_STRICT             => 'Strict',
+  	  E_RECOVERABLE_ERROR  => 'Recoverable Error',
+  	  E_DEPRECATED         => 'Deprecated',
+  	  E_USER_DEPRECATED    => 'User Deprecated',
   	);
   	// Define which error types we will account for.
   	$trigger = c('error_types_trigger');
