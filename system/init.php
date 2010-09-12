@@ -140,6 +140,15 @@
   );
   require_once $common;
 
+  // This framework now requires PHP5 for quite a lot of functionality. If we
+  // are running anything less, terminate.
+  if(PHP_VERSION_ID < 50000) {
+  	show_error(
+  	  'This installation of PHP is running version ' . PHP_VERSION
+  	. ', but this framework requires version 5.0.0 or greater.'
+  	);
+  }
+  
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
   // make it simple: URI, Router, Core, Controller and Model libraries...

@@ -836,15 +836,18 @@ if(!function_exists('elapsed_time')) {
 }
 
 $version = explode('.', PHP_VERSION);
+if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
+	$version[2] = $matches[1];
+}
 defined('PHP_VERSION_ID') || define(
   'PHP_VERSION_ID',
   $version[0] * 10000
 + $version[1] * 100
 + $version[2]
 );
-defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', $version[0]);
-defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', $version[1]);
-defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', $version[2]);
+defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', (int) $version[0]);
+defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
+defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
 
 // That's it for common functions, now just a couple of hard coded settings
 // and/or configurations:
@@ -864,3 +867,5 @@ $tokens = defined('T_ML_COMMENT')
         ? array('T_DOC_COMMENT', T_ML_COMMENT)
         : array('T_ML_COMMENT', T_COMMENT);
 define($tokens[0], $tokens[1]);
+
+unset($version, $matches, $tokens);
