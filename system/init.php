@@ -16,38 +16,6 @@
  * @since      v0.1
  */
 
-  if(!function_exists('E_Core_Error')) {
-  	/**
-  	 * Eventing Core Error
-  	 *
-  	 * I think this file is now obsolete. Is going to be deleted soon.
-  	 * This is the fall back function for fatal framework errors, before the
-  	 * show_error() and set_error_handler() functions have been defined. Very
-  	 * primitive, and hopefully it will never be seen in a production
-  	 * environment. At least it's a little better than
-  	 * trigger_error(E_USER_ERROR)
-  	 *
-	   * @param string $msg
-	   * @param int $file
-	   * @param int $line
-	   * @return void
-	   */
-	  function E_Core_Error($msg, $file = false, $line = false) {
-	  	if (!headers_sent()) {
-  			header('HTTP/1.1 500 Internal Application Error', true, 500);
-  			header('Content-Type: text/plain');
-  		}
-  		$msg = implode("\n          ", str_split($msg, 60));
-  		$error_msg = "Internal Application Error\n\nMessage: \"{$msg}\"\n"
-  		. $file !== false ? "File:    {$file}\n" : ''
-  		. is_int($line)
-  		? "Line:    E_Core_Error() called on Line {$line}\n"
-	  	: ''
-      . "\nApplication Terminated.\n";
-      exit($error_msg);
-    }
-  }
-
   defined('E_FRAMEWORK') || trigger_error(
     'E_FRAMEWORK has not been defined.',
     E_USER_ERROR
