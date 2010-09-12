@@ -64,6 +64,7 @@ if (!function_exists('eventing_error_handler')) {
   	// Define which error types we will account for.
   	$trigger = c('error_types_trigger');
   	if(!is_int($trigger)) {
+  		// The default.
   		$trigger = 17237;
   	}
   	$triggers = binary_parts($trigger);
@@ -573,9 +574,10 @@ if(!function_exists('a')) {
         $suffix = strlen($matches[1]) > 1
                 ? '.' . substr($matches[1], 0, -1)
                 : '/';
+        $base = substr($matches[2], 0, 1) == '/';
         $segments = trim($matches[2], '/');
         if($segments == '') {
-        	$suffix = '/';
+        	$suffix = '';
         }
         $query = '';
         if(strlen($matches[3]) > 1) {
@@ -602,7 +604,9 @@ if(!function_exists('a')) {
         if(strlen($matches[4]) > 1) {
           $fragment = $matches[4];
         }
-        $url = c('url_mod_rewrite') ? BASEURL : BASEURL . SELF . '/';
+        
+        $url = $base ? BASEURL : URL;
+        $url .= c('url_mod_rewrite') ? '' : SELF . '/';
         $url .= $segments . $suffix . $query . $fragment;
         break;
       // Anthing else.

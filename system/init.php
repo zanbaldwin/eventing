@@ -122,7 +122,7 @@
     $name = strtoupper($name);
     defined($name) || define($name, $const);
   }
-
+  
   // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
   unset(
     $main_config, $user_config, $key, $value, $system_folder, $default_app,
