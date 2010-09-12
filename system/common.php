@@ -395,9 +395,10 @@ if(!function_exists('show_error'))
     		}
     	}
     }
-    // Unset any variables that we don't want included in the error document.
-    unset($msg, $header, $matches, $trace);
     if(file_exists(theme_path('errors') . 'error' . EXT)) {
+    	extract($error);
+      // Unset any variables that we don't want included in the error document.
+      unset($msg, $header, $matches, $trace, $error);
     	// We are writing about the path twice because we don't want to set
     	// anymore variables.
     	require theme_path('errors') . 'error' . EXT;
