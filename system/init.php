@@ -49,16 +49,16 @@
   }
 
   defined('E_FRAMEWORK') || trigger_error(
-    E_USER_ERROR,
-    'E_FRAMEWORK has not been defined.'
+    'E_FRAMEWORK has not been defined.',
+    E_USER_ERROR
   );
   isset($main_file) || trigger_error(
-    E_USER_ERROR,
-    'Main file is not specified.'
+    'Main file is not specified.',
+    E_USER_ERROR
   );
   file_exists($main_file) || trigger_error(
-    E_USER_ERROR,
-    'The main file does not exist.'
+    'The main file does not exist.',
+    E_USER_ERROR
   );
 
   $main_config = array(
