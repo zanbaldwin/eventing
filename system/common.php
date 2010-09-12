@@ -513,6 +513,9 @@ if(!function_exists('a')) {
                 ? '.' . substr($matches[1], 0, -1)
                 : '/';
         $segments = trim($matches[2], '/');
+        if($segments == '') {
+        	$suffix = '/';
+        }
         $query = '';
         if(strlen($matches[3]) > 1) {
           if(substr($matches[3], -1) == '?') {
