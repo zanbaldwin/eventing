@@ -170,10 +170,21 @@
   // Make sure the controller class exists.
   class_exists($dcm[1]) || show_404();
   $controller = new $dcm[1];
-  // Make sure the method function exists.
+  // Make sure the method function exists and is public.
+  if(!class_exists('ReflectionMethod')) {
+  	show_error(
+  	  'ReflectionMethod class does not exist. Method publicity status cannot '
+  	. 'be determined.'
+  	);
+  }
+  
   method_exists($controller, $dcm[2])
     || in_array($dcm[2], get_class_methods($dcm[1]), true)
     || show_404();
+  $method_reflection = new ReflectionMethod($dcm[1], $dcm[2]);
+  if(!$method_reflection->isPublic()) {
+  	show_404();
+  } 
   $controller->$dcm[2]();
 
   // Right, that's everything done! Just dump the output to the client end
