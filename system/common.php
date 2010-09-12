@@ -835,6 +835,17 @@ if(!function_exists('elapsed_time')) {
   }
 }
 
+$version = explode('.', PHP_VERSION);
+defined('PHP_VERSION_ID') || define(
+  'PHP_VERSION_ID',
+  $version[0] * 10000
++ $version[1] * 100
++ $version[2]
+);
+defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', $version[0]);
+defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', $version[1]);
+defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', $version[2]);
+
 // That's it for common functions, now just a couple of hard coded settings
 // and/or configurations:
 
