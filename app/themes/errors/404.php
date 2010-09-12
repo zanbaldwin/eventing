@@ -1,9 +1,9 @@
 <?php
   echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
 ?><!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Eventing: <?php echo $title; ?></title>
+    <title>Eventing: 404 Not Found</title>
     <meta charset="utf-8" />
     <style>
       body{margin:2em;font-family:Frutiger,"Frutiger Linotype",Univers,Calibri,

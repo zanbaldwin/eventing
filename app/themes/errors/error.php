@@ -1,7 +1,7 @@
 <?php
   echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
 ?><!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>Eventing: <?php echo $title; ?></title>
     <meta charset="utf-8" />
