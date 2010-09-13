@@ -104,7 +104,7 @@
   if(is_string($_SERVER['DOCUMENT_ROOT'])) {
     $len = strlen($_SERVER['DOCUMENT_ROOT']);
     if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT']) {
-    	$c['content'] = trim(substr($['contentpath'], $len), '/')
+    	$c['content'] = trim(substr($['contentpath'], $len), '/');
     	$c['content'] = $c['content']
     	              ? '/' . $c['content'] . '/'
     	              : '/';
