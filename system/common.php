@@ -721,11 +721,12 @@ if(!function_exists('content'))
   		return false;
   	}
   	$file = trim(preg_replace('|/+|', '/', str_replace('\\', '/', $file)), '/');
-  	$path = CONTENTPATH . $file;
+  	$url = CONTENT . $file;
   	if($force) {
-  		return $path;
+  		return $url;
   	}
-  	return file_exists($path) ? realpath($path) : false;
+  	$path = CONTENTPATH . $file;
+  	return file_exists($path) ? $url : false;
   }
 }
 
