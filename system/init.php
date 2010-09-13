@@ -104,10 +104,11 @@
   if(is_string($_SERVER['DOCUMENT_ROOT'])) {
     $len = strlen($_SERVER['DOCUMENT_ROOT']);
     if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT']) {
-      $c['content'] = $c['server']
-                    . '/'
-                    . trim(substr($c['contentpath'], $len), '/')
-                    . '/';
+    	$c['content'] = trim(substr($['contentpath'], $len), '/')
+    	$c['content'] = $c['content']
+    	              ? '/' . $c['content'] . '/'
+    	              : '/';
+      $c['content'] = $c['server'] . $c['content'];
     }
   }
   // If the contenturl cannot be established, or it is outside the web root,
