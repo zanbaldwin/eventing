@@ -7,16 +7,42 @@
     <title><?php echo $title; ?></title>
     <meta charset="utf-8" />
     <link href="<?php echo content('css/main.css'); ?>" rel="stylesheet" media="screen, projection" title="Eventing Styles" />
+    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
     <script src="<?php echo content('js/main.js'); ?>"></script>
   </head>
 
-  <body>
-    <div class="content">
-      <h1>Eventing Framework</h1>
-      <p>
-        This is the Eventing PHP Framework. Source code is hosted on
-        <a href="http://github.com/mynameiszanders/eventing">GitHub.com</a>.
-      </p>
-    </div>
-  </body>
+  <body><div id="container">
+
+    <header>
+      <hgroup>
+        <h1>Eventing Framework</h1>
+        <h2>PHP Application Framework based on CodeIgniter</h2>
+      </hgroup>
+    </header>
+
+    <section>
+      <article>
+        <p>
+          Eventing is a PHP Application Framework based on <?php echo a('~ci', 'CodeIgniter'); ?> by <?php echo a('~profile', 'Alexander Baldwin'); ?>,
+          licensed under either <?php echo a('~licensemit', 'MIT'); ?> or <?php a('~licensegpl', 'GPL v3'); ?>, whichever suits you best.
+        </p>
+        <p>
+          Like CodeIgniter, it uses Model-View-Controller, but adds other features like <?php echo a('aspx:example', 'multiple suffixes (file extensions)'); ?>
+          and a moderately advanced view templating system.
+        </p>
+        <p>
+          At this moment in time, Eventing is a personal project and is not recommended for production use (late-alpha development). If you would like to tinker around with it,
+          the source code is <?php echo a('~eventingsource', 'hosted on GitHub'); ?>.<br />
+          If you already have the source, the page you are viewing is calling the <?php echo a('home/index', '<code>home::index()</code>'); ?> controller, located in the file 
+          code>app/controllers/home.php</code>.<br />
+          The HTML of this page is found in the file <code>app/themes/default/html5shell.php</code>.
+        </p>
+      </article>
+    </section>
+
+    <footer>
+      <p>Powered by the <?php echo a('~eventingsource'); ?>.</p>
+    </footer>
+
+  </div></body>
 </html>
