@@ -37,7 +37,7 @@ class E_core
 	 *
 	 * @return void
 	 */
-	public function core()
+	public function __construct()
 	{
 		self::$instance =& $this;
 	}

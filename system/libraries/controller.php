@@ -33,7 +33,7 @@ class E_controller extends E_core
 	 */
 	public function __construct()
 	{
-		parent::core();
+		parent::__construct();
 		$this->_initialise();
 	}
 
