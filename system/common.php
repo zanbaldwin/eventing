@@ -42,7 +42,7 @@ defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2
 // for production, but in truth, if you don't want errors coming up in your
 // applications, start writing better code!
 set_magic_quotes_runtime(0);
-error_reporting(E_ALL & E_STRICT);
+error_reporting(-1);
 ini_set('display_errors', 1);
 // If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
 // happy :)
