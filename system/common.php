@@ -44,12 +44,7 @@ defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2
 set_magic_quotes_runtime(0);
 error_reporting(-1);
 ini_set('display_errors', 1);
-// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
-// happy :)
-// You can change this in your controller, or a future library (hopefully!)
-if(function_exists('date_default_timezone_set')) {
-  date_default_timezone_set(c('default_timezone'));
-}
+
 // Versions of PHP less than 5 do not have these constants, let's add them in
 // for backwards compatibility with the PHP Tokenizer.
 $tokens = defined('T_ML_COMMENT')
@@ -869,4 +864,11 @@ if(!function_exists('elapsed_time')) {
     $elapsed_time = round($end - $start, 3);
     return $elapsed_time;
   }
+}
+
+// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
+// happy :)
+// You can change this in your controller, or a future library (hopefully!)
+if(function_exists('date_default_timezone_set')) {
+  date_default_timezone_set(c('default_timezone'));
 }
