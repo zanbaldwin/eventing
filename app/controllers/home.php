@@ -12,17 +12,19 @@ final class home extends E_controller
 {
 
 	public function __construct() {
-		parent::controller();
+		parent::__construct();
 	}
 
 	public function index() {
 		// This library should already be loaded, but just in case.
 		$this->load->library('template');
+		$this->load->model('default');
+		
+		$data = $this->model('default')->dummy();
+		
 		$this->template->create(array(
-        'shell'
-        ));
-        $this->template->section('shell')->add('title', 'Eventing Framework');
-        $this->template->load('shell');
+		  'shell' => 'html5shell'
+		));
 	}
 
 	public function html5()
