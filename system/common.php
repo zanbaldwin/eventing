@@ -598,19 +598,22 @@ if(!function_exists('a')) {
         break;
       // Segments.
       case preg_match($segment_regex, $path, $matches):
-        if(strlen($matches[1]) == 0) {
+        if(!isset($matches[1]) || strlen($matches[1]) == 0) {
           $matches[1] = c('url_default_suffix') . ':';
         }
         $suffix = strlen($matches[1]) > 1
                 ? '.' . substr($matches[1], 0, -1)
                 : '/';
+        if(!isset($matches[2])) {
+        	$matches[2] = '';
+        }
         $base = substr($matches[2], 0, 1) == '/';
         $segments = trim($matches[2], '/');
         if($segments == '') {
         	$suffix = '';
         }
         $query = '';
-        if(strlen($matches[3]) > 1) {
+        if(isset($matches[3]) && strlen($matches[3]) > 1) {
           if(substr($matches[3], -1) == '?') {
             $matches[3] = trim($matches[3], '?');
             if($matches[3] == '') {
@@ -631,7 +634,7 @@ if(!function_exists('a')) {
           }
         }
         $fragment = '';
-        if(strlen($matches[4]) > 1) {
+        if(isset($matches[4]) && strlen($matches[4]) > 1) {
           $fragment = $matches[4];
         }
         
