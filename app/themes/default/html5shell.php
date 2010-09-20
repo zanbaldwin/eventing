@@ -24,7 +24,7 @@
       <article>
         <p>
           Eventing is a PHP Application Framework based on <?php echo a('~ci', 'CodeIgniter'); ?> by <?php echo a('~profile', 'Alexander Baldwin'); ?>,
-          licensed under either <?php echo a('~licensemit', 'MIT'); ?> or <?php a('~licensegpl', 'GPL v3'); ?>, whichever suits you best.
+          licensed under either <?php echo a('~licensemit', 'MIT'); ?> or <?php echo a('~licensegpl', 'GPL v3'); ?>, whichever suits you best.
         </p>
         <p>
           Like CodeIgniter, it uses Model-View-Controller, but adds other features like <?php echo a('aspx:example', 'multiple suffixes (file extensions)'); ?>
@@ -41,7 +41,8 @@
     </section>
 
     <footer>
-      <p>Powered by the <?php echo a('~eventingsource'); ?>.</p>
+      <p>This page was generated in {elapsed_time} seconds and took {memory_usage} of memory.</p>
+      <p>Powered by the <?php echo a('~eventingsource', 'Eventing Framework'); ?>.</p>
     </footer>
 
   </div></body>
