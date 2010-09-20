@@ -24,6 +24,41 @@ if (!defined('E_FRAMEWORK')) {
   exit('Direct script access is disallowed.');
 }
 
+$version = explode('.', PHP_VERSION);
+if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
+  $version[2] = $matches[1];
+}
+defined('PHP_VERSION_ID') || define(
+  'PHP_VERSION_ID',
+  $version[0] * 10000
++ $version[1] * 100
++ $version[2]
+);
+defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', (int) $version[0]);
+defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
+defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
+
+// This is against standard practice, to set error reporting to full, especially
+// for production, but in truth, if you don't want errors coming up in your
+// applications, start writing better code!
+set_magic_quotes_runtime(0);
+error_reporting(E_ALL & E_STRICT);
+ini_set('display_errors', 1);
+// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
+// happy :)
+// You can change this in your controller, or a future library (hopefully!)
+if(function_exists('date_default_timezone_set')) {
+  date_default_timezone_set(c('default_timezone'));
+}
+// Versions of PHP less than 5 do not have these constants, let's add them in
+// for backwards compatibility with the PHP Tokenizer.
+$tokens = defined('T_ML_COMMENT')
+        ? array('T_DOC_COMMENT', T_ML_COMMENT)
+        : array('T_ML_COMMENT', T_COMMENT);
+define($tokens[0], $tokens[1]);
+
+unset($version, $matches, $tokens);
+
 // Some older versions of PHP don't define the E_STRICT constant, so for the
 // convinience of the next function:
 defined('E_STRICT') || define('E_STRICT', 2048);
@@ -835,38 +870,3 @@ if(!function_exists('elapsed_time')) {
     return $elapsed_time;
   }
 }
-
-$version = explode('.', PHP_VERSION);
-if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
-	$version[2] = $matches[1];
-}
-defined('PHP_VERSION_ID') || define(
-  'PHP_VERSION_ID',
-  $version[0] * 10000
-+ $version[1] * 100
-+ $version[2]
-);
-defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', (int) $version[0]);
-defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
-defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
-
-// That's it for common functions, now just a couple of hard coded settings
-// and/or configurations:
-
-set_magic_quotes_runtime(0);
-error_reporting(E_ALL & ~E_NOTICE);
-// If we don't do this, PHP 5.2+ will throw a little tantrum. Let's keep it
-// happy :)
-// You can change this in your controller, or a future library (hopefully!)
-if(function_exists('date_default_timezone_set'))
-{
-  date_default_timezone_set(c('default_timezone'));
-}
-// Versions of PHP less than 5 do not have these constants, let's add them in
-// for backwards compatibility with the PHP Tokenizer.
-$tokens = defined('T_ML_COMMENT')
-        ? array('T_DOC_COMMENT', T_ML_COMMENT)
-        : array('T_ML_COMMENT', T_COMMENT);
-define($tokens[0], $tokens[1]);
-
-unset($version, $matches, $tokens);
