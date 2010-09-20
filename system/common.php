@@ -168,7 +168,10 @@ if (!function_exists('load_class')) {
       return false;
     }
     $lib = trim(filter_path(strtolower($lib)), '/');
-    $class = 'E_' . end(explode('/', $lib));
+    
+    $class = explode('/', $lib);
+    $class = 'E_' . end($class);
+    
     // Check that we haven't already loaded this class. That would be pretty
     // stupid.
     if (isset($objects[$lib]) && $objects[$lib] !== false) {

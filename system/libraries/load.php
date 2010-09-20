@@ -99,7 +99,8 @@ class E_load
 			return false;
 		}
 		require_once $file;
-		$m = 'M_' . end(explode('/', $model));
+		$m = explode('/', $model);
+		$m = 'M_' . end($m);
 		if(!class_exists($m))
 		{
 			return false;
