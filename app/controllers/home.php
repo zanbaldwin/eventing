@@ -25,6 +25,7 @@ final class home extends E_controller
 		$this->template->create(array(
 		  'shell' => 'html5shell'
 		));
+		$this->template->section('shell')->add('title', $data);
 		$this->template->load('shell');
 	}
 
