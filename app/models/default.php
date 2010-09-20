@@ -15,8 +15,8 @@
      * @return array
      */
     public function dummy() {
-    	// We could be pulling a list of users from the database.
-    	return array('User01', 'User02', 'User03', 'User04', 'User05');
+    	// This is the string we are going to use as the document title.
+    	return 'Eventing PHP Application Framework';
     }
 
   }
