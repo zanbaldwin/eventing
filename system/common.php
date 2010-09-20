@@ -162,7 +162,7 @@ if (!function_exists('load_class')) {
    * @param bool $return
    * @return boolean|object
    */
-  function load_class($lib, $return = true) {
+  function &load_class($lib, $return = true) {
     static $objects = array();
     if (!is_string($lib)) {
       return false;
