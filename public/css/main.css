@@ -1,29 +1,129 @@
+/*
+
+body {
+	margin:2em;
+	font-family: Frutiger,
+	            "Frutiger Linotype",
+	             Univers,Calibri,
+	            "Gill Sans",
+	            "Gill Sans MT",
+	            "Myriad Pro",
+	             Myriad,
+	            "DejaVu Sans Condensed",
+	            "Liberation Sans",
+	            "Nimbus Sans L",
+	             Tahoma,Geneva,
+	            "Helvetica Neue",
+	             Helvetica,
+	             Arial,
+	             sans-serif;
+	font-size: 75%;
+}
+header, section, footer {
+	margin: 0 auto 2em;
+}
+hgroup, h1, p {
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	font-size: 175%;
+	color: #020;
+}
+h2 {
+	color:#040;
+	font-size: 125%;
+}
+p + p {
+	padding-top: .5em;
+}
+section {
+	border: 1px solid #090;
+	padding: 1em;
+}
+a {
+	color: #060;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+/**/
+
+
 body {
   background-color: #FFF;
   margin: 40px;
   font-family: Lucida Grande, Verdana, Sans-serif;
-  font-size: 12px;
-  font-size: 62.5% color :   #000;
+  font-size: 100%;
+  color: #000;
 }
 
-.content {
-  border: #999 1px solid;
+#container {
+	font-size: 75%;
+}
+
+header {
+	margin: 0 0 1em;
+}
+
+h1, h2 {
+  font-weight: normal;
+  font-size: 1.5em;
+  color: #020;
+  margin: 0 0 8px 0;
+}
+h2 {
+	font-size: 1.25em;
+	color: #040;
+}
+
+section {
+  border: 1px solid #999;
   background-color: #fff;
   padding: 20px 20px 12px 20px;
-  margin: 0 0 40px 0;
-}
-
-h1 {
-  font-weight: normal;
-  font-size: 1.25em;
-  color: #900;
-  margin: 0 0 4px 0;
+  margin: 0 0 1em;
 }
 
 a {
-  color: #006;
+  color: #060;
 }
 
 a:hover {
   color: #900;
 }
+
+code {
+	font-family: Consolas,
+	            "Andale Mono WT",
+	            "Andale Mono",
+	            "Lucida Console",
+	            "Lucida Sans Typewriter",
+	            "DejaVu Sans Mono",
+	            "Bitstream Vera Sans Mono",
+	            "Liberation Mono",
+	            "Nimbus Mono L",
+	             Monaco,
+	            "Courier New",
+	             Courier,
+	             monospace;
+	font-size: 100%;
+}
+code.ghpage {
+	cursor: pointer;
+}
+
+footer p {
+	margin: 0;
+	padding: 0;
+}
+
+.modalMask {
+	display: none;
+	background-color: #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0.8;
+}
+

@@ -23,19 +23,21 @@
     <section>
       <article>
         <p>
-          Eventing is a PHP Application Framework based on <?php echo a('~ci', 'CodeIgniter'); ?> by <?php echo a('~profile', 'Alexander Baldwin'); ?>,
+          Eventing is a <strong>PHP Application Framework</strong> based on <?php echo a('~ci', 'CodeIgniter'); ?> by <?php echo a('~profile', 'Alexander Baldwin'); ?>,
           licensed under either <?php echo a('~licensemit', 'MIT'); ?> or <?php echo a('~licensegpl', 'GPL v3'); ?>, whichever suits you best.
         </p>
         <p>
-          Like CodeIgniter, it uses Model-View-Controller, but adds other features like <?php echo a('aspx:example', 'multiple suffixes (file extensions)'); ?>
+          Like CodeIgniter, it uses <strong>Model-View-Controller</strong>, but adds other features like <?php echo a('aspx:example', 'multiple suffixes (file extensions)'); ?>
           and a moderately advanced view templating system.
         </p>
         <p>
           At this moment in time, Eventing is a personal project and is not recommended for production use (late-alpha development). If you would like to tinker around with it,
-          the source code is <?php echo a('~eventingsource', 'hosted on GitHub'); ?>.<br />
+          the source code is <?php echo a('~eventingsource', 'hosted on GitHub'); ?>.
+        </p>
+        <p>
           If you already have the source, the page you are viewing is calling the <?php echo a('home/index', '<code>home::index()</code>'); ?> controller, located in the file 
-          code>app/controllers/home.php</code>.<br />
-          The HTML of this page is found in the file <code>app/themes/default/html5shell.php</code>.
+          "<code class="ghpage" title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
+          The HTML of this page is found in the file "<code class="ghpage" title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
         </p>
       </article>
     </section>
