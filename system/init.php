@@ -174,7 +174,8 @@
 
   // Strip all extensions. We only want the name of the controller class now!
   if(($pos = strpos($dcm[1], '.')) !== false) {
-    $dcm[1] = reset(explode('.', $dcm[1]));
+  	$dcm[1] = explode('.', $dcm[1]);
+    $dcm[1] = reset($dcm[1]);
   }
 
   // Make sure the controller class exists.
