@@ -16,13 +16,17 @@ abstract class E_library
    */
   abstract protected function __construct();
 
+  final public function __clone() {
+  	trigger_error('Cannot clone Singleton library.', E_USER_ERROR);
+  }
+  
   /**
    * Get Instance
    *
    * @access public
    * @return object|false
    */
-  public static function &getInstance()
+  final public static function &getInstance()
   {
     static $objects = array();
     $class = get_called_class();

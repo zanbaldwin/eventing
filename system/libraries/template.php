@@ -20,10 +20,6 @@
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
  * @since      v0.1
- *
- * TODO: Implement <!--{link[]}-->
- *       This may take quite a lot of rewriting!
- * TODO: Decide whether we implement <!--{link[$n]}-->, where $n is max entries
  */
 
 if (!defined('E_FRAMEWORK')) {
@@ -43,7 +39,7 @@ if (!defined('E_FRAMEWORK')) {
  * @author      Alexander Baldwin
  * @link        http://github.com/mynameiszanders/eventing
  */
-class E_template {
+class E_template extends E_library {
    
   protected $links = array(),
   $sections = array(),
@@ -55,7 +51,7 @@ class E_template {
   $section_class = 'E_template_section',
   $valid_name = '[a-zA-Z_][a-zA-Z0-9_]*';
 
-  public function __construct() {
+  protected function __construct() {
     $theme = c('default_theme');
     $this->theme = is_string($theme)
     && $theme != ''

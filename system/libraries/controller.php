@@ -26,9 +26,6 @@ class E_controller extends E_core
   /**
    * Controller Construct Function
    *
-   * We won't use the PHP5 __construct() function, because each controller class must call "parent::controller();"
-   * We could use "parent::__construct();" - but it makes the code a lot more readable!
-   *
    * @return void
    */
   public function __construct()
@@ -53,7 +50,7 @@ class E_controller extends E_core
       // We want to load the libraries to be stored in variables of the Core object, not the controller
       // ($this) object.
       $E =& get_instance();
-      $E->$class =& load_class($class);
+      $E->$class = load_class($class);
     }
     // Load the resources that the user wants for their application.
     $this->load->autoload();

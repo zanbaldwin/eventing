@@ -25,7 +25,7 @@
 /**
  * Router Class
  */
-class E_router {
+class E_router extends E_library {
 
   private $uri_string,
   $ruri_string,
@@ -42,7 +42,7 @@ class E_router {
    *
    * @return void
    */
-  public function __construct() {
+  protected function __construct() {
     $this->controllers = APP . 'controllers/';
     $this->uri_string = REQUEST;
     $this->suffix = SUFFIX;

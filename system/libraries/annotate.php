@@ -33,11 +33,15 @@ if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true
  *
  * @author Alexander Baldwin
  */
-class E_annotate
+class E_annotate extends E_library
 {
 
   private $compiled = false, $path = false, $tokens = false, $classes = array();
 
+  protected function __construct() {
+  	
+  }
+  
   /**
    * Load
    *

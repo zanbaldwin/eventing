@@ -25,11 +25,13 @@ if (!defined('E_FRAMEWORK')) {
   exit('Direct script access is disallowed.');
 }
 
-class E_http
+class E_http extends E_library
 {
-
   private $requests = array();
 
+  protected function __construct() {
+  }
+  
   public function fetch($name, $url, $post_data = false, $headers = false) {
     if (isset($this->requests[$name])) {
       // That one already exists. Think of another name... It can't be that
