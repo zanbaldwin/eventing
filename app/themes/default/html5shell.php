@@ -1,6 +1,4 @@
-<?php
-  echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <!-- This page was generated in {elapsed_time} seconds and took {memory_usage} of memory. -->
@@ -35,7 +33,20 @@
           the source code is <?php echo a('~eventingsource', 'hosted on GitHub'); ?>.
         </p>
         <p>
-          If you already have the source, the page you are viewing is calling the <?php echo a('home/index', '<code>home::index()</code>'); ?> controller, located in the file 
+          If you already have the source, the page you are viewing is calling the
+          <?php
+            echo a(
+              'home/index??',
+              '<code>home::index()</code>',
+              array(
+                'query_string' => array(
+                  'rel' => 'install',
+                  'version' => '1.0'
+                )
+              )
+            );
+          ?>
+          controller, located in the file 
           "<code class="ghpage" title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
           The HTML of this page is found in the file "<code class="ghpage" title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
         </p>
