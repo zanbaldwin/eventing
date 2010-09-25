@@ -327,7 +327,12 @@ class E_router {
 	 */
 	public function total_segments()
 	{
-		return count($this->rsegments);
+		static $count = false;
+		if(is_int($count)) {
+			return $count;
+		}
+		$count = count($this->rsegments);
+		return $count;
 	}
 
 	/**
