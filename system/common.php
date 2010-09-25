@@ -54,9 +54,30 @@ define($tokens[0], $tokens[1]);
 
 unset($version, $matches, $tokens);
 
-// Some older versions of PHP don't define the E_STRICT constant, so for the
-// convinience of the next function:
-defined('E_STRICT') || define('E_STRICT', 2048);
+// Some older versions of PHP don't define the E_STRICT constant, or in fact any
+// error constants over E_USER_NOTICE, so for the convinience of the next
+// function:
+$error_definitions = array(
+  'E_ERROR',
+  'E_WARNING',
+  'E_PARSE',
+  'E_NOTICE',
+  'E_CORE_ERROR',
+  'E_CORE_WARNING',
+  'E_COMPILE_ERROR',
+  'E_COMPILE_WARNING',
+  'E_USER_ERROR',
+  'E_USER_WARNING',
+  'E_USER_NOTICE',
+  'E_STRICT',
+  'E_RECOVERABLE_ERROR',
+  'E_DEPRECATED',
+  'E_USER_DEPRECATED',
+);
+$count = count($error_definitions);
+for($i = 0, $count = count($error_definitions); $i < $count; $i++) {
+	defined($error_definitions[$i]) || define($error_definitions[$i], pow(2, $i));
+}
 
 if (!function_exists('eventing_error_handler')) {
   /**
