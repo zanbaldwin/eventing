@@ -105,10 +105,10 @@
   if(is_string($_SERVER['DOCUMENT_ROOT'])) {
     $len = strlen($_SERVER['DOCUMENT_ROOT']);
     if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT']) {
-    	$c['content'] = trim(substr($c['contentpath'], $len), '/');
-    	$c['content'] = $c['content']
-    	              ? '/' . $c['content'] . '/'
-    	              : '/';
+      $c['content'] = trim(substr($c['contentpath'], $len), '/');
+      $c['content'] = $c['content']
+                    ? '/' . $c['content'] . '/'
+                    : '/';
       $c['content'] = $c['server'] . $c['content'];
     }
   }
@@ -145,10 +145,10 @@
   // This framework now requires PHP5 for quite a lot of functionality. If we
   // are running anything less, terminate.
   if(PHP_VERSION_ID < 50000) {
-  	show_error(
-  	  'This installation of PHP is running version ' . PHP_VERSION
-  	. ', but this framework requires version 5.0.0 or greater.'
-  	);
+    show_error(
+      'This installation of PHP is running version ' . PHP_VERSION
+    . ', but this framework requires version 5.0.0 or greater.'
+    );
   }
   
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
@@ -175,7 +175,7 @@
 
   // Strip all extensions. We only want the name of the controller class now!
   if(($pos = strpos($dcm[1], '.')) !== false) {
-  	$dcm[1] = explode('.', $dcm[1]);
+    $dcm[1] = explode('.', $dcm[1]);
     $dcm[1] = reset($dcm[1]);
   }
 
@@ -184,10 +184,10 @@
   $controller = new $dcm[1];
   // Make sure the method function exists and is public.
   if(!class_exists('ReflectionMethod')) {
-  	show_error(
-  	  'ReflectionMethod class does not exist. Method publicity status cannot '
-  	. 'be determined.'
-  	);
+    show_error(
+      'ReflectionMethod class does not exist. Method publicity status cannot '
+    . 'be determined.'
+    );
   }
   
   method_exists($controller, $dcm[2])
@@ -195,7 +195,7 @@
     || show_404();
   $method_reflection = new ReflectionMethod($dcm[1], $dcm[2]);
   if(!$method_reflection->isPublic()) {
-  	show_404();
+    show_404();
   } 
   $controller->$dcm[2]();
 

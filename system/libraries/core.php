@@ -26,53 +26,53 @@ if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true
 class E_core
 {
 
-	public $models = array();
+  public $models = array();
 
-	private static $instance;
+  private static $instance;
 
-	/**
-	 * Core Construct Function
-	 *
-	 * Don't use __construct method so controller and model classes can use "parent::core();".
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		self::$instance =& $this;
-	}
+  /**
+   * Core Construct Function
+   *
+   * Don't use __construct method so controller and model classes can use "parent::core();".
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    self::$instance =& $this;
+  }
 
-	/**
-	 * Core Get-Instance Function
-	 *
-	 * blah blah blah...
-	 *
-	 * @static
-	 * @return object
-	 */
-	public static function &get_instance()
-	{
-		return self::$instance;
-	}
+  /**
+   * Core Get-Instance Function
+   *
+   * blah blah blah...
+   *
+   * @static
+   * @return object
+   */
+  public static function &get_instance()
+  {
+    return self::$instance;
+  }
 
-	/**
-	 * Use Model
-	 *
-	 * Models must be loaded through the Loader Library before they can be used here.
-	 * eg. "$this->load->model($model_name);"
-	 * They can they be called here.
-	 * eg. "$this->model($model_name)->userMethod();"
-	 *
-	 * @param string $model_name
-	 * @return object|void
-	 */
-	public function model($model_name)
-	{
-		// So we can use models that have been loaded through "$this->load->model($model_name);"
-		// Use like: "$this->model($model_name)->get_user_data();"
-		if(isset($this->models[$model_name]))
-		{
-			return $this->models[$model_name];
-		}
-	}
+  /**
+   * Use Model
+   *
+   * Models must be loaded through the Loader Library before they can be used here.
+   * eg. "$this->load->model($model_name);"
+   * They can they be called here.
+   * eg. "$this->model($model_name)->userMethod();"
+   *
+   * @param string $model_name
+   * @return object|void
+   */
+  public function model($model_name)
+  {
+    // So we can use models that have been loaded through "$this->load->model($model_name);"
+    // Use like: "$this->model($model_name)->get_user_data();"
+    if(isset($this->models[$model_name]))
+    {
+      return $this->models[$model_name];
+    }
+  }
 }

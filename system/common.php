@@ -73,42 +73,42 @@ if (!function_exists('eventing_error_handler')) {
    * @return false|exit
    */
   function eventing_error_handler($err, $msg, $file, $line) {
-  	// Define the different error types.
-  	$types = array(
-  	  E_ERROR              => 'Error',
-  	  E_WARNING            => 'Warning',
-  	  E_PARSE              => 'Parse Error',
-  	  E_NOTICE             => 'Notice',
-  	  E_CORE_ERROR         => 'Core Error',
-  	  E_CORE_WARNING       => 'Core Warning',
-  	  E_COMPILE_ERROR      => 'Compile Error',
-  	  E_COMPILE_WARNING    => 'Compile Warning',
-  	  E_USER_ERROR         => 'User Error',
-  	  E_USER_WARNING       => 'User Warning',
-  	  E_USER_NOTICE        => 'User Notice',
-  	  E_STRICT             => 'Strict',
-  	  E_RECOVERABLE_ERROR  => 'Recoverable Error',
-  	  E_DEPRECATED         => 'Deprecated',
-  	  E_USER_DEPRECATED    => 'User Deprecated',
-  	);
-  	// Define which error types we will account for.
-  	$trigger = c('error_types_trigger');
-  	if(!is_int($trigger)) {
-  		// The default.
-  		$trigger = 17237;
-  	}
-  	$triggers = binary_parts($trigger);
-  	if(!in_array($err, $triggers)) {
-  		return false;
-  	}
-  	// Build the error overwrite data array.
-  	$error = array(
-  	  'title'    => "Error {$err} ({$types[$err]})",
-  	  'file'     => $file,
-  	  'line'     => $line
-  	);
-  	// Show an error!
-  	show_error($msg, '500 Internal Server Error', $error);
+    // Define the different error types.
+    $types = array(
+      E_ERROR              => 'Error',
+      E_WARNING            => 'Warning',
+      E_PARSE              => 'Parse Error',
+      E_NOTICE             => 'Notice',
+      E_CORE_ERROR         => 'Core Error',
+      E_CORE_WARNING       => 'Core Warning',
+      E_COMPILE_ERROR      => 'Compile Error',
+      E_COMPILE_WARNING    => 'Compile Warning',
+      E_USER_ERROR         => 'User Error',
+      E_USER_WARNING       => 'User Warning',
+      E_USER_NOTICE        => 'User Notice',
+      E_STRICT             => 'Strict',
+      E_RECOVERABLE_ERROR  => 'Recoverable Error',
+      E_DEPRECATED         => 'Deprecated',
+      E_USER_DEPRECATED    => 'User Deprecated',
+    );
+    // Define which error types we will account for.
+    $trigger = c('error_types_trigger');
+    if(!is_int($trigger)) {
+      // The default.
+      $trigger = 17237;
+    }
+    $triggers = binary_parts($trigger);
+    if(!in_array($err, $triggers)) {
+      return false;
+    }
+    // Build the error overwrite data array.
+    $error = array(
+      'title'    => "Error {$err} ({$types[$err]})",
+      'file'     => $file,
+      'line'     => $line
+    );
+    // Show an error!
+    show_error($msg, '500 Internal Server Error', $error);
   }
 }
 
@@ -118,35 +118,35 @@ if (!function_exists('eventing_error_handler')) {
 set_error_handler('eventing_error_handler');
 
 if(!function_exists('binary_parts')) {
-	/**
-	 * Binary Parts
-	 * 
-	 * Returns an array of integers. Each number is a power of 2 that adds up to
-	 * the number passed to the function.
-	 * 
-	 * @access public
-	 * @param integer $int
-	 * @return array|false
-	 */
-	function binary_parts($int) {
-		if(!is_int($int)
-		   || (!is_numeric($int)
-		       || !preg_match('|^[0-9]+$|', $int))
-		   || $int < 0
-		) {
-			return false;
-		}
-		$arr = str_split(decbin((int) $int));
-		$arr = array_reverse($arr);
-		$count = count($arr);
-		$parts = array();
-		for($i = 0; $i < $count; $i++) {
-			if($arr[$i] == '1') {
-				$parts[] = pow(2, $i);
-			}
-		}
-		return $parts;
-	}
+  /**
+   * Binary Parts
+   * 
+   * Returns an array of integers. Each number is a power of 2 that adds up to
+   * the number passed to the function.
+   * 
+   * @access public
+   * @param integer $int
+   * @return array|false
+   */
+  function binary_parts($int) {
+    if(!is_int($int)
+       || (!is_numeric($int)
+           || !preg_match('|^[0-9]+$|', $int))
+       || $int < 0
+    ) {
+      return false;
+    }
+    $arr = str_split(decbin((int) $int));
+    $arr = array_reverse($arr);
+    $count = count($arr);
+    $parts = array();
+    for($i = 0; $i < $count; $i++) {
+      if($arr[$i] == '1') {
+        $parts[] = pow(2, $i);
+      }
+    }
+    return $parts;
+  }
 }
 
 if (!function_exists('load_class')) {
@@ -406,12 +406,12 @@ if(!function_exists('show_error'))
        && (int) $matches[1] < 600
        && (int) $matches[1] >= 100
     ) {
-    	if(!headers_sent()) {
-    			header($header, true, (int) $matches[1]);
-    	}
+      if(!headers_sent()) {
+          header($header, true, (int) $matches[1]);
+      }
     }
     else {
-    	$header = '500 Framework Application Error';
+      $header = '500 Framework Application Error';
     }
     // Grab some information from the backtrace. It might be useful.
     $trace = debug_backtrace();
@@ -423,27 +423,27 @@ if(!function_exists('show_error'))
       'line' => $trace[0]['line']
     );
     if(is_array($user_error)) {
-    	foreach($user_error as $overwrite => $value) {
-    		if(isset($error[$overwrite])) {
-    			$error[$overwrite] = $value;
-    		}
-    	}
+      foreach($user_error as $overwrite => $value) {
+        if(isset($error[$overwrite])) {
+          $error[$overwrite] = $value;
+        }
+      }
     }
     if(file_exists(theme_path('errors') . 'error' . EXT)) {
-    	extract($error);
+      extract($error);
       // Unset any variables that we don't want included in the error document.
       unset($msg, $header, $matches, $trace, $error);
-    	// We are writing about the path twice because we don't want to set
-    	// anymore variables.
-    	require theme_path('errors') . 'error' . EXT;
+      // We are writing about the path twice because we don't want to set
+      // anymore variables.
+      require theme_path('errors') . 'error' . EXT;
     }
     else {
-    	// No HTML document to show? Dump out the data in an XML document instead.
-    	echo '<?xml version="1.0" encoding="utf-8" ?>' . "\n<error>\n";
-    	foreach($error as $element => $value) {
-    		echo "  <{$element}>\n    {$value}\n  </{$element}>\n";
-    	}
-    	echo '</error>';
+      // No HTML document to show? Dump out the data in an XML document instead.
+      echo '<?xml version="1.0" encoding="utf-8" ?>' . "\n<error>\n";
+      foreach($error as $element => $value) {
+        echo "  <{$element}>\n    {$value}\n  </{$element}>\n";
+      }
+      echo '</error>';
     }
     exit;
   }
@@ -486,30 +486,30 @@ if(!function_exists('show_deny'))
 }
 
 if(!function_exists('show_teapot_error')) {
-	/**
-	 * Show Teapot Error
-	 * 
-	 * Show the HTTP Teapot error according to RFC2324.
-	 * 
-	 * @access public
-	 * @return exit
-	 */
-	function show_teapot_error() {
-		show_doc(418) || show_error(
-		  'The '
-		. a(
-		    'http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol',
-		    'HTCPCP'
-		  )
-		. ' server you requested a page from is a teapot, the entity may be short '
-		. 'or stout. Please '
-		. a(
-		    'coffee://' . $_SERVER['SERVER_NAME'] . '/brew/',
-		    'brew yourself a coffee'
-		  ) . '!',
-		  '418 I\'m a teapot'
-		);
-	}
+  /**
+   * Show Teapot Error
+   * 
+   * Show the HTTP Teapot error according to RFC2324.
+   * 
+   * @access public
+   * @return exit
+   */
+  function show_teapot_error() {
+    show_doc(418) || show_error(
+      'The '
+    . a(
+        'http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol',
+        'HTCPCP'
+      )
+    . ' server you requested a page from is a teapot, the entity may be short '
+    . 'or stout. Please '
+    . a(
+        'coffee://' . $_SERVER['SERVER_NAME'] . '/brew/',
+        'brew yourself a coffee'
+      ) . '!',
+      '418 I\'m a teapot'
+    );
+  }
 }
 
 if(!function_exists('show_doc'))
@@ -530,7 +530,7 @@ if(!function_exists('show_doc'))
   {
     $file = theme_path('errors') . (string) $error_number . EXT;
     if(headers_sent() || !file_exists($file)) {
-    	return false;
+      return false;
     }
     require $file;
     exit;
@@ -562,7 +562,7 @@ if(!function_exists('a')) {
       $options = array();
     }
     if(!is_string($title) || $title == '') {
-    	$title = false;
+      $title = false;
     }
     // If the path is a config reference, load it up so we can perform the check
     // on it as if it had been passed to the function directly.
@@ -611,12 +611,12 @@ if(!function_exists('a')) {
                 ? '.' . substr($matches[1], 0, -1)
                 : '/';
         if(!isset($matches[2])) {
-        	$matches[2] = '';
+          $matches[2] = '';
         }
         $base = substr($matches[2], 0, 1) == '/';
         $segments = trim($matches[2], '/');
         if($segments == '') {
-        	$suffix = '';
+          $suffix = '';
         }
         $query = '';
         if(isset($matches[3]) && strlen($matches[3]) > 1) {
@@ -630,7 +630,7 @@ if(!function_exists('a')) {
                      ? http_build_query($options[$matches[3]])
                      : $options[$matches[3]];
               if($title) {
-              	$query = htmlentities($query);
+                $query = htmlentities($query);
               }
               unset($options[$matches[3]]);
               if(substr($query, 0, 1) != '?') {
@@ -692,59 +692,59 @@ if(!function_exists('a')) {
 }
 
 if(!function_exists('theme_path')) {
-	/**
-	 * Theme Path
-	 * 
-	 * Specify a theme and will return the absolute path to the theme directory.
-	 * Will return false if the theme directory does not exist.
-	 * 
-	 * @access public
-	 * @param string $theme
-	 * @return string|false
-	 */
-	function theme_path($theme = true) {
-		if($theme === true) {
-			$theme = '';
-		}
-		if(!is_string($theme)) {
-			return false;
-		}
-		$path = realpath(APP . 'themes/' . $theme);
-		return is_string($path) ? $path . '/' : false;
-	}
+  /**
+   * Theme Path
+   * 
+   * Specify a theme and will return the absolute path to the theme directory.
+   * Will return false if the theme directory does not exist.
+   * 
+   * @access public
+   * @param string $theme
+   * @return string|false
+   */
+  function theme_path($theme = true) {
+    if($theme === true) {
+      $theme = '';
+    }
+    if(!is_string($theme)) {
+      return false;
+    }
+    $path = realpath(APP . 'themes/' . $theme);
+    return is_string($path) ? $path . '/' : false;
+  }
 }
 
 if(!function_exists('get_themes')) {
-	/**
-	 * Get Themes
-	 * 
-	 * Returns an array of folders that are inside the themes directory.
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	function get_themes() {
-		static $themes = false;
-		if(is_array($themes)) {
-			return $themes;
-		}
-		$path = theme_path();
-		if(!is_string($path)) {
-			return array();
-		}
-		$handler = opendir($path);
-		while($file = readdir($handler)) {
-			if($file != '.' && $file != '..' && is_dir($path . $file)) {
-				$themes[] = $file;
-			}
-		}
-		return $themes;
-	}
+  /**
+   * Get Themes
+   * 
+   * Returns an array of folders that are inside the themes directory.
+   * 
+   * @access public
+   * @return array
+   */
+  function get_themes() {
+    static $themes = false;
+    if(is_array($themes)) {
+      return $themes;
+    }
+    $path = theme_path();
+    if(!is_string($path)) {
+      return array();
+    }
+    $handler = opendir($path);
+    while($file = readdir($handler)) {
+      if($file != '.' && $file != '..' && is_dir($path . $file)) {
+        $themes[] = $file;
+      }
+    }
+    return $themes;
+  }
 }
 
 if(!function_exists('content'))
 {
-	/**
+  /**
    * Content URL
    *
    * Takes a file path, relative to the content folder, checks that it exists,
@@ -758,17 +758,17 @@ if(!function_exists('content'))
    * @return false|string
    */
   function content($file, $force = false) {
-  	$force = bool($force);
-  	if(is_null(CONTENTPATH) || is_null(CONTENT)) {
-  		return false;
-  	}
-  	$file = trim(preg_replace('|/+|', '/', str_replace('\\', '/', $file)), '/');
-  	$url = CONTENT . $file;
-  	if($force) {
-  		return $url;
-  	}
-  	$path = CONTENTPATH . $file;
-  	return file_exists($path) ? $url : false;
+    $force = bool($force);
+    if(is_null(CONTENTPATH) || is_null(CONTENT)) {
+      return false;
+    }
+    $file = trim(preg_replace('|/+|', '/', str_replace('\\', '/', $file)), '/');
+    $url = CONTENT . $file;
+    if($force) {
+      return $url;
+    }
+    $path = CONTENTPATH . $file;
+    return file_exists($path) ? $url : false;
   }
 }
 

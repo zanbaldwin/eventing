@@ -3,7 +3,7 @@
   class M_default extends E_model {
 
     public function __construct() {
-    	parent::__construct();
+      parent::__construct();
     }
     
     /**
@@ -15,8 +15,8 @@
      * @return array
      */
     public function dummy() {
-    	// This is the string we are going to use as the document title.
-    	return 'Eventing PHP Application Framework';
+      // This is the string we are going to use as the document title.
+      return 'Eventing PHP Application Framework';
     }
 
   }
