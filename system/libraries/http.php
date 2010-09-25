@@ -136,7 +136,7 @@ class E_http_request
 		// Right. We have the complete response, but we want to separate the
 		// headers from the body.
 		$bottleneck = strpos($response, "\r\n\r\n");
-		$this->response_headers = explode("\r\n", substr($response, 0, $bottleneck));
+		$this->response_headers = xplode("\r\n", substr($response, 0, $bottleneck));
 		// The Server always sends the status code and message in the first
 		// header, but we'll still check it's there just in case. We like good
 		// practice.

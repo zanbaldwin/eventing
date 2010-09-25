@@ -150,7 +150,7 @@ class E_uri
 	 */
 	private function _segment_array($uri_string)
 	{
-		$segments = explode('/', $uri_string);
+		$segments = xplode('/', $uri_string);
 		array_unshift($segments, null);
 		unset($segments[0]);
 		return $segments;

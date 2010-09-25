@@ -68,7 +68,8 @@
   // File and System Constants.
   $c['config'] = strtolower($config_type) == 'ini' ? 'ini' : 'array';
   $c['self'] = basename($main_file);
-  $c['ext'] = '.' . end(explode('.', $c['self']));
+  $c['ext'] = explode('.', $c['self']);
+  $c['ext'] = '.' . end($c['ext']);
 
   // URL Constants.
   $c['server'] = (isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)

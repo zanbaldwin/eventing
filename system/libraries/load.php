@@ -76,7 +76,8 @@ class E_load
 		$lib = load_class($library);
 		if(is_object($lib))
 		{
-			$library = end(explode("/", $library));
+			$library = xplode('/', $library);
+			$library = end($library);
 			$this->E->$library = $lib;
 			return true;
 		}
@@ -99,7 +100,7 @@ class E_load
 			return false;
 		}
 		require_once $file;
-		$m = explode('/', $model);
+		$m = xplode('/', $model);
 		$m = 'M_' . end($m);
 		if(!class_exists($m))
 		{

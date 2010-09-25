@@ -250,7 +250,7 @@ class E_annotate extends E_library
 		$doc_array = array();
 		$params = false;
 		// Split the string into lines, after removing the Doc Comment markers.
-		foreach(explode("\n", substr($doc, 3, -2)) as $num => $line)
+		foreach(xplode("\n", substr($doc, 3, -2)) as $num => $line)
 		{
 			$line = trim($line);
 			if(substr($line, 0, 2) == '**' || substr($line, 0, 1) != '*')

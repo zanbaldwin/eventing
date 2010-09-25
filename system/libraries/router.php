@@ -223,7 +223,7 @@ class E_router {
 	private function _recursive_file($ruri_string, $rsuffix)
 	{
 		$ext = '.' . c('url_default_suffix') == $rsuffix ? '' : $rsuffix;
-		$ruri = explode('/', $ruri_string);
+		$ruri = xplode('/', $ruri_string);
 		$d = '';
 
 		for($i = 0; $i < count($ruri); $i++)
@@ -252,7 +252,7 @@ class E_router {
 	private function _recursive_folder($ruri_string, $rsuffix)
 	{
 		$ext = '.' . c('url_default_suffix') == $rsuffix ? '' : $rsuffix;
-		$ruri = explode('/', $ruri_string);
+		$ruri = xplode('/', $ruri_string);
 		$d = '';
 
 		$m = c('default_method');

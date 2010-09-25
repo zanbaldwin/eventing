@@ -169,7 +169,7 @@ if (!function_exists('load_class')) {
     }
     $lib = trim(filter_path(strtolower($lib)), '/');
     
-    $class = explode('/', $lib);
+    $class = xplode('/', $lib);
     $class = 'E_' . end($class);
     
     // Check that we haven't already loaded this class. That would be pretty
