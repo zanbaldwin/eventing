@@ -630,7 +630,7 @@ if(!function_exists('a')) {
                      ? http_build_query($options[$matches[3]])
                      : $options[$matches[3]];
               if($title) {
-              	$query = urlencode($query);
+              	$query = htmlentities($query);
               }
               unset($options[$matches[3]]);
               if(substr($query, 0, 1) != '?') {
