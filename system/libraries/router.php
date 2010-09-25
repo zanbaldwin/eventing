@@ -37,6 +37,16 @@ class E_router extends E_library {
   $m = '',
   $controllers;
 
+  public function route($uri_string, $suffix = false) {
+  	return self::create_router($uri_string, $suffix);
+  }
+
+  public static function create_router($uri_string, $suffix) {
+  	if(!is_string($uri_string)) {
+  		return false;
+  	}
+  }
+  
   /**
    * Constructor Method
    *
