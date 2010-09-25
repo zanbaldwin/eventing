@@ -561,6 +561,9 @@ if(!function_exists('a')) {
     if(!is_array($options)) {
       $options = array();
     }
+    if(!is_string($title) || $title == '') {
+    	$title = false;
+    }
     // If the path is a config reference, load it up so we can perform the check
     // on it as if it had been passed to the function directly.
     if(preg_match('|^~([a-zA-Z0-9_-]+)$|', $path, $matches)) {
@@ -626,6 +629,9 @@ if(!function_exists('a')) {
               $query = is_array($options[$matches[3]])
                      ? http_build_query($options[$matches[3]])
                      : $options[$matches[3]];
+              if($title) {
+              	$query = urlencode($query);
+              }
               unset($options[$matches[3]]);
               if(substr($query, 0, 1) != '?') {
                 $query = '?' . $query;
@@ -653,10 +659,10 @@ if(!function_exists('a')) {
     // Rel Nofollow
     if(in_array($url, $used_urls)) {
       $options['rel'] = isset($options['rel'])
-                      ? trim($options['rel']) . ' nofollow'
+                      ? trim($options['rel'] . ' nofollow')
                       : 'nofollow';
     }
-    elseif(is_string($title)) {
+    elseif($title) {
       $used_urls[] = $url;
     }
     // Title
