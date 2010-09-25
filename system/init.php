@@ -154,6 +154,7 @@
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
   // make it simple: URI, Router, Core, Controller and Model libraries...
+  load_class('library', false);
   $URI =& load_class('uri');
   $RTR =& load_class('router');
   load_class('core', false);
