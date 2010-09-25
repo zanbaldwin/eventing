@@ -192,7 +192,7 @@ if (!function_exists('load_class')) {
     // Do we want to initiate the class, or just load it?
     if (bool($return)) {
       // Initiate.
-      $objects[$lib] = new $class;
+      $objects[$lib] = $class::getInstance();
     }
     else {
       // Load, but do not initiate.
