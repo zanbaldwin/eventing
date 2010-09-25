@@ -162,44 +162,46 @@ if (!function_exists('load_class')) {
    * @param bool $return
    * @return boolean|object
    */
-  function &load_class($lib, $return = true) {
-    static $objects = array();
-    if (!is_string($lib)) {
-      return false;
-    }
-    $lib = trim(filter_path(strtolower($lib)), '/');
-    
-    $class = xplode('/', $lib);
-    $class = 'E_' . end($class);
-    
-    // Check that we haven't already loaded this class. That would be pretty
-    // stupid.
-    if (isset($objects[$lib]) && $objects[$lib] !== false) {
-      return $objects[$lib];
-    }
-    // Default. If we can't load it the first time, there is no point trying
-    // again!
-    $objects[$lib] = false;
-    // Let's go get it!
-    $file = SYS . 'libraries/' . $lib . EXT;
-    if (!file_exists($file)) {
-      return false;
-    }
-    require_once $file;
-    if (!class_exists($class)) {
-      return false;
-    }
-    // Do we want to initiate the class, or just load it?
-    if (bool($return)) {
-      // Initiate.
-      $objects[$lib] = $class::getInstance();
-    }
-    else {
-      // Load, but do not initiate.
-      $objects[$lib] = true;
-    }
-    return $objects[$lib];
-  }
+	
+	function load_class($lib, $return = true) {
+		static $files = array();
+		if(!is_string($lib)) {
+			return false;
+		}
+		$return = bool($return);
+		
+		$lib = trim(filter_path(strtolower($lib)), '/');
+		if($lib == '') {
+			return false;
+		}
+		$class = xplode('/', $lib);
+		$class = 'E_' . end($class);
+		
+		if(isset($files[$lib])) {
+			return $files[$lib] ? $class::getInstance() : false;
+		}
+		$file = SYS . 'libraries/' . $lib . EXT;
+		$files[$lib] = file_exists($file);
+		
+		if(!$files[$lib]) {
+			return false;
+		}
+		
+		require $file;
+		// If they want to just load the file (not return the class instance), don't
+		// carry on.
+		if(!class_exists($class)) {
+			$files[$lib] = false;
+			return false;
+		}
+		if(!$return) {
+			return true;
+		}
+		if(!method_exists($class, 'getInstance')) {
+			return false;
+		}
+		return $class::getInstance();
+	}
 }
 
 if(!function_exists('get_called_class'))
