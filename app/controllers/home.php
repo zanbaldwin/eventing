@@ -8,8 +8,7 @@ if (!defined('E_FRAMEWORK')) {
 /**
  * Eventing Home Controller Class (framework default)
  */
-final class home extends E_controller
-{
+final class home extends E_controller {
 
   public function __construct() {
     parent::__construct();
