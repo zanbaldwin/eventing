@@ -20,12 +20,12 @@
 
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_input
+class E_input extends E_library
 {
 
   private $globals;
 
-  public function __construct()
+  protected function __construct()
   {
     // Grab the global variables, add them to this library, then get rid of the originals.
     $this->collect();

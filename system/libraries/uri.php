@@ -21,7 +21,7 @@
 
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_uri
+class E_uri extends E_library
 {
 
   private $uri_string = '',
@@ -33,7 +33,7 @@ class E_uri
    *
    * @return void
    */
-  public function __construct()
+  protected function __construct()
   {
     $this->_get();
     if(!$this->check($this->uri_string))

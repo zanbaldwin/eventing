@@ -22,7 +22,7 @@ abstract class E_library
    * @access public
    * @return object|false
    */
-  public static function &getInstance()
+  final public static function &getInstance()
   {
     static $objects = array();
     $class = get_called_class();

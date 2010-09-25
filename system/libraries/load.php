@@ -20,12 +20,12 @@
 
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_load
+class E_load extends E_library
 {
 
   private $E;
 
-  public function __construct()
+  protected function __construct()
   {
     $this->E =& get_instance();
   }

@@ -22,7 +22,7 @@
 
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_digest
+class E_digest extends E_library
 {
 
   protected $user = false, $hash = false, $data = false, $valid = false;
@@ -36,7 +36,7 @@ class E_digest
    *
    * @return void
    */
-  public function __construct()
+  protected function __construct()
   {
     // First things first, if the framework user has specified a default realm to use,
     // we should use it.

@@ -26,9 +26,6 @@ class E_controller extends E_core
   /**
    * Controller Construct Function
    *
-   * We won't use the PHP5 __construct() function, because each controller class must call "parent::controller();"
-   * We could use "parent::__construct();" - but it makes the code a lot more readable!
-   *
    * @return void
    */
   public function __construct()
