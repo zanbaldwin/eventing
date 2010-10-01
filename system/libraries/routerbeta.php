@@ -68,7 +68,8 @@ class E_routerbeta extends E_library {
    * @return string
    */
   protected function get_uri() {
-  	// Get the URI String from the following methods: PATH_INFO, ORIG_PATH_INFO and REQUEST_URI.
+  	// Get the URI String from the following methods: PATH_INFO, ORIG_PATH_INFO
+  	// and REQUEST_URI.
     foreach(array('PATH_INFO', 'ORIG_PATH_INFO', 'REQUEST_URI') as $method) {
       $uri_string = isset($_SERVER[$method])
                   ? $_SERVER[$method]
@@ -112,19 +113,32 @@ class E_routerbeta extends E_library {
    * @return boolean
    */
   protected function check($uri_string) {
-  	$regex = '|^[a-zA-Z0-9\/_-]*(\.[a-zA-Z0-9]+)?(\?.*)?$|';
-  	$regex = '#^([a-zA-Z0-9\/_-]+(\.[a-zA-Z0-9]+)?$#';
-    if(preg_match($regex, $uri_string))
-    {
-      if(strstr($uri_string, '/.') === false)
-      {
-        return true;
-      }
-    }
-    return false;
+  	if(!is_string($uri_string)) {
+  		return false;
+  	}
+  	$regex = '#^([a-zA-Z0-9\/_-]+(\.[a-zA-Z0-9]+)?)?$#';
+  	// Does the string contain the correct characters, and in the right places?
+  	return preg_match($regex, $uri_string) && strstr($uri_string, '/.');
   }
-  protected function split() {}
-  protected function routes() {}
-  protected function determine() {}
+
+  /**
+   * Split URI
+   * Split the URI into segments and suffix.
+   */
+  protected function split() {
+  	
+  }
+  
+  /**
+   * Routes
+   * Match the URI with routes inside the routes config file.
+   * 
+   * @access protected
+   * @param string $uri_string
+   * @param string $suffix
+   * @return string
+   */
+  protected function routes($uri_string, $suffix) {}
+  protected function determine($uri_string, $suffix) {}
   
 }
