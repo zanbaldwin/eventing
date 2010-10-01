@@ -4,8 +4,9 @@
     <!-- This page was generated in {elapsed_time} seconds and took {memory_usage} of memory. -->
     <title><?php echo $title; ?></title>
     <meta charset="utf-8" />
-    <link href="<?php echo content('css/main.css'); ?>" rel="stylesheet" media="screen, projection" title="Eventing Styles" />
-    <script src="http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
+    <link href="<?php echo content('css/main.less'); ?>" rel="stylesheet/less" media="screen, projection" title="Eventing Styles" />
+    <script src="<?php echo content('js/mootools.js'); ?>"></script>
+    <script src="<?php echo content('js/less.js'); ?>"></script>
     <script src="<?php echo content('js/main.js'); ?>"></script>
   </head>
 
@@ -47,8 +48,8 @@
             );
           ?>
           controller, located in the file 
-          "<code class="ghpage" title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
-          The HTML of this page is found in the file "<code class="ghpage" title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
+          "<code title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
+          The HTML of this page is found in the file "<code title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
         </p>
       </article>
     </section>

@@ -1,0 +1,62 @@
+@colour: #040;
+@bordercolour: #ccc;
+@bgcolour: #fff;
+
+.mpzero {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: @bgcolour;
+  margin: 40px;
+  font-family: "Lucida Grande", Verdana, sans-serif;
+  font-size: 100%;
+  color: #000;
+  
+  #container {
+    font-size: 75%;
+    
+    header {
+      margin: 0 0 1em;
+      
+      h1, h2 {
+        font-weight: normal;
+        font-size: 1.5em;
+        color: @colour / 2;
+      }
+      h2 {
+        color: @colour;
+        font-size: 1.25em;
+      }
+    }
+    section {
+      border: 1px solid @bordercolour;
+      background-color: @bgcolour;
+      padding: 20px 20px 12px;
+      margin: 0 0 1em;
+      overflow: hidden;
+    }
+    a{
+      color: @colour * 1.5;
+      &:hover {
+        color: @colour * 2;
+      }
+    }
+    code {
+      font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
+                   "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+                   "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New",
+                   Courier, monospace;
+      font-size: 100%;
+      &.ghpage {
+        cursor: pointer;
+      }
+    }
+    footer {
+      p {
+        .mpzero;
+      }
+    }
+  }
+}
