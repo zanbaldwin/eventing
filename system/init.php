@@ -157,6 +157,9 @@
   load_class('library', false);
   load_class('uri');
   $r = load_class('router');
+  
+  $router = load_class('routerbeta');
+  
   load_class('core', false);
   load_class('controller', false);
   load_class('model', false);
