@@ -133,7 +133,7 @@ class E_uri extends E_library
         return array(rtrim($uri_string, '/'), '');
         break;
       case 2:
-        return array(rtrim($parts[1], '/'), '.' . $parts[2]);
+        return array(rtrim($parts[0], '/'), '.' . $parts[1]);
         break;
       default:
         show_error('Invalid URI passed check. Oh noes!');
