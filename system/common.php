@@ -857,10 +857,14 @@ if(!function_exists('xplode'))
    */
   function xplode($delimiter, $string)
   {
+    $string = trim($string, $delimiter);
     if($string === '') return array();
+    $string = preg_replace(
+      '#' . preg_quote($delimiter . $delimiter, '#') . '+#',
+      $delimiter,
+      $string
+    );
     $array = explode($delimiter, $string);
-    array_unshift($array, null);
-    unset($array[0]);
     return $array;
   }
 }
