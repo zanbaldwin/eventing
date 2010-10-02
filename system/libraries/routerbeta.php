@@ -58,6 +58,8 @@ class E_routerbeta extends E_library {
     // worry about calling this method several times.
     defined('REQUEST') || define('REQUEST', $this->uri_string);
     defined('SUFFIX') || define('SUFFIX', $this->suffix);
+    list($uri_string, $suffix) = $this->routes($this->uri_string, $this->suffix);
+    list($this->ruri_string, $this->rsuffix) = $this->determine($uri_string, $suffix);
   }
 
   /**
@@ -101,7 +103,6 @@ class E_routerbeta extends E_library {
     }
     $uri_string = trim(filter_path($uri_string), '/');
     return $uri_string;
-  	
   }
   
   /**
@@ -118,15 +119,23 @@ class E_routerbeta extends E_library {
   	}
   	$regex = '#^([a-zA-Z0-9\/_-]+(\.[a-zA-Z0-9]+)?)?$#';
   	// Does the string contain the correct characters, and in the right places?
-  	return preg_match($regex, $uri_string) && strstr($uri_string, '/.');
+  	return preg_match($regex, $uri_string)
+  	    && strstr($uri_string, '/.') === false;
   }
 
   /**
    * Split URI
    * Split the URI into segments and suffix.
    */
-  protected function split() {
-  	
+  protected function split($uri_string) {
+  	if(!is_string($uri_string)) {
+  		return false;
+  	}
+  	$parts = xplode('.', $uri_string);
+  	return array(
+      isset($parts[0]) ? trim($parts[0], '/') : '',
+      isset($parts[1]) ? '.' . $parts[1] : '',
+  	);
   }
   
   /**
