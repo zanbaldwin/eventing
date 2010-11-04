@@ -12,7 +12,7 @@
 			      <li><?php echo a('general/requirements', 'Server Requirements'); ?></li>
 			      <li><?php echo a('license', 'License Agreement'); ?></li>
 			      <li><?php echo a('changelog', 'Change Log'); ?></li>
-			      <li><?php echo a('general/credits', 'Credits'); ?></li>
+			      <li><?php echo a('general/credits', 'Accreditations'); ?></li>
 			    </ul>
 			    <h3>Installation</h3>
 			    <ul>
