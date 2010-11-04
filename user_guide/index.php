@@ -32,7 +32,7 @@
   
   $user_config = array(
     'system_folder'  => '../system',
-    'default_app'    => '../docs',
+    'default_app'    => '.',
     'content_folder' => '../public',
     # Can be "ini" or "array". Defaults to "array".
     'config_type'    => 'array'
