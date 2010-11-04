@@ -1,6 +1,6 @@
 <h1>Server Requirements</h1>
 <ul>
-  <li><a href="http://www.php.net/" title="PHP: Hypertext Preprocessor">PHP</a> version 5 or greater.
+  <li><a href="http://www.php.net/" title="PHP: Hypertext Preprocessor">PHP</a> version 5.3 or greater.
 </ul>
 
 <h2>Stability</h2>
