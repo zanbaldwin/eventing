@@ -14,7 +14,7 @@
 
     <header>
       <hgroup>
-        <h1>Eventing Framework</h1>
+        <h1>Eventing Framework / <a href="<?php echo BASEURL; ?>user_guide/">User Guide</a></h1>
         <h2>PHP Application Framework based on CodeIgniter</h2>
       </hgroup>
     </header>
@@ -50,6 +50,10 @@
           controller, located in the file 
           "<code title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
           The HTML of this page is found in the file "<code title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
+        </p>
+        <p>
+          <?php /* For the documentation link, we are using BASEURL instead of a(), incase SELF is in the URL. */ ?>
+          Before you dive in, you might want to read the <a href="<?php echo BASEURL; ?>user_guide/">documentation</a>.
         </p>
       </article>
     </section>
