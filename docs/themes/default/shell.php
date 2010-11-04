@@ -28,7 +28,7 @@
         </td>
         <td id="searchbox">
           <form method="get" action="http://www.google.com/search">
-            <input type="hidden" name="as_sitesearch" id="as_sitesearch" value="<?php echo a(''); ?>" />
+            <input type="hidden" name="as_sitesearch" id="as_sitesearch" value="<?php echo a('/'); ?>" />
             <label for="q">Search User Guide</label>
             <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />
             <input type="submit" class="submit" name="sa" value="Go" />
