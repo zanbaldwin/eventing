@@ -16,5 +16,11 @@
       $this->template->link(array('shell' => array('nav', 'content')));
       $this->template->load('shell');
     }
-  
+
+    public function requirements() {
+    	$this->template->create(array('shell', 'nav', 'content' => 'general/requirements'));
+      $this->template->link(array('shell' => array('nav', 'content')));
+      $this->template->load('shell');
+    }
+    
   }

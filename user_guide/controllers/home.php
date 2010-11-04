@@ -15,7 +15,7 @@
 	  }
 	
 	  public function index() {
-	    $this->template->create(array('shell', 'nav', 'content' => 'index'));
+	    $this->template->create(array('shell', 'nav', 'content' => 'home/index'));
 	    $this->template->link(array('shell' => array('nav', 'content')));
 	    $this->template->load('shell');
 	  }
