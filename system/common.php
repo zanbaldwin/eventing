@@ -76,7 +76,7 @@ $error_definitions = array(
 );
 $count = count($error_definitions);
 for($i = 0, $count = count($error_definitions); $i < $count; $i++) {
-	defined($error_definitions[$i]) || define($error_definitions[$i], pow(2, $i));
+  defined($error_definitions[$i]) || define($error_definitions[$i], pow(2, $i));
 }
 
 if (!function_exists('eventing_error_handler')) {
@@ -183,46 +183,46 @@ if (!function_exists('load_class')) {
    * @param bool $return
    * @return boolean|object
    */
-	
-	function load_class($lib, $return = true) {
-		static $files = array();
-		if(!is_string($lib)) {
-			return false;
-		}
-		$return = bool($return);
-		
-		$lib = trim(filter_path(strtolower($lib)), '/');
-		if($lib == '') {
-			return false;
-		}
-		$class = xplode('/', $lib);
-		$class = 'E_' . end($class);
-		
-		if(isset($files[$lib])) {
-			return $files[$lib] ? $class::getInstance() : false;
-		}
-		$file = SYS . 'libraries/' . $lib . EXT;
-		$files[$lib] = file_exists($file);
-		
-		if(!$files[$lib]) {
-			return false;
-		}
-		
-		require $file;
-		// If they want to just load the file (not return the class instance), don't
-		// carry on.
-		if(!class_exists($class)) {
-			$files[$lib] = false;
-			return false;
-		}
-		if(!$return) {
-			return true;
-		}
-		if(!method_exists($class, 'getInstance')) {
-			return false;
-		}
-		return $class::getInstance();
-	}
+  
+  function load_class($lib, $return = true) {
+    static $files = array();
+    if(!is_string($lib)) {
+      return false;
+    }
+    $return = bool($return);
+    
+    $lib = trim(filter_path(strtolower($lib)), '/');
+    if($lib == '') {
+      return false;
+    }
+    $class = xplode('/', $lib);
+    $class = 'E_' . end($class);
+    
+    if(isset($files[$lib])) {
+      return $files[$lib] ? $class::getInstance() : false;
+    }
+    $file = SYS . 'libraries/' . $lib . EXT;
+    $files[$lib] = file_exists($file);
+    
+    if(!$files[$lib]) {
+      return false;
+    }
+    
+    require $file;
+    // If they want to just load the file (not return the class instance), don't
+    // carry on.
+    if(!class_exists($class)) {
+      $files[$lib] = false;
+      return false;
+    }
+    if(!$return) {
+      return true;
+    }
+    if(!method_exists($class, 'getInstance')) {
+      return false;
+    }
+    return $class::getInstance();
+  }
 }
 
 if(!function_exists('get_called_class'))
@@ -902,6 +902,15 @@ if(!function_exists('elapsed_time')) {
     }
     $elapsed_time = round($end - $start, 3);
     return $elapsed_time;
+  }
+}
+
+if(!function_exists('copyright')) {
+  function copyright($holder = 'Copyright Holder', $since = false) {
+    $since = is_numeric($since) ? (int) $since : (int) strftime('%Y');
+    $year = (int) strftime('%Y');
+    $year = $year > $since ? '-'.$year : '';
+    return 'Copyright &#169; ' . $holder . ' ' . $since . $year;
   }
 }
 
