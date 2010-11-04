@@ -560,7 +560,7 @@ class E_template extends E_library {
  * @author      Alexander Baldwin
  * @link        http://github.com/mynameiszanders/eventing
  */
-class E_Template_Section {
+class E_template_tection {
 
   public    $name,
   $path;
@@ -626,6 +626,7 @@ class E_Template_Section {
    *
    * Add data to be included in the view.
    *
+   * @access public
    * @return boolean
    */
   public function add() {
