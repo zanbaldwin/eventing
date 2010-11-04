@@ -22,7 +22,7 @@
  * @since      v0.1
  */
 
-if (!defined('E_FRAMEWORK')) {
+if(!defined('E_FRAMEWORK')) {
   headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
   exit('Direct script access is disallowed.');
 }
@@ -68,7 +68,7 @@ class E_template extends E_library {
    * @return boolean
    */
   public function view_exists($view) {
-    if (!is_string($view) || !is_string($this->theme)) {
+    if(!is_string($view) || !is_string($this->theme)) {
       return false;
     }
     $file = APP
@@ -89,7 +89,7 @@ class E_template extends E_library {
    * @return boolean
    */
   public function section_exists($section) {
-    if (!is_string($section)) {
+    if(!is_string($section)) {
       return false;
     }
     return isset($this->sections[$section]);
@@ -106,10 +106,10 @@ class E_template extends E_library {
    */
   protected function section_name($section) {
     // If the section is already passed as a string, return it straight away.
-    if (is_string($section)) {
+    if(is_string($section)) {
       return $section;
     }
-    if (!is_object($section)
+    if(!is_object($section)
     || !($section instanceof $this->section_class)
     || get_class($section) != $this->section_class) {
       return false;
@@ -128,7 +128,7 @@ class E_template extends E_library {
    * @return string|false
    */
   public function view_path($view) {
-    if (!$this->view_exists($view)) {
+    if(!$this->view_exists($view)) {
       return false;
     }
     $file = APP
@@ -149,7 +149,7 @@ class E_template extends E_library {
    * @return boolean
    */
   protected function is_varname($varname) {
-    if (!is_string($varname)) {
+    if(!is_string($varname)) {
       return false;
     }
     $regex = '/^' . $this->valid_name . '$/';
@@ -165,11 +165,11 @@ class E_template extends E_library {
    * @return boolean
    */
   public function set_theme($theme) {
-    if (!is_string($theme) || strpos($theme, '/') !== false) {
+    if(!is_string($theme) || strpos($theme, '/') !== false) {
       return false;
     }
     $path = APP . 'themes/' . $theme;
-    if (!is_dir($path)) {
+    if(!is_dir($path)) {
       return false;
     }
     $this->theme = $theme . '/';
@@ -183,12 +183,12 @@ class E_template extends E_library {
    * @return boolean
    */
   public function set_dir($dir) {
-    if (!is_string($dir) || !is_string($this->theme)) {
+    if(!is_string($dir) || !is_string($this->theme)) {
       return false;
     }
     $dir = trim($dir, '/');
     $path = APP . 'themes/' . $this->theme . $dir;
-    if (!is_dir($path)) {
+    if(!is_dir($path)) {
       return false;
     }
     $this->subdir = $dir;
@@ -206,7 +206,7 @@ class E_template extends E_library {
    * @return boolean
    */
   public function set_prefix($prefix) {
-    if (!$this->is_varname($prefix)) {
+    if(!$this->is_varname($prefix)) {
       return false;
     }
     $this->prefix = $prefix;
@@ -221,24 +221,24 @@ class E_template extends E_library {
    * @return void
    */
   public function create($views) {
-    if (!is_array($views) || !count($views)) {
+    if(!is_array($views) || !count($views)) {
       return;
     }
     foreach($views as $name => $view) {
       // If the section already exists, there is no point creating a new one;
       // you'd lose all your data!
-      if ($this->section_exists($name)) {
+      if($this->section_exists($name)) {
         continue;
       }
       // Shortcut for lazy people, if no array key is given, use the view as
       // the name. If something other than a valid string is passed as the key
       // just continue.
       $name = is_int($name) ? $view : $name;
-      if (!$this->is_varname($name)) {
+      if(!$this->is_varname($name)) {
         continue;
       }
       // You can't makea section if the view doesn't exist!
-      if (!$this->view_exists($view)) {
+      if(!$this->view_exists($view)) {
         continue;
       }
       // All checks have passed, let's create that section!
@@ -263,7 +263,7 @@ class E_template extends E_library {
    */
   public function active($section) {
     $section = $this->section_name($section);
-    if (!$this->section_exists($section)) {
+    if(!$this->section_exists($section)) {
       return false;
     }
     $this->active = $section;
@@ -281,10 +281,10 @@ class E_template extends E_library {
    * @return object
    */
   public function section($section = true) {
-    if (isset($this->sections[$section])) {
+    if(isset($this->sections[$section])) {
       return $this->sections[$section];
     }
-    if ($section === true && isset($this->sections[$this->active])) {
+    if($section === true && isset($this->sections[$this->active])) {
       return $this->sections[$this->active];
     }
     // If we can't find either, return nothing (void).
@@ -300,22 +300,22 @@ class E_template extends E_library {
    */
   public function link($links) {
 
-    if (!is_array($links)) {
+    if(!is_array($links)) {
       return;
     }
     foreach($links as $section => $imports) {
       $section = $this->section_name($section);
-      if (!$this->section_exists($section)) {
+      if(!$this->section_exists($section)) {
         continue;
       }
       // Make sure that it is an array!
       $imports = (array) $imports;
-      if (!isset($this->links[$section]) || !is_array($this->links[$section])) {
+      if(!isset($this->links[$section]) || !is_array($this->links[$section])) {
         $this->links[$section] = array();
       }
       // Loop through the imports, making sure each one exists.
-      foreach ($imports as $import) {
-        if (!$this->section_exists($import)
+      foreach($imports as $import) {
+        if(!$this->section_exists($import)
         || in_array($import, $this->links[$section])) {
           continue;
         }
@@ -333,15 +333,15 @@ class E_template extends E_library {
    * @return boolean
    */
   public function group($name, $sections) {
-    if ($this->section_exists($name)
+    if($this->section_exists($name)
     || !$this->is_varname($name)
     || !is_array($sections)) {
       return false;
     }
     $this->sections[$name] = array();
-    foreach ($sections as $section) {
+    foreach($sections as $section) {
       $section = $this->section_name($section);
-      if ($this->section_exists($section) && is_object($this->section($section))) {
+      if($this->section_exists($section) && is_object($this->section($section))) {
         $this->sections[$name][] = $section;
       }
     }
@@ -362,7 +362,7 @@ class E_template extends E_library {
     if(is_string($sections)) {
       $sections = array($sections);
     }
-    if (!is_string($group)
+    if(!is_string($group)
     || !$this->is_varname($group)
     || !$this->section_exists($group)
     || !is_array($this->sections[$group])
@@ -370,7 +370,7 @@ class E_template extends E_library {
     ) {
       return false;
     }
-    foreach ($sections as $section) {
+    foreach($sections as $section) {
       if($this->section_exists($section)) {
         $this->sections[$group][] = $section;
       }
@@ -390,15 +390,15 @@ class E_template extends E_library {
     // with me thinking of something that I should of done differently 5
     // minutes ago.
 
-    if (!$this->section_exists($section)
+    if(!$this->section_exists($section)
     || !is_int($limit)) {
       return false;
     }
 
-    if (is_array($this->sections[$section])) {
+    if(is_array($this->sections[$section])) {
       $sections = $this->sections[$section];
     }
-    elseif (is_object($this->section($section))) {
+    elseif(is_object($this->section($section))) {
       $sections = array($this->section($section)->name());
     }
     else {
@@ -407,13 +407,13 @@ class E_template extends E_library {
 
     $content = $this->concat_sections($sections, $limit);
 
-    if (!isset($this->links[$section]) || !is_array($this->links[$section])) {
+    if(!isset($this->links[$section]) || !is_array($this->links[$section])) {
       return $content;
     }
 
-    foreach ($this->links[$section] as $link) {
+    foreach($this->links[$section] as $link) {
       $link = $this->section_name($link);
-      if (!$this->section_exists($link)
+      if(!$this->section_exists($link)
       || !preg_match('/' . $this->valid_name . '/', $link)) {
         continue;
       }
@@ -425,13 +425,13 @@ class E_template extends E_library {
       . '(\[([0-9]+)?\])?'
       . preg_quote('}-->', '/')
       . '/';
-      if ($preg = preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
-        foreach ($matches as $match) {
+      if($preg = preg_match_all($regex, $content, $matches, PREG_SET_ORDER)) {
+        foreach($matches as $match) {
           // Determine how many interations are needed if the next section is
           // actually a group.
           // "" = 1, "[]" = 0 (unlimited), "[n]" = n.
-          if (isset($match[2])) {
-            if (isset($match[3])) {
+          if(isset($match[2])) {
+            if(isset($match[3])) {
               $n = (int) $match[3];
             }
             else {
@@ -466,21 +466,21 @@ class E_template extends E_library {
   protected function concat_sections($sections, $max = 0) {
     // If they have provided us with just one section object, turn it into an
     // array.
-    if (is_object($sections) && $sections instanceof $this->section_class) {
+    if(is_object($sections) && $sections instanceof $this->section_class) {
       $sections = array($sections);
     }
-    if (!is_int($max) || !is_array($sections) || !count($sections)) {
+    if(!is_int($max) || !is_array($sections) || !count($sections)) {
       return false;
     }
-    if ($max === 0) {
+    if($max === 0) {
       $max = count($sections);
     }
     $content = '';
     reset($sections);
-    for ($i = 0; $i < $max; $i++) {
+    for($i = 0; $i < $max; $i++) {
       // Grab the array element the pointer is currently at.
       $section = $this->section_name(current($sections));
-      if (!$this->section_exists($section) || !is_object($this->section($section))) {
+      if(!$this->section_exists($section) || !is_object($this->section($section))) {
         continue;
       }
       $content .= $this->section($section)->content();
@@ -500,16 +500,16 @@ class E_template extends E_library {
   public function load($section) {
     $section = $this->section_name($section);
     // You are required to pass a valid section, groups are not allowed.
-    if (!$this->section_exists($section)
+    if(!$this->section_exists($section)
     || !is_object($this->section($section))) {
       return false;
     }
     $rendered = $this->combine($section);
-    if (!is_string($rendered)) {
+    if(!is_string($rendered)) {
       return false;
     }
     $E =& get_instance();
-    if (!isset($E->output)) {
+    if(!isset($E->output)) {
       echo $rendered;
     }
     else {
@@ -632,9 +632,9 @@ class E_Template_Section {
     $args = func_get_args();
     array_unshift($args, null);
     unset($args[0]);
-    switch (count($args)) {
+    switch(count($args)) {
       case 1:
-        if (!is_array($args[1])) {
+        if(!is_array($args[1])) {
           return false;
         }
         break;
@@ -646,9 +646,9 @@ class E_Template_Section {
         return false;
         break;
     }
-    foreach ($args[1] as $varname => $vardata)
+    foreach($args[1] as $varname => $vardata)
     {
-      if (!is_string($varname) || !$this->is_varname($varname)) {
+      if(!is_string($varname) || !$this->is_varname($varname)) {
         continue;
       }
       $this->data[$varname] = $vardata;
