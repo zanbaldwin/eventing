@@ -14,6 +14,8 @@ It focuses on features that could be useful in [CodeIgniter] [4], but is not
 designed to replace it. The main libraries that are included in [CodeIgniter] [4]
 will not be included here.
 
+Eventing requires PHP version 5.3 or greater.
+
 Enjoy!
 
 [1]: http://github.com/mynameiszanders "Alexander Baldwin on GitHub"
