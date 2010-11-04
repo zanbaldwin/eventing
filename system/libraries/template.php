@@ -560,7 +560,7 @@ class E_template extends E_library {
  * @author      Alexander Baldwin
  * @link        http://github.com/mynameiszanders/eventing
  */
-class E_template_tection {
+class E_template_section {
 
   public    $name,
   $path;
