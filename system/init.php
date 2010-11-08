@@ -222,27 +222,21 @@
   load_class('model', false);
 
   // We want to know what request this application is meant to serve!
-  if(!is_array($dcm = $r->dcm())) {
+  if(!is_array($r->dcm())) {
     show_404();
   }
+  list($controller_path, $controller, $method) = $r->dcm();
 
   // Directory should come in format 'path/to/controller/', with a trailing
   // slash. Make an absolute path to the controller file, and include it.
-  $controller_file = APP . 'controllers/' . $dcm[0] . $dcm[1] . EXT;
-  // Check that the file provided by $dcm exists, because the router library may
-  // not of used the recursive method.
+  $controller_file = APP . 'controllers/' . $controller_path . EXT;
+  // Check that the file provided by router::dcm() exists.
   file_exists($controller_file) || show_404();
   require_once $controller_file;
 
-  // Strip all extensions. We only want the name of the controller class now!
-  if(($pos = strpos($dcm[1], '.')) !== false) {
-    $dcm[1] = explode('.', $dcm[1]);
-    $dcm[1] = reset($dcm[1]);
-  }
-
   // Make sure the controller class exists.
-  class_exists($dcm[1]) || show_404();
-  $controller = new $dcm[1];
+  class_exists($controller) || show_404();
+  $controller = new $controller;
   // Make sure the method function exists and is public.
   if(!class_exists('ReflectionMethod')) {
     show_error(
@@ -251,14 +245,19 @@
     );
   }
   
-  method_exists($controller, $dcm[2])
-    || in_array($dcm[2], get_class_methods($dcm[1]), true)
+  method_exists($controller, $method)
+    || in_array($method, get_class_methods($controller), true)
     || show_404();
-  $method_reflection = new ReflectionMethod($dcm[1], $dcm[2]);
-  if(!$method_reflection->isPublic()) {
-    show_404();
-  } 
-  $controller->$dcm[2]();
+  $method_reflection = new ReflectionMethod($controller, $method);
+  $method_reflection->isPublic() || show_404();
+
+  // Unset all unecessary variables before we call action.
+  unset(
+    $common, $u, $modules, $mod, $uri_string, $uri, $segment, $r,
+    $controller_path, $controller_file
+  );
+
+  $controller->$method();
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!
