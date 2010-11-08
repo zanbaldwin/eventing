@@ -160,61 +160,7 @@
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
   // make it simple: URI, Router, Core, Controller and Model libraries...
   load_class('library', false);
-  $u = load_class('uri');
-
-  // Let's determine whether or not we need to load a module before we call the
-  // router.
-  $modules = get_config('modules');
-  $mod = null;
-  // Remember to check MODBASE, there will be no module without a module folder!
-  if(MODBASE) {
-    // Check the $modules config array for a match.
-    if(is_array($modules)) {
-      $uri_string = $u->uri_string();
-      // Do a time saving check first.
-      if(isset($modules[$uri_string])
-         && is_string($modules[$uri_string])
-         // Make sure that the string isn't empty.
-         && $modules[$uri_string]
-         && is_dir(MODBASE . $modules[$uri_string])
-      ) {
-        $mod = $modules[$uri_string];
-      }
-      // If it isn't that easy, iterate through the modules array, checking each
-      // one for a match.
-      else {
-        foreach($modules as $uri => $module) {
-          // If the module name is not a string, an empty string, or contains
-          // characters other than alphanumeric, underscores or hyphens, then it
-          // is not valid. Skip it.
-          if(!is_string($module) || preg_match('^[^a-zA-Z0-9_-]*$', $module)) {
-            continue;
-          }
-          // Modules are not quite as flexible as routes, no wildcards, and no
-          // heirachy.
-          if(substr($uri_string, 0, strlen($uri)) == $module
-             && is_dir(MODBASE . $module)
-          ) {
-            $mod = $module;
-            break;
-          }
-        }
-      }
-    }
-    // If $modules is not an array, then use the fallback of loading the module if
-    // the first segment is the same as the module slug.
-    else {
-      $segment = $u->segment(1);
-      if($segment && is_dir(MODBASE . $segment)) {
-        $mod = $segment;
-      }
-    }
-  }
-  defined('MOD') || define('MOD', $mod);
-  $modpath = MOD
-           ? rtrim(str_replace('\\', '/', MODBASE . MOD), '/') . '/'
-           : null;
-  defined('MODPATH') || define('MODPATH', $modpath);
+  load_class('uri');
 
   $r = load_class('router');
   load_class('core', false);
