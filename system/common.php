@@ -217,6 +217,41 @@
       }
       return $class::getInstance();
     }
+    function load_class2($lib, $module = false, $return = true) {
+      static $files = array();
+      if(!is_string($lib)) {
+        return false;
+      }
+      bl($return);
+      $lib = trim(filter_path(strtolower($lib)), '/');
+      if($lib == '') {
+        return false;
+      }
+      $class = xplode('/', $lib);
+      $class = end($class);
+      if(isset($files[$lib]) && $files[$lib] !== false) {
+        if($files[$lib] !== false) {
+          return $files[$lib];
+        }
+        else {
+          return false;
+        }
+      }
+      $module = strtolower(trim(filter_path($module), '/'));
+      if($module && file_exists($file = MOD . $module . '/libraries/' . $lib . EXT)) {
+        $namespace = '\\Eventing\\Module\\' . $module . '\\Library\\';
+      }
+      elseif(file_exists($file = APP . 'libraries/' . $lib . EXT)) {
+        $namespace = '\\Eventing\\Application\\Library\\';
+      }
+      elseif(file_exists($file = SYS . 'libraries/' . $lib . EXT)) {
+        $namespace = '\\Eventing\\Library\\';
+      }
+      else {
+        return false;
+      }
+      require_once $file;
+    }
   }
 
   if(!function_exists('get_called_class')) {
