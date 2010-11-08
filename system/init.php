@@ -30,10 +30,11 @@
   );
 
   $main_config = array(
-    'system_folder'   => 'system',
-    'default_app'     => 'app',
+    'config_type'     => 'array',
     'content_folder'  => 'public',
-    'config_type'     => 'array'
+    'default_app'     => 'app',
+    'modules_folder'  => 'modules',
+    'system_folder'   => 'system',
   );
 
   // Incorporate the user's settings into the default settings. We trust the
