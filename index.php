@@ -31,11 +31,12 @@
   # ========================================================================== #
   
   $user_config = array(
-    'system_folder'  => 'system',
-    'default_app'    => 'app',
-    'content_folder' => 'public',
-    # Can be "ini" or "array". Defaults to "array".
+    // Can be "ini" or "array". Defaults to "array".
     'config_type'    => 'array'
+    'content_folder' => 'public',
+    'default_app'    => 'app',
+    'modules_folder' => false,
+    'system_folder'  => 'system',
   );
   
   # ========================================================================== #
