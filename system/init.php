@@ -16,6 +16,8 @@
  * @since      v0.1
  */
 
+  namespace Eventing;
+
   defined('E_FRAMEWORK') || trigger_error(
     'E_FRAMEWORK has not been defined.',
     E_USER_ERROR
