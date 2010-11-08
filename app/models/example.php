@@ -1,6 +1,8 @@
 <?php
 
-  class M_default extends E_model {
+  namespace Eventing\Application\Model
+
+  class example extends model {
 
     public function __construct() {
       parent::__construct();
