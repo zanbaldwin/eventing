@@ -95,6 +95,10 @@
     '/'
   ) . '/';
   $c['app'] = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
+  $c['modbase'] = realpath($modules_folder);
+  $c['modbase'] = is_string($c['modbase'])
+                ? rtrim(str_replace('\\', '/', $c['modbase']), '/') . '/'
+                : null;
   $c['contentpath'] = rtrim(
     str_replace('\\', '/', realpath($content_folder)),
     '/'
@@ -128,7 +132,8 @@
   // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
   unset(
     $main_config, $user_config, $key, $value, $system_folder, $default_app,
-    $content_folder, $skeleton_mode, $config_type, $c, $name, $const
+    $content_folder, $skeleton_mode, $config_type, $c, $name, $const,
+    $modules_folder
   );
 
   // Right, we have all out constants defined, with no loose variables floating
@@ -142,23 +147,24 @@
   );
   require_once $common;
 
-  // This framework now requires PHP5 for quite a lot of functionality. If we
+  // This framework now requires PHP5.3 for quite a lot of functionality. If we
   // are running anything less, terminate.
-  if(PHP_VERSION_ID < 50000) {
+  if(PHP_VERSION_ID < 50300) {
     show_error(
       'This installation of PHP is running version ' . PHP_VERSION
-    . ', but this framework requires version 5.0.0 or greater.'
+    . ', but this framework requires version 5.3.0 or greater.'
     );
   }
-  
+
+  // Let's determine whether or not we need to load a module.
+  $modules = get_config('modules');
+
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
   // make it simple: URI, Router, Core, Controller and Model libraries...
   load_class('library', false);
   load_class('uri');
   $r = load_class('router');
-  
-  $router = load_class('routerbeta');
   
   load_class('core', false);
   load_class('controller', false);
