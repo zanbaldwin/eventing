@@ -27,28 +27,28 @@
  */
 class E_routerbeta extends E_library {
   
-	protected $uri_string = false,
-	          $valid = true;
-	          
-	
+  protected $uri_string = false,
+            $valid = true;
+            
+  
   /**
    * Constructor Method
    *
    * @return void
    */
-  protected function __construct($uri_string = false) {
-  	// If a URI string was not passed (most likely called from init), grab the
-  	// current URI request.
+  protected function __construct($uri_string = false, $module = false) {
+    // If a URI string was not passed (most likely called from init), grab the
+    // current URI request.
     if(!is_string($uri_string)) {
-    	$uri_string = $this->get_uri();
+      $uri_string = $this->get_uri();
     }
     // Check that we have a valid request.
     if(!$this->check($uri_string)) {
-    	// Invalid characters? That's not good!
-    	$this->valid = false;
-    	// This class is always going to be called from load_class() so we can't
-    	// return anything from the constructor function.
-    	return;
+      // Invalid characters? That's not good!
+      $this->valid = false;
+      // This class is always going to be called from load_class() so we can't
+      // return anything from the constructor function.
+      return;
     }
     list($this->uri_string, $this->suffix) = $this->split($uri_string);
     $this->segments = xplode('/', $this->uri_string);
@@ -62,6 +62,10 @@ class E_routerbeta extends E_library {
     list($this->ruri_string, $this->rsuffix) = $this->determine($uri_string, $suffix);
   }
 
+  public function route($uri_string, $module) {
+    
+  }
+
   /**
    * Get URI
    * Fetch the URI string from server variables.
@@ -70,8 +74,8 @@ class E_routerbeta extends E_library {
    * @return string
    */
   protected function get_uri() {
-  	// Get the URI String from the following methods: PATH_INFO, ORIG_PATH_INFO
-  	// and REQUEST_URI.
+    // Get the URI String from the following methods: PATH_INFO, ORIG_PATH_INFO
+    // and REQUEST_URI.
     foreach(array('PATH_INFO', 'ORIG_PATH_INFO', 'REQUEST_URI') as $method) {
       $uri_string = isset($_SERVER[$method])
                   ? $_SERVER[$method]
@@ -114,12 +118,12 @@ class E_routerbeta extends E_library {
    * @return boolean
    */
   protected function check($uri_string) {
-  	if(!is_string($uri_string)) {
-  		return false;
-  	}
-  	$regex = '#^([a-zA-Z0-9/_-]+((?<!/)\.[a-zA-Z0-9]+)?)?$#';
-  	// Does the string contain the correct characters, and in the right places?
-  	return preg_match($regex, $uri_string);
+    if(!is_string($uri_string)) {
+      return false;
+    }
+    $regex = '#^(([a-zA-Z0-9/_-]+)((?<!/)\.[a-zA-Z0-9]+)?)?$#';
+    // Does the string contain the correct characters, and in the right places?
+    return preg_match($regex, $uri_string);
   }
 
   /**
@@ -127,14 +131,14 @@ class E_routerbeta extends E_library {
    * Split the URI into segments and suffix.
    */
   protected function split($uri_string) {
-  	if(!is_string($uri_string)) {
-  		return false;
-  	}
-  	$parts = xplode('.', $uri_string);
-  	return array(
+    if(!is_string($uri_string)) {
+      return false;
+    }
+    $parts = xplode('.', $uri_string);
+    return array(
       isset($parts[0]) ? trim($parts[0], '/') : '',
       isset($parts[1]) ? '.' . $parts[1] : '',
-  	);
+    );
   }
   
   /**
