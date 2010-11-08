@@ -225,8 +225,7 @@ if (!function_exists('load_class')) {
   }
 }
 
-if(!function_exists('get_called_class'))
-{
+if(!function_exists('get_called_class')) {
   /**
    * Get Called Class Object
    *
@@ -234,20 +233,16 @@ if(!function_exists('get_called_class'))
    * Use this implementation by Chris Webb.
    * http://www.septuro.com/2009/07/php-5-2-late-static-binding-get_called_class-and-self-new-self/
    */
-  class _get_called_class_object
-  {
+  class _get_called_class_object {
     static $i = 0;
     static $fl = null;
 
-    static function get_called_class()
-    {
+    static function get_called_class() {
       $bt = debug_backtrace();
-      if(self::$fl == $bt[2]['file'].$bt[2]['line'])
-      {
+      if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
         self::$i++;
       }
-      else
-      {
+      else {
         self::$i = 0;
         self::$fl = $bt[2]['file'].$bt[2]['line'];
       }
@@ -265,14 +260,12 @@ if(!function_exists('get_called_class'))
    *
    * @return string
    */
-  function get_called_class()
-  {
+  function get_called_class() {
     return _get_called_class_object::get_called_class();
   }
 }
 
-if(!function_exists('get_instance'))
-{
+if(!function_exists('get_instance')) {
   /**
    * Get Instance
    *
@@ -280,14 +273,12 @@ if(!function_exists('get_instance'))
    *
    * @return object
    */
-  function &get_instance()
-  {
+  function &get_instance() {
     return E_core::get_instance();
   }
 }
 
-if(!function_exists('bool'))
-{
+if(!function_exists('bool')) {
   /**
    * Check Boolean
    *
@@ -296,14 +287,12 @@ if(!function_exists('bool'))
    * @param mixed $var
    * @return boolean
    */
-  function bool($var)
-  {
+  function bool($var) {
     return $var === true ? true : false;
   }
 }
 
-if(!function_exists('bl'))
-{
+if(!function_exists('bl')) {
   /**
    * Make Boolean
    *
@@ -312,15 +301,13 @@ if(!function_exists('bl'))
    * @param mixed $var
    * @return boolean
    */
-  function bl(&$var)
-  {
+  function bl(&$var) {
     $var = bool($var);
     return $var;
   }
 }
 
-if(!function_exists('get_config'))
-{
+if(!function_exists('get_config')) {
   /**
    * Get Config
    *
@@ -329,38 +316,31 @@ if(!function_exists('get_config'))
    * @param string $file
    * @return array|false
    */
-  function get_config($config_file)
-  {
+  function get_config($config_file) {
     static $main_config = array();
-    if(isset($main_config[$config_file]))
-    {
+    if(isset($main_config[$config_file])) {
       return $main_config[$config_file];
     }
     $file = APP . 'config/' . $config_file;
-    if(CONFIG == 'ini')
-    {
+    if(CONFIG == 'ini') {
       function_exists('parse_ini_file') || show_error(
         'Cannot retrieve config settings. INI file parser does not exist.',
         500
       );
       $file .= '.ini';
-      if(!file_exists($file))
-      {
+      if(!file_exists($file)) {
         return false;
       }
       $config = parse_ini_file($file, false);
     }
-    else
-    {
+    else {
       $file .= EXT;
-      if(!file_exists($file))
-      {
+      if(!file_exists($file)) {
         return false;
       }
       require_once $file;
     }
-    if(!is_array($config))
-    {
+    if(!is_array($config)) {
       return false;
     }
     $main_config[$config_file] =& $config;
@@ -368,8 +348,7 @@ if(!function_exists('get_config'))
   }
 }
 
-if(!function_exists('c'))
-{
+if(!function_exists('c')) {
   /**
    * Config Item
    *
@@ -379,16 +358,13 @@ if(!function_exists('c'))
    * @param string $file
    * @return mixed|false
    */
-  function c($item, $file = 'config')
-  {
+  function c($item, $file = 'config') {
     static $config_items = array();
     $file = is_string($file) && $file != '' ? $file : 'config';
-    if(!isset($config_items[$file]))
-    {
+    if(!isset($config_items[$file])) {
       $config_items[$file] = get_config($file);
     }
-    if(!is_array($config_items[$file]))
-    {
+    if(!is_array($config_items[$file])) {
       return false;
     }
     return isset($config_items[$file][$item])
@@ -397,8 +373,7 @@ if(!function_exists('c'))
   }
 }
 
-if(!function_exists('filter_path'))
-{
+if(!function_exists('filter_path')) {
   /**
    * Filter Path
    *
@@ -408,14 +383,12 @@ if(!function_exists('filter_path'))
    * @param string $path
    * @return string|null
    */
-  function filter_path($path)
-  {
+  function filter_path($path) {
     return preg_replace('|/+|', '/', str_replace('\\', '/', $path));
   }
 }
 
-if(!function_exists('show_error'))
-{
+if(!function_exists('show_error')) {
   /**
    * Show Error
    *
@@ -472,8 +445,7 @@ if(!function_exists('show_error'))
   }
 }
 
-if(!function_exists('show_404'))
-{
+if(!function_exists('show_404')) {
   /**
    * Show 404
    *
@@ -482,8 +454,7 @@ if(!function_exists('show_404'))
    *
    * @return void
    */
-  function show_404()
-  {
+  function show_404() {
     show_doc(404) || show_error(
       'The page you requested does not exist.',
       '404 Not Found'
@@ -491,16 +462,14 @@ if(!function_exists('show_404'))
   }
 }
 
-if(!function_exists('show_deny'))
-{
+if(!function_exists('show_deny')) {
   /**
    * Show Deny
    *
    * Calls show_doc(403), trying to find a user error document. If this fails,
    * default to the not-so-pretty show_error().
    */
-  function show_deny()
-  {
+  function show_deny() {
     show_doc(403) || show_error(
       'You do not have sufficient clearance to view this page.',
       '403 Forbidden'
@@ -535,8 +504,7 @@ if(!function_exists('show_teapot_error')) {
   }
 }
 
-if(!function_exists('show_doc'))
-{
+if(!function_exists('show_doc')) {
   /**
    * Show Error Document
    *
@@ -549,8 +517,7 @@ if(!function_exists('show_doc'))
    * @param int $error_number
    * @return exit|false
    */
-  function show_doc($error_number)
-  {
+  function show_doc($error_number) {
     $file = theme_path('errors') . (string) $error_number . EXT;
     if(headers_sent() || !file_exists($file)) {
       return false;
@@ -765,8 +732,7 @@ if(!function_exists('get_themes')) {
   }
 }
 
-if(!function_exists('content'))
-{
+if(!function_exists('content')) {
   /**
    * Content URL
    *
@@ -795,8 +761,7 @@ if(!function_exists('content'))
   }
 }
 
-if(!function_exists('redirect'))
-{
+if(!function_exists('redirect')) {
   /**
    * Redirect
    *
@@ -806,11 +771,9 @@ if(!function_exists('redirect'))
    * @param string $segments
    * @return false|void
    */
-  function redirect($segments, $location = true)
-  {
+  function redirect($segments, $location = true) {
     $url = a($segments);
-    if(!is_string($url) || headers_sent())
-    {
+    if(!is_string($url) || headers_sent()) {
       return false;
     }
     $header = bool($location) ? 'Location: ' : 'Refresh: 0; url=';
@@ -821,8 +784,7 @@ if(!function_exists('redirect'))
   }
 }
 
-if(!function_exists('vardump'))
-{
+if(!function_exists('vardump')) {
   /**
    * Vardump
    *
@@ -832,8 +794,7 @@ if(!function_exists('vardump'))
    * @param mixed $var
    * @return string
    */
-  function vardump($var)
-  {
+  function vardump($var) {
     ob_start();
     var_dump($var);
     $contents = ob_get_contents();
@@ -842,8 +803,7 @@ if(!function_exists('vardump'))
   }
 }
 
-if(!function_exists('xplode'))
-{
+if(!function_exists('xplode')) {
   /**
    * Xplode
    *
@@ -855,10 +815,11 @@ if(!function_exists('xplode'))
    * @param string $string
    * @return array|false
    */
-  function xplode($delimiter, $string)
-  {
+  function xplode($delimiter, $string) {
     $string = trim($string, $delimiter);
-    if($string === '') return array();
+    if($string === '') {
+      return array();
+    }
     $string = preg_replace(
       '#' . preg_quote($delimiter . $delimiter, '#') . '+#',
       $delimiter,
