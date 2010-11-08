@@ -117,10 +117,9 @@ class E_routerbeta extends E_library {
   	if(!is_string($uri_string)) {
   		return false;
   	}
-  	$regex = '#^([a-zA-Z0-9\/_-]+(\.[a-zA-Z0-9]+)?)?$#';
+  	$regex = '#^([a-zA-Z0-9/_-]+((?<!/)\.[a-zA-Z0-9]+)?)?$#';
   	// Does the string contain the correct characters, and in the right places?
-  	return preg_match($regex, $uri_string)
-  	    && strstr($uri_string, '/.') === false;
+  	return preg_match($regex, $uri_string);
   }
 
   /**
