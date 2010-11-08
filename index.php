@@ -35,7 +35,7 @@
     'config_type'    => 'array',
     'content_folder' => 'public',
     'default_app'    => 'app',
-    'modules_folder' => false,
+    'modules_folder' => 'modules',
     'system_folder'  => 'system',
   );
   
