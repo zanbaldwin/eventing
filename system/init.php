@@ -16,6 +16,8 @@
  * @since      v0.1
  */
 
+  namespace Eventing;
+
   defined('E_FRAMEWORK') || trigger_error(
     'E_FRAMEWORK has not been defined.',
     E_USER_ERROR
@@ -96,6 +98,10 @@
     '/'
   ) . '/';
   $c['app'] = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
+  $c['mod'] = realpath($modules_folder);
+  $c['mod'] = is_string($c['mod'])
+                ? rtrim(str_replace('\\', '/', $c['mod']), '/') . '/'
+                : null;
   $c['contentpath'] = rtrim(
     str_replace('\\', '/', realpath($content_folder)),
     '/'
@@ -129,7 +135,8 @@
   // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
   unset(
     $main_config, $user_config, $key, $value, $system_folder, $default_app,
-    $content_folder, $skeleton_mode, $config_type, $c, $name, $const
+    $content_folder, $skeleton_mode, $config_type, $c, $name, $const,
+    $modules_folder
   );
 
   // Right, we have all out constants defined, with no loose variables floating
@@ -143,50 +150,42 @@
   );
   require_once $common;
 
-  // This framework now requires PHP5 for quite a lot of functionality. If we
+  // This framework now requires PHP5.3 for quite a lot of functionality. If we
   // are running anything less, terminate.
-  if(PHP_VERSION_ID < 50000) {
+  if(PHP_VERSION_ID < 50300) {
     show_error(
       'This installation of PHP is running version ' . PHP_VERSION
-    . ', but this framework requires version 5.0.0 or greater.'
+    . ', but this framework requires version 5.3.0 or greater.'
     );
   }
-  
+
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
   // make it simple: URI, Router, Core, Controller and Model libraries...
   load_class('library', false);
   load_class('uri');
+
   $r = load_class('router');
-  
-  $router = load_class('routerbeta');
-  
   load_class('core', false);
   load_class('controller', false);
   load_class('model', false);
 
   // We want to know what request this application is meant to serve!
-  if(!is_array($dcm = $r->dcm())) {
+  if(!is_array($r->dcm())) {
     show_404();
   }
+  list($controller_path, $controller, $method) = $r->dcm();
 
   // Directory should come in format 'path/to/controller/', with a trailing
   // slash. Make an absolute path to the controller file, and include it.
-  $controller_file = APP . 'controllers/' . $dcm[0] . $dcm[1] . EXT;
-  // Check that the file provided by $dcm exists, because the router library may
-  // not of used the recursive method.
+  $controller_file = APP . 'controllers/' . $controller_path . EXT;
+  // Check that the file provided by router::dcm() exists.
   file_exists($controller_file) || show_404();
   require_once $controller_file;
 
-  // Strip all extensions. We only want the name of the controller class now!
-  if(($pos = strpos($dcm[1], '.')) !== false) {
-    $dcm[1] = explode('.', $dcm[1]);
-    $dcm[1] = reset($dcm[1]);
-  }
-
   // Make sure the controller class exists.
-  class_exists($dcm[1]) || show_404();
-  $controller = new $dcm[1];
+  class_exists($controller) || show_404();
+  $controller = new $controller;
   // Make sure the method function exists and is public.
   if(!class_exists('ReflectionMethod')) {
     show_error(
@@ -195,14 +194,19 @@
     );
   }
   
-  method_exists($controller, $dcm[2])
-    || in_array($dcm[2], get_class_methods($dcm[1]), true)
+  method_exists($controller, $method)
+    || in_array($method, get_class_methods($controller), true)
     || show_404();
-  $method_reflection = new ReflectionMethod($dcm[1], $dcm[2]);
-  if(!$method_reflection->isPublic()) {
-    show_404();
-  } 
-  $controller->$dcm[2]();
+  $method_reflection = new ReflectionMethod($controller, $method);
+  $method_reflection->isPublic() || show_404();
+
+  // Unset all unecessary variables before we call action.
+  unset(
+    $common, $u, $modules, $mod, $uri_string, $uri, $segment, $r,
+    $controller_path, $controller_file
+  );
+
+  $controller->$method();
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!

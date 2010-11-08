@@ -70,4 +70,3 @@
   // to get it again.
   $main_file = __FILE__;
   require_once $init;
-

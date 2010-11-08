@@ -18,9 +18,11 @@
  * @since      v0.1
  */
 
+namespace Eventing\Library;
+
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_input extends E_library
+class input extends library
 {
 
   private $globals;

@@ -15,12 +15,14 @@
  * @since      v0.1
  */
 
+namespace Eventing\Library;
+
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
 /**
  * Eventing Controller Class
  */
-class E_controller extends E_core
+class controller extends core
 {
 
   /**
