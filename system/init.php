@@ -39,9 +39,9 @@
 
   // Incorporate the user's settings into the default settings. We trust the
   // user to have all the right stuff there... Well, almost...
-  if (is_array($user_config)) {
+  if(is_array($user_config)) {
     foreach ($user_config as $key => $value) {
-      if (array_key_exists($key, $main_config)) {
+      if(array_key_exists($key, $main_config)) {
         $main_config[$key] = is_string($value) ? strtolower($value) : $value;
       }
     }
