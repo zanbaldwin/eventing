@@ -58,12 +58,11 @@
   $init = isset($user_config['system_folder'])
         ? $user_config['system_folder'] . '/init.php'
         : 'system/init.php';
-  $init = realpath($init);
   
   // For obvious reasons, let's check if the initialisation script exists...
   // If it doesn't, we'll give the user a big slap in the face of epic
   // disappointment by calling the exit function. SAD TIMES!
-  file_exists($init) || exit('Initialisation script not found.');
+  $init = realpath($init) || exit('Initialisation script not found.');
   // Great... Everything working so far. What a boring life we live!
   // Don't forget to say which file is calling the script.
   // We are not going to define this as a constant because we can just use:
