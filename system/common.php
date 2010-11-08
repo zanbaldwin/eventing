@@ -878,5 +878,8 @@ if(!function_exists('copyright')) {
 // happy :)
 // You can change this in your controller, or a future library (hopefully!)
 if(function_exists('date_default_timezone_set')) {
-  date_default_timezone_set(c('default_timezone'));
+  $default_timezone = c('default_timezone')
+                    ? c('default_timezone')
+                    : 'Europe/London';
+  date_default_timezone_set($default_timezone);
 }
