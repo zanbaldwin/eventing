@@ -41,7 +41,6 @@ defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2
 // This is against standard practice, to set error reporting to full, especially
 // for production, but in truth, if you don't want errors coming up in your
 // applications, start writing better code!
-set_magic_quotes_runtime(0);
 error_reporting(-1);
 ini_set('display_errors', 1);
 
