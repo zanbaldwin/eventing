@@ -98,9 +98,9 @@
     '/'
   ) . '/';
   $c['app'] = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
-  $c['modbase'] = realpath($modules_folder);
-  $c['modbase'] = is_string($c['modbase'])
-                ? rtrim(str_replace('\\', '/', $c['modbase']), '/') . '/'
+  $c['mod'] = realpath($modules_folder);
+  $c['mod'] = is_string($c['mod'])
+                ? rtrim(str_replace('\\', '/', $c['mod']), '/') . '/'
                 : null;
   $c['contentpath'] = rtrim(
     str_replace('\\', '/', realpath($content_folder)),
