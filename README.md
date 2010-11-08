@@ -5,8 +5,8 @@ Eventing is a PHP Framework based on [CodeIgniter] [4] by [Alexander Baldwin] [1
 licensed under either [MIT] [2] or [GPL v3] [3], whichever suits you best.
 
 Like [CodeIgniter] [4], it uses Model-View-Controller, but adds other features
-like multiple suffixes (file extensions) and a moderately advanced view
-templating system.
+like multiple suffixes (file extensions), an implementation of HMVC and modules,
+and a moderately advanced view templating system.
 
 The Eventing Framework, at this moment in time, is a fun project and is not
 recommended for production use (late-alpha development).
