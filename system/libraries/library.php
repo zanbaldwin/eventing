@@ -1,11 +1,11 @@
 <?php
 
-namespace Eventing\Libraries;
+namespace Eventing\Library;
 
 /**
  * Library base class
  */
-abstract class E_library
+abstract class library
 {
 
   /**
@@ -19,7 +19,7 @@ abstract class E_library
   abstract protected function __construct();
 
   final public function __clone() {
-  	trigger_error('Cannot clone Singleton library.', E_USER_ERROR);
+    trigger_error('Cannot clone Singleton library.', E_USER_ERROR);
   }
   
   /**

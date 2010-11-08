@@ -17,7 +17,7 @@
  * @since      v0.1
  */
 
-  namespace Eventing\Libraries;
+  namespace Eventing\Library;
 
   if(!defined('E_FRAMEWORK')) {
     headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
@@ -27,7 +27,7 @@
   /**
    * Router Class
    */
-  class E_router extends E_library {
+  class router extends library {
 
     private $uri_string,
     $ruri_string,

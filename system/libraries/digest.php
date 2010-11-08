@@ -20,9 +20,11 @@
  * @since      v0.1
  */
 
+namespace Eventing\Library;
+
 if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
-class E_digest extends E_library
+class digest extends library
 {
 
   protected $user = false, $hash = false, $data = false, $valid = false;

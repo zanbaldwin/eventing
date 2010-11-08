@@ -192,7 +192,7 @@
         return false;
       }
       $class = xplode('/', $lib);
-      $class = 'E_' . end($class);
+      $class = end($class);
       if(isset($files[$lib])) {
         return $files[$lib] ? $class::getInstance() : false;
       }
