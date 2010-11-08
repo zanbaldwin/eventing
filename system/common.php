@@ -1,7 +1,5 @@
 <?php
 
-  namespace Eventing;
-
   /**
    * Eventing Framework Common Functions
    *
@@ -136,7 +134,7 @@
 
 
   // Set PHP's error handler to the Eventing error handler.
-  set_error_handler('\\Eventing\\eventing_error_handler');
+  set_error_handler('eventing_error_handler');
 
   if(!function_exists('binary_parts')) {
     /**
@@ -206,6 +204,7 @@
       require $file;
       // If they want to just load the file (not return the class instance), don't
       // carry on.
+      $class = '\\Eventing\\Libraries\\' . $class;
       if(!class_exists($class)) {
         $files[$lib] = false;
         return false;

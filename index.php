@@ -23,8 +23,6 @@
  * @since      v0.1
  */
 
-  namespace Eventing;
-
   # ========================================================================== #
   # Please edit the following settings depending on your folder structure and  #
   # preferences. If you are going to keep the default values here, you might   #
@@ -72,4 +70,3 @@
   // to get it again.
   $main_file = __FILE__;
   require_once $init;
-
