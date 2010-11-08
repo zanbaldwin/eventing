@@ -136,7 +136,7 @@
 
 
   // Set PHP's error handler to the Eventing error handler.
-  set_error_handler('eventing_error_handler');
+  set_error_handler('\\Eventing\\eventing_error_handler');
 
   if(!function_exists('binary_parts')) {
     /**

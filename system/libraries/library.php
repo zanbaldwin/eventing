@@ -1,5 +1,7 @@
 <?php
 
+namespace Eventing\Libraries;
+
 /**
  * Library base class
  */
