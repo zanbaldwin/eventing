@@ -16,8 +16,6 @@
  * @since      v0.1
  */
 
-  namespace Eventing;
-
   defined('E_FRAMEWORK') || trigger_error(
     'E_FRAMEWORK has not been defined.',
     E_USER_ERROR
@@ -125,6 +123,30 @@
     $c['contentpath'] = null;
   }
 
+  // Define our list of namespaces used throughout our framework.
+  $c['ns']          = 'Eventing';
+  $c['nslibrary']   = 'Library';
+  $c['nscontroller'] = 'Application';
+  $c['nsmodel']     = 'Model';
+  $c['nsmodule']    = 'Module';
+
+  /**
+   * Namespace String
+   *
+   * @access public
+   * @params strings
+   * @return string
+   */
+  if(!function_exists('ns')) {
+    function ns() {
+      if(func_num_args() == 0) {
+        return '\\';
+      }
+      $ns_str = implode('\\', func_get_args());
+      return '\\' . $ns_str . '\\';
+    }
+  }
+
   // All our constants are really great, but they're a little soft at the
   // moment... Shall we make them hardcore?
   foreach ($c as $name => $const) {
@@ -184,10 +206,11 @@
   require_once $controller_file;
 
   // Make sure the controller class exists.
+  $controller = ns(NS, NSCONTROLLER) . $controller;
   class_exists($controller) || show_404();
   $controller = new $controller;
   // Make sure the method function exists and is public.
-  if(!class_exists('ReflectionMethod')) {
+  if(!class_exists('\\ReflectionMethod')) {
     show_error(
       'ReflectionMethod class does not exist. Method publicity status cannot '
     . 'be determined.'
@@ -197,7 +220,7 @@
   method_exists($controller, $method)
     || in_array($method, get_class_methods($controller), true)
     || show_404();
-  $method_reflection = new ReflectionMethod($controller, $method);
+  $method_reflection = new \ReflectionMethod($controller, $method);
   $method_reflection->isPublic() || show_404();
 
   // Unset all unecessary variables before we call action.
