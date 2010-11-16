@@ -16,12 +16,19 @@
     </style>
   </head>
   <body>
-    <header><h1><?php echo $title; ?></h1></header>
+    <header>
+      <h1><?php echo htmlentities($title); ?></h1>
+    </header>
     <section>
-      <p>An error occured on line <strong><?php echo $line; ?></strong> in file <strong><?php echo $file; ?></strong>.</p>
+      <p>
+        An error occured on line <strong><?php echo $line; ?></strong> in file
+        <strong><?php echo htmlentities($file); ?></strong>.
+      </p>
       <p>"<?php echo $message; ?>"</p>
     </section>
-    <footer><p>Powered by the <a href="http://github.com/mynameiszanders/eventing">Eventing Framework</a>.</p></footer>
+    <footer>
+      <p>Powered by the <a href="http://github.com/mynameiszanders/eventing">Eventing Framework</a>.</p>
+    </footer>
   </body>
 
 </html>

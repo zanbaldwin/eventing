@@ -16,12 +16,19 @@
     </style>
   </head>
   <body>
-    <header><h1>404 Not Found</h1></header>
+    <header>
+      <h1>404 Not Found</h1>
+    </header>
     <section>
       <p>The page you requested does not exist.</p>
-      <p>Please try navigating to the page from the <?php echo a('', 'homepage'); ?>. If you arrived here from a broken link, please <?php echo a('feedback/brokenlink', 'report it'); ?>.</p>
+      <p>
+        Please try navigating to the page from the <?php echo a('', 'homepage'); ?>.
+        If you arrived here from a broken link, please <?php echo a('feedback/brokenlink', 'report it'); ?>.
+      </p>
     </section>
-    <footer><p>Powered by the <a href="http://github.com/mynameiszanders/eventing">Eventing Framework</a>.</p></footer>
+    <footer>
+      <p>Powered by the <a href="http://github.com/mynameiszanders/eventing">Eventing Framework</a>.</p>
+    </footer>
   </body>
 
 </html>
