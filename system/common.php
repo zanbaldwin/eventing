@@ -202,13 +202,13 @@
         return false;
       }
       require $file;
-      // If they want to just load the file (not return the class instance), don't
-      // carry on.
-      $class = '\\Eventing\\Libraries\\' . $class;
+      $class = '\\Eventing\\Library\\' . $class;
       if(!class_exists($class)) {
         $files[$lib] = false;
         return false;
       }
+      // If they want to just load the file (not return the class instance), don't
+      // carry on.
       if(!$return) {
         return true;
       }
