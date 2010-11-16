@@ -10,7 +10,7 @@
   /**
    * Eventing Home Controller Class (framework default)
    */
-  final class home extends controller {
+  final class home extends \Eventing\Library\controller {
 
     public function __construct() {
       parent::__construct();
