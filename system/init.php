@@ -154,7 +154,7 @@
     defined($name) || define($name, $const);
   }
   
-  // You know what? I've had enough of you lot... Yeah you heard me! Get lost!
+  // You know what? I've had enough of you lot... Yeah, you heard me! Get lost!
   unset(
     $main_config, $user_config, $key, $value, $system_folder, $default_app,
     $content_folder, $skeleton_mode, $config_type, $c, $name, $const,
@@ -164,7 +164,6 @@
   // Right, we have all out constants defined, with no loose variables floating
   // about... I think we're doing pretty well! Shall we load some common
   // functions? Let's!
-
   $common = SYS . 'common' . EXT;
   file_exists($common) || trigger_error(
     'Common functions could not be loaded.',
@@ -183,14 +182,13 @@
 
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
-  // make it simple: URI, Router, Core, Controller and Model libraries...
+  // make it simple: Library, URI, Router, Core, Controller libraries...
   load_class('library', false);
   load_class('uri');
 
   $r = load_class('router');
   load_class('core', false);
   load_class('controller', false);
-  load_class('model', false);
 
   // We want to know what request this application is meant to serve!
   if(!is_array($r->dcm())) {
@@ -200,6 +198,9 @@
 
   // Directory should come in format 'path/to/controller/', with a trailing
   // slash. Make an absolute path to the controller file, and include it.
+  // The main request will always be treated as a request to a controller in the
+  // application, rather than a module. This is HMVC, not let's-have-controllers
+  // -and-files-everywhere-don't-worry-our-directory-structure-it-can-handle-WW3
   $controller_file = APP . 'controllers/' . $controller_path . EXT;
   // Check that the file provided by router::dcm() exists.
   file_exists($controller_file) || show_404();
@@ -239,3 +240,5 @@
   // finish the script!
   $E =& getInstance();
   $E->output->display();
+
+  // KTHXBAI!
