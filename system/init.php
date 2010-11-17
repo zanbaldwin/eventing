@@ -232,7 +232,7 @@
 
   // Everything checks out as far as we can tell here. Grab a new instance of
   // the controller, and then call the action.
-  $controller = new $controller;
+  $controller = $controller::getInstance();
   $controller->$method();
 
   // Right, that's everything done! Just dump the output to the client end
