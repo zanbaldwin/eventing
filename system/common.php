@@ -581,33 +581,37 @@
       // Start constructing the data array.
       $u = array();
       // We want the name of the module, if no module passed, use boolean false.
-      $u['module']    = $matches[1]
+      $u['module']    = isset($matches[1]) && $matches[1]
                       ? trim(substr($matches[1], 0, -1))
                       : false;
       // Do the segments specify an absolute or relative URI?
-      $u['absolute']  = substr($matches[2], 0, 1) == '/';
+      $u['absolute']  = isset($matches[2]) && substr($matches[2], 0, 1) == '/';
       // A trailing slash on the segments indicates the URI points to a
       // directory. Before filtering the segments, make a note of this.
-      $notrailing     = substr($matches[2], -1) != '/';
+      $trailing       = isset($matches[2]) && substr($matches[2], -1) == '/';
       // Clean up the segments
-      $u['segments']  = ($u['segments'] = trim(filter_path($matches[2]), '/'))
+      $u['segments']  = isset($matches[2])
+                     && ($u['segments'] = trim(filter_path($matches[2]), '/'))
                       ? $u['segments']
                       : false;
       // If we have a suffix, prepend it with a full stop, else false.
-      $u['suffix']    = $matches[3] && $u['segments'] && $notrailing
+      $u['suffix']    = isset($matches[3]) && $matches[3] && $u['segments']
                       ? '.' . $matches[3]
-                      : false;
+                      : $trailing ? '/' : false;
       // If we have a query string placeholder, just return the placeholder
       // name. If we have an actual query string, parse it and return the query
       // array.
-      if(substr($matches[4], -1) == '?') {
+      if(!isset($matches[4])) {
+        $u['query'] = false;
+      }
+      elseif(substr($matches[4], -1) == '?') {
         $u['query']   = trim($matches[4], '?');
       }
       else {
         parse_str(trim(substr($matches[4], 1)), $u['query']);
       }
       // If we have a fragment, great! Else false, as per usual.
-      $u['fragment']  = $matches[5]
+      $u['fragment']  = isset($matches[5]) && $matches[5]
                       ? substr($matches[5], 1)
                       : false;
       // Return the data we've collected in the format the function callee
