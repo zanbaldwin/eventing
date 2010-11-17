@@ -18,63 +18,50 @@
  * @since      v0.1
  */
 
-namespace Eventing\Library;
+  namespace Eventing\Library;
 
-if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
-
-/**
- *
- */
-class core
-{
-
-  public $models = array();
-
-  private static $instance;
+  if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
 
   /**
-   * Core Construct Function
    *
-   * Don't use __construct method so controller and model classes can use "parent::core();".
-   *
-   * @return void
    */
-  public function __construct()
-  {
-    self::$instance =& $this;
-  }
+  class core extends library {
 
-  /**
-   * Core Get-Instance Function
-   *
-   * blah blah blah...
-   *
-   * @static
-   * @return object
-   */
-  public static function &get_instance()
-  {
-    return self::$instance;
-  }
+    protected $models = array(),
+              $modules = array();
 
-  /**
-   * Use Model
-   *
-   * Models must be loaded through the Loader Library before they can be used here.
-   * eg. "$this->load->model($model_name);"
-   * They can they be called here.
-   * eg. "$this->model($model_name)->userMethod();"
-   *
-   * @param string $model_name
-   * @return object|void
-   */
-  public function model($model_name)
-  {
-    // So we can use models that have been loaded through "$this->load->model($model_name);"
-    // Use like: "$this->model($model_name)->get_user_data();"
-    if(isset($this->models[$model_name]))
-    {
-      return $this->models[$model_name];
+    protected function __construct() {}
+
+    /**
+     * Use Model
+     *
+     * Return an instance of a model object.
+     *
+     * @access public
+     * @param string $model
+     * @return object|void
+     */
+    public function model($model) {
+      // So we can use models that have been loaded through "$this->load->model($model_name);"
+      // Use like: "$this->model($model_name)->get_user_data();"
+      if(isset($this->models[$model])) {
+        return $this->models[$model];
+      }
     }
+
+    /**
+     * Use Module
+     *
+     * Return an instance of a module object.
+     *
+     * @access public
+     * @param string $module
+     * @return object|void
+     */
+    public function module($module) {
+      if(isset($this->modules[$module])) {
+        return $this->modules[$module];
+      }
+    }
+
   }
-}
