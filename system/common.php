@@ -213,8 +213,8 @@
       // Transform the library name to an absolute namespace and class
       // reference.
       $class = $module
-             ? ns(NS, NSMODULE, $module) . $class
-             : ns(NS, NSLIBRARY)         . $class;
+             ? ns(NS, NSMODULE, $module, NSLIBRARY) . $class
+             : ns(NS, NSLIBRARY)                    . $class;
       // If we have already loaded the file in question, then return the
       // appropriate - we do not want to load the file again.
       if(isset($files[$identifier])) {

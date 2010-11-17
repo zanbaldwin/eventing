@@ -1,3 +1,3 @@
 <?php
 
-  namespace \Eventing\Module\example\Application\Model;
+  namespace \Eventing\Module\example\Model;

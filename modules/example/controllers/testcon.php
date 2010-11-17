@@ -8,4 +8,11 @@
   }
 
   class testcon extends someclassthatihaventdecidedyet {
+
+    protected function __construct() {}
+
+    public function index() {
+      // Your module controller, default action.
+    }
+
   }

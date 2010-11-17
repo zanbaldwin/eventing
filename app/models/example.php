@@ -1,6 +1,6 @@
 <?php
 
-  namespace Eventing\Application\Model
+  namespace Eventing\Model
 
   class example extends model {
 
