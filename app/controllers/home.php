@@ -12,7 +12,7 @@
    */
   final class home extends \Eventing\Library\controller {
 
-    public function __construct() {
+    protected function __construct() {
       parent::__construct();
     }
 
