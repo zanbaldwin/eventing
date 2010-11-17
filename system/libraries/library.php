@@ -46,16 +46,13 @@
      * @access public
      * @return object|false
      */
-    final public static function &getInstance()
-    {
+    final public static function &getInstance() {
       static $objects = array();
       $class = get_called_class();
-      if(isset($objects[$class]) && is_object($objects[$class]))
-      {
+      if(isset($objects[$class]) && is_object($objects[$class])) {
         return $objects[$class];
       }
-      if(!class_exists($class))
-      {
+      if(!class_exists($class)) {
         return false;
       }
       $objects[$class] = new $class;
