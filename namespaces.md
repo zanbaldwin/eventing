@@ -7,12 +7,44 @@ encapsulated within the `Eventing` namespace.
 The namespace structure goes as following
 
     \Eventing
-             \Application
-                         \Library
-             \Model
-             \Library
-             \Module
-                    \yourmodule
-                               \Library
-                               \Application
-                               \Model
+        \Library
+        \Application
+            \Library
+        \Model
+        \Module
+            \yourmodule
+                \Library
+                \Application
+                \Model
+            \anothermodule
+                \Library
+                \Application
+                \Model
+            etc...
+
+From your application, models, views and libraries can be access should be
+accessible from the super object like so
+
+    $this->load->library('system_library');
+    $this->system_library->some_method();
+    
+    $this->load->model('some_model');
+    $this->model('some_model')->some_method();
+    
+    $html = $this->load->view('some_view', $data);
+
+By default, only libraries should be accessible from the super object
+properties, though this can be overwritten (via the second parameter).
+Unlike CodeIgniter, the view loader returns the output rather than add it to the
+Output library, this due to the integration with the Template library.
+
+From your application, modules are available via the module() method.
+
+    $this->load->module('some_module');
+    
+    $this->module('some_module')->library('some_library');
+    $this->module('some_module')->some_library->some_method();
+    
+    $this->module('some_module')->model('some_model')->some_method();
+    
+    $html = $this->module('some_modele')->view('some_view');
