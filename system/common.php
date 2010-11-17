@@ -268,44 +268,6 @@
     }
   }
 
-  if(!function_exists('get_called_class')) {
-    /**
-     * Get Called Class Object
-     *
-     * To use the native get_called_class(), PHP 5.3 or greater must be installed.
-     * Use this implementation by Chris Webb.
-     * http://www.septuro.com/2009/07/php-5-2-late-static-binding-get_called_class-and-self-new-self/
-     */
-    class _get_called_class_object {
-      static $i = 0;
-      static $fl = null;
-      static function get_called_class() {
-        $bt = debug_backtrace();
-        if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
-          self::$i++;
-        }
-        else {
-          self::$i = 0;
-          self::$fl = $bt[2]['file'].$bt[2]['line'];
-        }
-        $lines = file($bt[2]['file']);
-        preg_match_all('/([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
-        $lines[$bt[2]['line']-1],
-        $matches
-        );
-        return $matches[1][self::$i];
-      }
-    }
-    /**
-     * Get Called Class
-     *
-     * @return string
-     */
-    function get_called_class() {
-      return _get_called_class_object::get_called_class();
-    }
-  }
-
   if(!function_exists('getInstance')) {
     /**
      * Get Instance
