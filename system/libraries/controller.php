@@ -25,40 +25,27 @@
   /**
    * Eventing Controller Class
    */
-  class controller extends core
-  {
+  class controller extends core {
 
     /**
      * Controller Construct Function
      *
+     * @access protected
      * @return void
      */
-    public function __construct()
-    {
+    protected function __construct() {
       parent::__construct();
-      $this->_initialise();
-    }
-
-    /**
-     * Controller Initialise Function
-     *
-     * Load the libraries into the super object.
-     *
-     * @access private
-     * @return void
-     */
-    private function _initialise()
-    {
-      $load_classes = array('uri', 'router', 'load', 'input', 'output', 'template');
-      foreach($load_classes as $class)
-      {
-        // We want to load the libraries to be stored in variables of the Core object, not the controller
-        // ($this) object.
+      $libs = array('uri', 'router', 'load', 'input', 'output', 'template');
+      foreach($libs as $lib) {
+        // We want to load the libraries to be stored in variables of the Core
+        // object, not the controller ($this) object. This is so our models can
+        // access the libraries too.
         $E =& getInstance();
-        $E->$class = load_class($class);
+        $obj = load_class($lib);
+        if(is_object($obj)) {
+          $E->$lib = $obj;
+        }
       }
-      // Load the resources that the user wants for their application.
-      $this->load->autoload();
     }
 
   }
