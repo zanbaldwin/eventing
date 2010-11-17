@@ -639,6 +639,25 @@
      * @param array $options
      * @return string|false
      */
+    
+    function a2($path, $title = false, $options = array()) {
+      static $used_urls = array();
+      if(!is_string($path)) {
+        return false;
+      }
+      // Set the optional parameters to safe values.
+      $options = (array) $options;
+      $title = !is_string($title) || !$title ? false : $title;
+      $shortcut_regex = '|^~([a-zA-Z_][a-zA-Z0-9_]+)$|';
+      if(preg_match($shortcut_regex, $path, $matches)) {
+        $link = c($matches[1], 'links');
+        if(!is_string($link)) {
+          return false;
+        }
+        $path = $link;
+      }
+    }
+    
     function a($path, $title = false, $options = array()) {
       static $used_urls = array();
       if(!is_array($options)) {
