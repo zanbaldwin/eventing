@@ -15,47 +15,50 @@
  * @since      v0.1
  */
 
-namespace Eventing\Library;
+  namespace Eventing\Library;
 
-if(!defined('E_FRAMEWORK')){headers_sent()||header('HTTP/1.1 404 Not Found',true,404);exit('Direct script access is disallowed.');}
-
-/**
- * Eventing Controller Class
- */
-class controller extends core
-{
-
-  /**
-   * Controller Construct Function
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    parent::__construct();
-    $this->_initialise();
+  if(!defined('E_FRAMEWORK')) {
+    headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
+    exit('Direct script access is disallowed.');
   }
 
   /**
-   * Controller Initialise Function
-   *
-   * Load the libraries into the super object.
-   *
-   * @access private
-   * @return void
+   * Eventing Controller Class
    */
-  private function _initialise()
+  class controller extends core
   {
-    $load_classes = array('uri', 'router', 'load', 'input', 'output', 'template');
-    foreach($load_classes as $class)
+
+    /**
+     * Controller Construct Function
+     *
+     * @return void
+     */
+    public function __construct()
     {
-      // We want to load the libraries to be stored in variables of the Core object, not the controller
-      // ($this) object.
-      $E =& getInstance();
-      $E->$class = load_class($class);
+      parent::__construct();
+      $this->_initialise();
     }
-    // Load the resources that the user wants for their application.
-    $this->load->autoload();
-  }
 
-}
+    /**
+     * Controller Initialise Function
+     *
+     * Load the libraries into the super object.
+     *
+     * @access private
+     * @return void
+     */
+    private function _initialise()
+    {
+      $load_classes = array('uri', 'router', 'load', 'input', 'output', 'template');
+      foreach($load_classes as $class)
+      {
+        // We want to load the libraries to be stored in variables of the Core object, not the controller
+        // ($this) object.
+        $E =& getInstance();
+        $E->$class = load_class($class);
+      }
+      // Load the resources that the user wants for their application.
+      $this->load->autoload();
+    }
+
+  }
