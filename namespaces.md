@@ -6,13 +6,13 @@ encapsulated within the `Eventing` namespace.
 
 The namespace structure goes as following
 
-  \Eventing
-           \Application
-                       \Library
-           \Model
-           \Library
-           \Module
-                  \yourmodule
-                             \Library
-                             \Application
-                             \Model
+    \Eventing
+             \Application
+                         \Library
+             \Model
+             \Library
+             \Module
+                    \yourmodule
+                               \Library
+                               \Application
+                               \Model
