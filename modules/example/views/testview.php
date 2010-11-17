@@ -1,0 +1,1 @@
+<p>Test view for the module "example".</p>
