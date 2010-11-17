@@ -208,30 +208,34 @@
   // Make sure the controller class exists.
   $controller = ns(NS, NSCONTROLLER) . $controller;
   class_exists($controller) || show_404();
-  $controller = new $controller;
-  // Make sure the method function exists and is public.
-  if(!class_exists('\\ReflectionMethod')) {
-    show_error(
-      'ReflectionMethod class does not exist. Method publicity status cannot '
-    . 'be determined.'
-    );
-  }
-  
+
+  // Check that the action we want to call exists.
   method_exists($controller, $method)
     || in_array($method, get_class_methods($controller), true)
     || show_404();
-  $method_reflection = new \ReflectionMethod($controller, $method);
-  $method_reflection->isPublic() || show_404();
 
-  // Unset all unecessary variables before we call action.
+  // Now check if the action we want to call is public. This requires the use of
+  // PHP's Reflection extension. It's not essential, so carry on if it doesn't
+  // exist. It's just a little more friendly to show our custom 404 page than
+  // the user get a fatal error stating the ReflectionMethod class does not
+  // exist.
+  if(class_exists('\\ReflectionMethod')) {
+    $reflection = new \ReflectionMethod($controller, $method);
+    $reflection->isPublic() || show_404();
+  }
+
+  // Unset all unecessary variables before we call the controller.
   unset(
     $common, $u, $modules, $mod, $uri_string, $uri, $segment, $r,
     $controller_path, $controller_file
   );
 
+  // Everything checks out as far as we can tell here. Grab a new instance of
+  // the controller, and then call the action.
+  $controller = new $controller;
   $controller->$method();
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!
-  $E =& get_instance();
+  $E =& getInstance();
   $E->output->display();
