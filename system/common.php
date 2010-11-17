@@ -884,9 +884,7 @@
   // If we don't do this, PHP (we use versions above 5.2 remember?) will throw a
   // little tantrum. Let's keep it happy :)
   // You can change this in your controller, or a future library (hopefully!)
-  if(function_exists('date_default_timezone_set')) {
-    $default_timezone = c('default_timezone')
-                      ? c('default_timezone')
-                      : 'Europe/London';
-    date_default_timezone_set($default_timezone);
-  }
+  $default_timezone = c('default_timezone')
+                    ? c('default_timezone')
+                    : 'Europe/London';
+  date_default_timezone_set($default_timezone);
