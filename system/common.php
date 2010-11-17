@@ -306,16 +306,19 @@
     }
   }
 
-  if(!function_exists('get_instance')) {
+  if(!function_exists('getInstance')) {
     /**
      * Get Instance
      *
-     * Get an instance of the super (core) object.
+     * Global version of the getInstance method in libraries, returns an
+     * instance of the super (core) object.
      *
+     * @access public
      * @return object
      */
-    function &get_instance() {
-      return \Eventing\Library\core::get_instance();
+    function &getInstance() {
+      $core = ns(NS, NSLIBRARY) . 'core';
+      return $core::getInstance();
     }
   }
 
