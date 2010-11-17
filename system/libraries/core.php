@@ -30,8 +30,9 @@
    */
   class core extends library {
 
-    protected $models = array(),
-              $modules = array();
+    //  Prepend the variables with underscores as to not clash with libraries.
+    protected $_models = array(),
+              $_modules = array();
 
     protected function __construct() {}
 
@@ -47,8 +48,8 @@
     public function model($model) {
       // So we can use models that have been loaded through "$this->load->model($model_name);"
       // Use like: "$this->model($model_name)->get_user_data();"
-      if(isset($this->models[$model])) {
-        return $this->models[$model];
+      if(isset($this->_models[$model])) {
+        return $this->_models[$model];
       }
     }
 
@@ -62,8 +63,8 @@
      * @return object|void
      */
     public function module($module) {
-      if(isset($this->modules[$module])) {
-        return $this->modules[$module];
+      if(isset($this->_modules[$module])) {
+        return $this->_modules[$module];
       }
     }
 
