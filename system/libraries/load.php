@@ -29,7 +29,7 @@ class load extends library
 
   protected function __construct()
   {
-    $this->E =& get_instance();
+    $this->E =& getInstance();
   }
 
   /**

@@ -510,7 +510,7 @@ class template extends library {
     if(!is_string($rendered)) {
       return false;
     }
-    $E =& get_instance();
+    $E =& getInstance();
     if(!isset($E->output)) {
       echo $rendered;
     }
@@ -583,7 +583,7 @@ class E_template_section {
   public function __construct($name, $path) {
     $this->name = $name;
     $this->path = is_string($path) ? $path : '';
-    $this->E =& get_instance();
+    $this->E =& getInstance();
   }
 
   /**

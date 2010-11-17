@@ -248,7 +248,7 @@ class uri extends library
       return array();
     }
     $saved = array();
-    $E =& get_instance();
+    $E =& getInstance();
     foreach($save as $get_key)
     {
       $get_value = $E->input->get($get_key);

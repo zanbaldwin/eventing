@@ -11,7 +11,7 @@ class model extends core
   {
     // Do nothing for the moment?
     // This is just so all models have access to the Eventing super object instead of having to use the
-    // get_instance() method. Happy days!
+    // getInstance() method. Happy days!
   }
 
 }

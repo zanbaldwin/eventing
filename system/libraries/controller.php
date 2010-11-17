@@ -51,7 +51,7 @@ class controller extends core
     {
       // We want to load the libraries to be stored in variables of the Core object, not the controller
       // ($this) object.
-      $E =& get_instance();
+      $E =& getInstance();
       $E->$class = load_class($class);
     }
     // Load the resources that the user wants for their application.
