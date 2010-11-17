@@ -53,8 +53,8 @@
 
   unset($version, $matches, $tokens);
 
-  // Some older versions of PHP don't define the E_STRICT constant, or in fact any
-  // error constants over E_USER_NOTICE, so for the convinience of the next
+  // Some older versions of PHP don't define the E_STRICT constant, or in fact
+  // any error constants over E_USER_NOTICE, so for the convinience of the next
   // function:
   $error_definitions = array(
     'E_ERROR',
@@ -132,7 +132,6 @@
     }
   }
 
-
   // Set PHP's error handler to the Eventing error handler.
   set_error_handler('eventing_error_handler');
 
@@ -140,8 +139,8 @@
     /**
      * Binary Parts
      * 
-     * Returns an array of integers. Each number is a power of 2 that adds up to
-     * the number passed to the function.
+     * Returns an array of integers. Each integer is a power of 2 that adds up
+     * to the number passed to the function.
      * 
      * @access public
      * @param integer $int
