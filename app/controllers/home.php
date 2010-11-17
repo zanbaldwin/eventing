@@ -17,11 +17,11 @@
     }
 
     public function index() {
-      echo '<h2>Viewing default controller/action.</h2><br />';
-      echo '<tt>'.__METHOD__.'()</tt><br />';
+      echo "<h2>Viewing default controller/action.</h2><br />\n";
+      echo '<tt>\\' . __METHOD__ . "()</tt><br />\n";
       $indent = '&nbsp;&nbsp;&nbsp;&nbsp;';
-      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\controller</tt><br />';
-      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\core</tt><br />';
+      echo $indent . "<strong>extends</strong> <tt>\\Eventing\\Library\\controller</tt><br />\n";
+      echo $indent . "<strong>extends</strong> <tt>\\Eventing\\Library\\core</tt><br />\n";
       echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\library</tt>';
       return;
     }
