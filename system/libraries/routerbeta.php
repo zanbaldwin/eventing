@@ -3,8 +3,10 @@
 /**
  * Router Library
  *
- * Takes the URI string (segments and suffix). Checks to see if it should re-route the request to a different one.
- * Then finds the appropriate controller and method, and determines which folder the controller class is in.
+ * Takes the URI string (segments and suffix). Checks to see if it should
+ * re-route the request to a different one. Then finds the appropriate
+ * controller and method, and determines which folder the controller class is
+ * in.
  *
  * @category   Eventing
  * @package    Libraries
@@ -17,9 +19,28 @@
  * @since      v0.1
  */
 
+  namespace Eventing\Library;
+
   if(!defined('E_FRAMEWORK')) {
     headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
     exit('Direct script access is disallowed.');
+  }
+
+  class routerbeta extends library {
+
+    /**
+     * Constructor Method
+     *
+     * This method will get called everytime a new route is initiated.
+     * The first time, however, will be the route of the main application, when
+     * called from the init.php file.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function __construct() {
+    }
+
   }
 
 /**
