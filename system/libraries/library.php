@@ -55,7 +55,9 @@
       if(!class_exists($class)) {
         return false;
       }
-      $objects[$class] = new $class;
+      $objects[$class] = isset($class::$_instance)
+                       ? $class::$_instance
+                       : new $class;
       return $objects[$class];
     }
 
