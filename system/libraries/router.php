@@ -297,7 +297,7 @@
      */
     public function dcm()
     {
-      return array($this->d, $this->c, $this->m);
+      return array($this->d . '/' . $this->c, $this->c, $this->m);
     }
 
     /**
