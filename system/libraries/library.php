@@ -62,7 +62,7 @@
      * @access public
      * @return object|false
      */
-    final public static function &getInstance() {
+    final public static function &getInstance($super = false) {
       static $objects = array();
       $class = get_called_class();
       if(isset($objects[$class]) && is_object($objects[$class])) {
@@ -74,6 +74,11 @@
       $objects[$class] = isset($class::$_instance)
                        ? $class::$_instance
                        : new $class;
+      $super = bool($super);
+      if($super) {
+        // Find some way of merging objects, maintaining both properties and
+        // methods? That would be nice. KTHXBAI!
+      }
       return $objects[$class];
     }
 
