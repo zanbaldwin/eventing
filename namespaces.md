@@ -71,3 +71,8 @@ are.
 As the `load_class()` function now uses the syntax `module:path/to/lib`, this
 might be a good place to start. The query string, fragment and segment syntax do
 not need altering; just module and suffix referencing.
+
+Ideas?
+
+    module  suffix  segments  query  fragment
+    module  segments  suffix  query  fragment
