@@ -1,6 +1,6 @@
 <?php
 
-  namespace Eventing\Module\example;
+  namespace Eventing\Module\example\Library;
 
   if(!defined('E_FRAMEWORK')) {
     headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
@@ -12,7 +12,7 @@
     protected function __construct() {}
 
     public function test() {
-      return 'test string';
+      return __METHOD__ . '()';
     }
 
   }
