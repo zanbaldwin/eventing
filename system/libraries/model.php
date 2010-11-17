@@ -7,10 +7,10 @@
     exit('Direct script access is disallowed.');
   }
 
-  class model extends core
+  class model extends library
   {
 
-    public function __construct()
+    protected function __construct()
     {
       // Do nothing for the moment?
       // This is just so all models have access to the Eventing super object instead of having to use the
