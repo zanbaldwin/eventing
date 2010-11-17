@@ -17,22 +17,13 @@
     }
 
     public function index() {
-      // This library should already be loaded, but just in case.
-      $this->load->library('template');
-
-      $this->load->model('default');
-      $data = $this->model('default')->dummy();
-      
-      $this->template->create(array(
-        'shell' => 'html5shell'
-      ));
-      $this->template->section('shell')->add('title', $data);
-
-      // Fire up the template.
-      $this->template->load('shell');
-      // Notice we can echo after we have loaded the template, but it still gets
-      // outputted first?
-      echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+      echo '<h2>Viewing default controller/action.</h2><br />';
+      echo '<tt>'.__METHOD__.'()</tt><br />';
+      $indent = '&nbsp;&nbsp;&nbsp;&nbsp;';
+      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\controller</tt><br />';
+      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\core</tt><br />';
+      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\library</tt>';
+      return;
     }
 
   }
