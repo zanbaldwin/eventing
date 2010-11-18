@@ -213,7 +213,18 @@
     }
 
     /**
-     * Route Path
+     * Determine Route
+     *
+     * Determine the path to the controller, the controller itself, and the
+     * method from the re-routed URI.
+     *
+     * @access protected
+     * @return void
+     */
+    public function determine() {}
+
+    /**
+     * Get Route Path
      *
      * Return the path to the controller file. If the request is not valid, or
      * no controller could be found, return false.
@@ -226,7 +237,7 @@
     }
 
     /**
-     * Route Controller
+     * Get Route Controller
      *
      * Return the name of the controller class, including its namespace. If the
      * request is not valid, or no controller could be found, return false.
@@ -239,7 +250,7 @@
     }
 
     /**
-     * Route Method
+     * Get Route Method
      *
      * Return the name of the controller method. If the request is not valid, or
      * no controller could be found, return false. The Router library does not
@@ -254,7 +265,7 @@
     }
 
     /**
-     * Segment
+     * Get Segment
      *
      * Return a specified segment from the URI string.
      *
@@ -272,7 +283,7 @@
     }
 
     /**
-     * Re-Routed Segment
+     * Get Re-Routed Segment
      *
      * Return a specified segment from the re-routed URI string.
      *
@@ -290,7 +301,7 @@
     }
 
     /**
-     * Segments
+     * Get Segments
      *
      * Return all the segments of the URI string as an array.
      *
@@ -302,7 +313,7 @@
     }
 
     /**
-     * Re-Routed Segments
+     * Get Re-Routed Segments
      *
      * Return all the segments of the re-routed URI string as an array.
      *
