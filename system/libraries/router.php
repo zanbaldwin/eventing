@@ -64,6 +64,16 @@
       if(!self::$_instance) {
         self::$_instance =& $this;
       }
+      // Instead of worrying all the time about the confusion of URI suffixes,
+      // like we have in the past, define the default suffix here and be done
+      // with it. It must either be a file extension containing only
+      // alphanumeric characters, preceded with a full stop, or a directory
+      // separator.
+      $ds = c('default_suffix');
+      $this->default_suffix = is_string($ds)
+                           && preg_match('/^\.[a-zA-Z0-9]+$/', $ds)
+                            ? $ds
+                            : '/';
       // If the data is not an object, the user must have passed a string to be
       // parsed by the uri() function.
       if(!is_object($data)) {
