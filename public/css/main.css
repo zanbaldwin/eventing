@@ -57,9 +57,6 @@ code {
                monospace;
   font-size: 100%;
 }
-code.ghpage {
-  cursor: pointer;
-}
 
 footer p {
   margin: 0;
