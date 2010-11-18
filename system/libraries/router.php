@@ -215,8 +215,105 @@
 
     /**
      * Re-Route Request
+     *
+     * Map and route the URI string to one set in the routes configuration file.
+     *
+     * @access protected
+     * @return void
      */
-    protected function reroute() {}
+    protected function reroute() {
+      // First of all we need to know if the URI string exists. If you wanted to
+      // re-route the root URI, then change your default controller, method and
+      // suffix in the configuration files. Return here, the defaults are set to
+      // false already, just like the non-routed URI if it points to root.
+      if(!$this->uri_string) {
+        return;
+      }
+      // Next we need to see if we have any routes, if we haven't, set the
+      // defaults and return.
+      $routes = get_config('routes');
+      if(!is_array($routes) || !$routes) {
+        $this->rmodule          = $this->module;
+        $this->rsegment_string  = $this->segment_string;
+        $this->rsuffix          = $this->suffix;
+        return;
+      }
+      
+      // We could do a quick check to see if the URI is set in the array keys of
+      // $routes, but I've decided against this to prevent unexpected results
+      // with suffixes. Just loop through the array. This shouldn't have too
+      // much of impact on memory or time, as long as your keep your array of
+      // routes down to less than 2500 entries.
+      $wildcards = array(
+        'match' => array('**', '*', '&&', '&', '##', '#'),
+        'replace' => array(
+          '([a-zA-Z0-9/_-]+)',
+          '([a-zA-Z0-9_-]+)',
+          '([a-zA-Z/]+)',
+          '([a-zA-Z]+)',
+          '([0-9/]+)',
+          '([0-9]+)',
+        ),
+      );
+      // Loop through the routes config as route matcher and route replacer.
+      foreach($routes as $uri => $route) {
+        // If the route matcher contains any illegal characters, skip this
+        // route, we don't want a user's route causing preg_match() to throw an
+        // error or warning, that would look bad on the framework. NEVER TRUST
+        // USER DATA.
+        if(!preg_match('/^[a-zA-Z0-9\*&#/@\._-]+$/', $uri)) {
+          continue;
+        }
+        // If the route matcher does not contain a suffix ('/' counts as a
+        // suffix), add the default suffix to the end because our application's
+        // URI will always contain one.
+        if(substr($uri, -1) != '/' && strpos($uri, '.') === false) {
+          $uri .= $this->default_suffix;
+        }
+        // Replace wildcards in the route matcher with the correct PCRE RegEx.
+        $uri = str_replace($wildcards['match'], $wildcards['replace'], $uri);
+        // Use the RegEx we generated to check against the route matcher, and
+        // save the wildcards to an array if we do match.
+        if(preg_match('~^' . $uri . '$~', $this->uri_string, $matches)) {
+          // We found a route match! If the user has back references, insert
+          // them into the route replacer.
+          unset($matches[0]);
+          foreach($matches as $ref => $wild) {
+            $route = str_replace('$' . $ref, $wild, $route);
+          }
+          // Now we have the URI the user wants to route to, treat it as the
+          // ruri_string from now on. 
+          $data = uri($route);
+          if(!is_object($data)) {
+            // Oh no! After all that hard work, the route the user supplied
+            // isn't valid! Make the entire Router instance invalid.
+            $this->valid = false;
+            return;
+          }
+          
+          // Do exactly the same as in the constructor function, except saving
+          // to the Re-Routed parts, instead of the URL parts.
+          $ruri_string = '';
+          if($data->module) {
+            $this->rmodule = $data->module;
+            $ruri_string .= $this->rmodule . '@';
+          }
+          if($data->segments) {
+            $this->rsegment_string = $data->segments;
+            $ruri_string .= $this->rsegment_string;
+            $this->rsuffix = '/';
+            if($data->suffix) {
+              $this->rsuffix = $data->suffix;
+              $ruri_string .= $this->rsuffix;
+            }
+          }
+          if($ruri_string) {
+            $this->ruri_string = $ruri_string;
+          }
+        }
+      }
+      return;
+    }
 
     /**
      * Publicise Data
