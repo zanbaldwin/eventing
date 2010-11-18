@@ -186,33 +186,25 @@
   load_class('library', false);
   load_class('uri');
 
-  $r = load_class('router');
+  $r = load_class('routerbeta');
+  var_dump($r);
   load_class('core', false);
   load_class('controller', false);
 
   // We want to know what request this application is meant to serve!
-  if(!is_array($r->dcm())) {
+  if(!$r->valid) {
     show_404();
   }
-  list($controller_path, $controller, $method) = $r->dcm();
-
-  // Directory should come in format 'path/to/controller/', with a trailing
-  // slash. Make an absolute path to the controller file, and include it.
-  // The main request will always be treated as a request to a controller in the
-  // application, rather than a module. This is HMVC, not let's-have-controllers
-  // -and-files-everywhere-don't-worry-our-directory-structure-it-can-handle-WW3
-  $controller_file = APP . 'controllers/' . $controller_path . EXT;
-  // Check that the file provided by router::dcm() exists.
-  file_exists($controller_file) || show_404();
-  require_once $controller_file;
+  
+  // Make sure that the path has been set, and then include the controller file.
+  $r->path() && require_once $r->path();
 
   // Make sure the controller class exists.
-  $controller = ns(NS, NSCONTROLLER) . $controller;
-  class_exists($controller) || show_404();
+  class_exists($r->controller()) || show_404();
 
   // Check that the action we want to call exists.
-  method_exists($controller, $method)
-    || in_array($method, get_class_methods($controller), true)
+  method_exists($r->controller(), $r->method())
+    || in_array($r->method(), get_class_methods($r->controller()), true)
     || show_404();
 
   // Now check if the action we want to call is public. This requires the use of
@@ -221,9 +213,12 @@
   // the user get a fatal error stating the ReflectionMethod class does not
   // exist.
   if(class_exists('\\ReflectionMethod')) {
-    $reflection = new \ReflectionMethod($controller, $method);
+    $reflection = new \ReflectionMethod($r->controller(), $r->method());
     $reflection->isPublic() || show_404();
   }
+
+  $c = $r->controller();
+  $m = $r->method();
 
   // Unset all unecessary variables before we call the controller.
   unset(
@@ -233,8 +228,8 @@
 
   // Everything checks out as far as we can tell here. Grab a new instance of
   // the controller, and then call the action.
-  $controller = $controller::getInstance();
-  $controller->$method();
+  $c = $c::getInstance();
+  $c->$m();
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!

@@ -29,6 +29,17 @@
   class routerbeta extends library {
 
     protected static $_instance = false;
+    public    $valid = false,
+              $uri_string = false,
+              $ruri_string = false;
+    protected $segments = array(),
+              $rsegments = array(),
+              $module = false,
+              $segment = false,
+              $suffix = false,
+              $p = false,
+              $c = false,
+              $m = false;
 
     /**
      * Constructor Method
@@ -40,13 +51,127 @@
      * @access protected
      * @return void
      */
-    protected function __construct() {
+    protected function __construct($data = false) {
       // Store the original instance of this class, it will be application
       // default.
       if(!self::$_instance) {
         self::$_instance =& $this;
       }
-      
+      if($data === false) {
+        // This is a request to route the main application, this is where the
+        // URI part of the library is required.
+        $this->uri_string = $this->get_uri();
+        $data = uri($this->uri_string);
+        var_dump($data);
+      }
+      // Check that we have the required parts.
+      $this->valid = is_object($data)
+                  && isset($data->module)
+                  && isset($data->segments)
+                  && isset($data->suffix);
+      if(!$this->valid) {
+        // We can't return a value from inside our constructor method.
+        return;
+      }
+      $this->module   = $data->module;
+      $this->segment  = $data->segments;
+      $this->suffix   = $data->suffix;
+      // Set the URI String to a specific format.
+      $this->uri_string = $this->module . '@'
+                        . $this->segment
+                        . $this->suffix;
+    }
+
+    // Parse an Eventing URI
+    public function route($uri_string) {}
+    protected static function create_route($segments, $suffix = false, $module = false) {}
+
+    /**
+     * Get URI
+     *
+     * Get the raw URI string from the server, using preset PHP Global
+     * variables. Filter out all unwanted information that comes with the URI
+     * string from the server.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function get_uri() {
+      $uri_string = '';
+      // Get the URI string from the following methods: PATH_INFO,
+      // ORIG_PATH_INFO and REQUEST_URI. If none of those provide a URI, just
+      // continue with an empty string.
+      $server_methods = array('PATH_INFO', 'ORIGIN_PATH_INFO', 'REQUEST_URI');
+      foreach($server_methods as $method) {
+        $uri_string = isset($_SERVER[$method])
+                    ? $_SERVER[$method]
+                    : @getenv($method);
+        $uri_string = trim(filter_path($uri_string), '/');
+        if($uri_string != '' && $uri_string != SELF) {
+          break;
+        }
+      }
+      // Remove the query string from the URI. It can't help us determine
+      // modules, controllers or methods!
+      $uri_string = ($pos = strpos($uri_string, '?')) !== false
+                  ? substr($uri_string, 0, $pos)
+                  : $uri_string;
+      // If the URI string contains either the root folder the application is
+      // located in, or the application file, remove them. They have nothing to
+      // do with the flow of the application now.
+      foreach(array(URL, SELF) as $method) {
+        if($uri_string == $method) {
+          $uri_string = '';
+          break;
+        }
+        if(strlen($uri_string) > strlen($method)
+           && substr($uri_string, 0, strlen($method)) == $method
+        ) {
+          $uri_string = substr($uri_string, strlen($method));
+        }
+      }
+      return trim(filter_path($uri_string), '/');
+    }
+
+    /**
+     * Route Path
+     *
+     * Return the path to the controller file. If the request is not valid, or
+     * no controller could be found, return false.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function path() {
+      return $this->valid ? $this->p : false;
+    }
+
+    /**
+     * Route Controller
+     *
+     * Return the name of the controller class, including its namespace. If the
+     * request is not valid, or no controller could be found, return false.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function controller() {
+      return $this->valid ? $this->c : false;
+    }
+
+    /**
+     * Route Method
+     *
+     * Return the name of the controller method. If the request is not valid, or
+     * no controller could be found, return false. The Router library does not
+     * check if the method exists, as we do not want to include the controller
+     * file from withing this class.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function method() {
+      return $this->valid ? $this->m : false;
     }
 
   }
@@ -54,7 +179,7 @@
 /**
  * Router Class
  */
-class E_routerbeta extends E_library {
+class E_routerbeta {
   
   protected $uri_string = false,
             $valid = true;
