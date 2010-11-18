@@ -3,8 +3,10 @@
 /**
  * Router Library
  *
- * Takes the URI string (segments and suffix). Checks to see if it should re-route the request to a different one.
- * Then finds the appropriate controller and method, and determines which folder the controller class is in.
+ * Takes the URI string (module, segments and suffix). Checks to see if it
+ * should re-route the request to a different one. Then finds the appropriate
+ * controller and method, and determines which folder the controller class is
+ * in.
  *
  * @category   Eventing
  * @package    Libraries
@@ -24,351 +26,313 @@
     exit('Direct script access is disallowed.');
   }
 
-  /**
-   * Router Class
-   */
   class router extends library {
 
-    private $uri_string,
-    $ruri_string,
-    $suffix,
-    $rsuffix,
-    $rsegments = array(),
-    $d = '',
-    $c = '',
-    $m = '',
-    $controllers;
+    protected static $_instance = false;
+    public    $valid = false,
+              $uri_string = false,
+              $ruri_string = false;
+    protected $segments = array(),
+              $rsegments = array(),
+              $module = false,
+              $rmodule = false,
+              $segment_string = false,
+              $rsegment_string = false,
+              $suffix = false,
+              $rsuffix = false,
+              $p = false,
+              $c = false,
+              $m = false;
 
-    public function route($uri_string, $suffix = false) {
-      return self::create_router($uri_string, $suffix);
-    }
-
-    public static function create_router($uri_string, $suffix) {
-      if(!is_string($uri_string)) {
-        return false;
-      }
-    }
-    
     /**
      * Constructor Method
      *
+     * This method will get called everytime a new route is initiated.
+     * The first time, however, will be the route of the main application, when
+     * called from the init.php file.
+     *
+     * @access protected
+     * @param object|string|false $data
      * @return void
      */
-    protected function __construct() {
-      $this->controllers = APP . 'controllers/';
-      $this->uri_string = REQUEST;
-      $this->suffix = SUFFIX;
-      list($this->ruri_string, $this->rsuffix) = $this->_routes(
-      $this->uri_string,
-      $this->suffix
-      );
-      $this->rsegments = xplode('/', $this->ruri_string);
-      $dcm = $this->_determine($this->ruri_string, $this->rsuffix);
-      if (is_array($dcm)) {
-        list($this->d, $this->c, $this->m) = $dcm;
+    protected function __construct($data = false) {
+      // Store the original instance of this class, it will be the application
+      // default.
+      if(!self::$_instance) {
+        self::$_instance =& $this;
       }
-      defined('ROUTE') || define('ROUTE', $this->ruri_string);
-      defined('RSUFFIX') || define('RSUFFIX', $this->rsuffix);
+      // If the data is not an object, the user must have passed a string to be
+      // parsed by the uri() function.
+      if(!is_object($data)) {
+        // If the data is not a string or an object, it means this constructor
+        // method was called via the getInstance() Singleton library method.
+        // Unless something has gone horribly wrong, this is the call from the
+        // initialisation script asking for the route of the main application.
+        if(!is_string($data)) {
+          // Grab the URI string for the application.
+          $data = $this->get_uri();
+          if(preg_match('#\\s#', $data)) {
+            // If the application URI string contains whitespace, then do not
+            // continue. We cannot return a value from the constructor function,
+            // but we're specifying false here just to emphasise that it is a
+            // failure for quick development reference.
+            return false;
+          }
+        }
+        // Now we know we have a string, parse it with the uri() function.
+        $data = uri($data);
+      }
+
+      // If after all this the data is not in object form, then we obviously got
+      // an invalid URI string.
+      $this->valid = is_object($data);
+      if(!$this->valid) {
+        return false;
+      }
+      // Create a temporary URI string variable for now, we don't want to
+      // overwrite the default value for the class property just yet.
+      $uri_string = '';
+      // Check that module, segments and suffix exist in the data, and set them
+      // to class properties and the computed URI string.
+      if(isset($data->module) && $data->module) {
+        $this->module = $data->module;
+        $uri_string .= $this->module . '@';
+      }
+      if(isset($data->segments) && $data->segments) {
+        $this->segment_string = $data->segments;
+        $uri_string .= $this->segment_string;
+        // The URL suffix will only get set if segments are present. You can't
+        // have a file extension if you are specifying the root directory.
+        // Additionally, it would be unwise to allow *nix hidden files.
+        if(isset($data->suffix) && $data->suffix) {
+          $this->suffix = $data->suffix;
+          $uri_string .= $this->suffix;
+        }
+      }
+      // If the URI string is not empty, set the URI string to what was
+      // extracted from the passed data, instead of the default (false).
+      if($uri_string) {
+        $this->uri_string = $uri_string;
+      }
+      // Now we have data for the URI half of the Library, move onto the other
+      // half of the library, and reroute any requests if necessary.
+      $this->reroute();
+      // We have done everything we need to do in terms of data collection and
+      // parsing, publicise all our just publicise the data in an accessible way
+      // for our user to use. This will allow the data to be accessed using the
+      // public methods (which are used by the determine() method).
+      $this->publicise();
+      // Now we need to determine the path, controller and method from the given
+      // URI string now.
+      // However, if the route is not valid, due to the re-route not being
+      // correct, then don't bother.
+      $this->valid && $this->determine();
     }
 
     /**
-     * Routes
+     * New Route
      *
-     * Re-routes the URI string according to the rules in the routes config file.
-     * This method does use up memory a bit, and it extremely fiddly. 'Twas a
-     * ***** to get right! EDIT: Wasn't so bad the second time round :D
+     * Create a new instance of the Router library, specifying a request passed
+     * by the URI string in the first parameter.
      *
-     * @access private
+     * @access public
      * @param string $uri_string
-     * @param string $suffix
-     * @return array
+     * @return object|false
      */
-    private function _routes($uri_string, $suffix) {
-      $routes = get_config('routes');
-      if (!is_array($routes)) {
-        return array($uri_string, $suffix);
+    public function route($uri_string) {
+      $data = uri($uri_string);
+      // If the URI string wasn't formatted correctly, or it wasn't a string at
+      // all, the uri() function will not return a data object. If this is the
+      // case, don't bother creating a new instance of the Router library.
+      if(!is_object($data)) {
+        return false;
       }
-      if (isset($routes[$uri_string]) && $suffix == '.' . c('url_default_suffix')) {
-        return array($routes[$uri_string], $suffix);
-      }
-      // Define those pseudo-wildcards!
-      $wildcards = array(
-          'match' => array(
-            '**', '*', '##', '#', '@@', '@'
-            ),
-          'replace' => array(
-            '([a-zA-Z0-9\/_-]+)',
-            '([a-zA-Z0-9_-]+)',
-            '([0-9\/]+)',
-            '([0-9]+)',
-            '([a-zA-Z\/]+)',
-            '([a-zA-Z]+)'
-            )
-            );
-            // Now, I know looping through every route could potentially be very memory hungry, but it's the only way to
-            // do it!
-            foreach($routes as $match => $route)
-            {
-              // We could clean up the $match, but to save on memory, forget it! If it's not formatted
-              // properly, then it's the users own fault and won't work anyway!
-              // Add a couple of useful helpers to the pseudo-wildcards we have already.
-              $helper_names = array('{controller}', '{method}');
-              $helper_values = array(c('default_controller'), c('default_method'));
-              $match = str_replace($helper_names, $helper_values, $match);
-              $route = str_replace($helper_names, $helper_values, $route);
-              // If the route isn't formatted properly, then skip it and go onto the next!
-              $regex = '#^(([a-zA-Z0-9]*|\~)\:)?['.preg_quote('*#@/', '#').'a-zA-Z0-9_-]*$#';
-              if (!preg_match($regex, $match))
-              {
-                continue;
-              }
-              // If the suffix of the $match is not the same as the current document, skip this route and try the
-              // next.
-              if (substr($match, 0, 1) == '~:')
-              {
-                $match = c('url_default_suffix') . substr($match, 1);
-              }
-              $tsuffix = ($pos = strpos($match, ':')) !== false
-              ? '.' . substr($match, 0, $pos)
-              : $suffix;
-              if ($tsuffix == '.')
-              {
-                $tsuffix = '';
-              }
-              if ($tsuffix != $suffix)
-              {
-                continue;
-              }
-              // Remove the suffix from $match. We only want to segments now.
-              if ($pos !== false)
-              {
-                $match = substr($match, $pos + 1);
-              }
-              // Now we get to use those magic pseudo-wildcards! Mmm... pseudo-wildcards...
-              $match = str_replace($wildcards['match'], $wildcards['replace'], $match);
-              // Let's check if this route ($match) equals our current URI string.
-              $regex = '|^' . $match . '$|';
-              if (!preg_match($regex, $uri_string))
-              {
-                continue;
-              }
-              // Woohoo! We found a route that is also of the same file type! Congrats!
-              // We haven't finished though! Let's check that the route is formatted properly.
-              $regex = '#^(([a-zA-Z0-9]*|\~)\:)?[/\$a-zA-Z0-9_-]*$#';
-              if (!preg_match($regex, $route))
-              {
-                // There is no point looping again, we have already found our route; it just isn't formatted
-                // properly! Return the default.
-                return array($uri_string, $suffix);
-              }
-              // Check if there is a change in suffix. If there isn't the original document suffix is kept.
-              if (($pos = strpos($route, ':')) !== false)
-              {
-                $rsuffix = '.' . substr($route, 0, $pos);
-                $rsuffix = $rsuffix == '.' ? '' : $rsuffix;
-                $rsuffix = $rsuffix == '.~' ? '.' . c('url_default_suffix') : $rsuffix;
-                $route = substr($route, $pos + 1);
-              }
-              else
-              {
-                $rsuffix = $suffix;
-              }
-              // If any of the pseudo-wildcards are referenced in $route, put them in.
-              $regex = '|^' . $match . '$|';
-              $ruri_string = preg_replace($regex, $route, $uri_string);
-              // The string, $route, has already been check if it has been formatted correctly, the only problem we
-              // may have is if there is a stray '$' floating about from where pseudo-wildcards are referenced.
-              if (strpos($ruri_string, '$') !== false)
-              {
-                // Oh noes! A stray dollar symbol! That means the $route is not formatted properly, return default.
-                return array($uri_string, $suffix);
-              }
-              // Nope, nothing wrong with it. Return the re-routed URI string and re-routed suffix.
-              return array($ruri_string, $rsuffix);
-            }
-            // We've exhausted all possibilities, just return the default!
-            return array($uri_string, $suffix);
+      return new $this($data);
     }
 
     /**
-     * Determine
+     * Get URI
      *
-     * Determines the controller and method, and which directory it is located in.
+     * Get the raw URI string from the server, using preset PHP Global
+     * variables. Filter out all unwanted information that comes with the URI
+     * string from the server.
      *
-     * @access private
-     * @param string $ruri_string
-     * @param string $rsuffix
+     * @access protected
+     * @return string
+     */
+    protected function get_uri() {
+      $uri_string = '';
+      // Get the URI string from the following methods: PATH_INFO,
+      // ORIG_PATH_INFO and REQUEST_URI. If none of those provide a URI, just
+      // continue with an empty string.
+      $server_methods = array('PATH_INFO', 'ORIGIN_PATH_INFO', 'REQUEST_URI');
+      foreach($server_methods as $method) {
+        $uri_string = isset($_SERVER[$method])
+                    ? $_SERVER[$method]
+                    : @getenv($method);
+        $uri_string = trim(filter_path($uri_string), '/');
+        if($uri_string != '' && $uri_string != SELF) {
+          break;
+        }
+      }
+      // Remove the query string from the URI. It can't help us determine
+      // modules, controllers or methods!
+      $uri_string = ($pos = strpos($uri_string, '?')) !== false
+                  ? substr($uri_string, 0, $pos)
+                  : $uri_string;
+      // If the URI string contains either the root folder the application is
+      // located in, or the application file, remove them. They have nothing to
+      // do with the flow of the application now.
+      foreach(array(URL, SELF) as $method) {
+        if($uri_string == $method) {
+          $uri_string = '';
+          break;
+        }
+        if(strlen($uri_string) > strlen($method)
+           && substr($uri_string, 0, strlen($method)) == $method
+        ) {
+          $uri_string = substr($uri_string, strlen($method));
+        }
+      }
+      return trim(filter_path($uri_string), '/');
+    }
+
+    /**
+     * Re-Route Request
+     */
+    protected function reroute() {}
+
+    /**
+     * Publicise Data
+     *
+     * Make all the data we collected in the constructor method into usable,
+     * accessible data for the user.
+     *
+     * @access protected
      * @return void
      */
-    private function _determine($ruri_string, $rsuffix)
-    {
-      if ($ruri_string == '')
-      {
-        return array('', c('default_controller'), c('default_method'));
-      }
-      if ($rsuffix == '')
-      {
-        // It's a folder, no need to use recursive method.
-        return array($ruri_string . '/', c('default_controller'), c('default_method'));
-      }
-      $fof = bool(c('file_over_folder'));
-      if ($fof)
-      {
-        return $this->_recursive_file($ruri_string, $rsuffix);
-      }
-      else
-      {
-        return $this->_recursive_folder($ruri_string, $rsuffix);
-      }
+    protected function publicise() {
+      // Explode the segment strings, both the original and the re-routed
+      // versions.
+      $this->segments = xplode('/', $this->segment_string);
+      $this->rsegments = xplode('/', $this->rsegment_string);
+      // Unshift the arrays, so that the array indexes match human numbering.
+      array_unshift($this->segments, null);
+      array_unshift($this->rsegments, null);
+      // Removed the zero-indexed values from the arrays.
+      unset($this->segments[0], $this->rsegments[0]);
     }
 
     /**
-     * Recursive File
+     * Determine Route
      *
-     * File over folder recursive method for finding the controller class file.
+     * Determine the path to the controller, the controller itself, and the
+     * method from the re-routed URI.
      *
-     * @access private
-     * @param string $ruri_string
-     * @param string $rsuffix
+     * @access protected
      * @return void
      */
-    private function _recursive_file($ruri_string, $rsuffix)
-    {
-      $ext = '.' . c('url_default_suffix') == $rsuffix ? '' : $rsuffix;
-      $ruri = xplode('/', $ruri_string);
-      $d = '';
-
-      for($i = 0; $i < count($ruri); $i++)
-      {
-        if (file_exists($this->controllers . $d . $ruri[$i] . $ext . EXT))
-        {
-          $m = isset($ruri[$i + 1]) ? $ruri[$i + 1] : c('default_method');
-          return array($d, $ruri[$i] . $ext, $m);
-        }
-        $d .= $ruri[$i] . '/';
-      }
-      // If the file has not been found, return an array of empty strings.
-      return array('', '', '');
-    }
+    public function determine() {}
 
     /**
-     * Recursive Folder
+     * Get Route Path
      *
-     * Folder over file recursive method for finding the controller class file.
+     * Return the path to the controller file. If the request is not valid, or
+     * no controller could be found, return false.
      *
-     * @access private
-     * @param string $ruri_string
-     * @param string $rsuffix
-     * @return void
+     * @access public
+     * @return string|false
      */
-    private function _recursive_folder($ruri_string, $rsuffix)
-    {
-      $ext = '.' . c('url_default_suffix') == $rsuffix ? '' : $rsuffix;
-      $ruri = xplode('/', $ruri_string);
-      $d = '';
-
-      $m = c('default_method');
-      $c = array_pop($ruri);
-      for($i = count($ruri); $i >= 0; $i--)
-      {
-        $d = implode('/', $ruri);
-        if ($d == '/')
-        {
-          $d = '';
-        }
-        $file = $this->controllers . $d . $c . $ext . EXT;
-        if (file_exists($file))
-        {
-          return array(implode('/', $ruri), $c . $ext, $m);
-        }
-        $m = $c;
-        $c = array_pop($ruri);
-      }
-      // If the file has not been found, return an array of empty strings.
-      return array('', '', '');
+    public function path() {
+      return $this->valid ? $this->p : false;
     }
 
     /**
-     * DCM
+     * Get Route Controller
      *
-     * Returns the controller and method name, and the directory the controller class file is located in.
+     * Return the name of the controller class, including its namespace. If the
+     * request is not valid, or no controller could be found, return false.
      *
-     * @return array
+     * @access public
+     * @return string|false
      */
-    public function dcm()
-    {
-      return array($this->d . '/' . $this->c, $this->c, $this->m);
+    public function controller() {
+      return $this->valid ? $this->c : false;
     }
 
     /**
-     * Segment
+     * Get Route Method
      *
-     * Return a specific segment from the re-routed URI.
+     * Return the name of the controller method. If the request is not valid, or
+     * no controller could be found, return false. The Router library does not
+     * check if the method exists, as we do not want to include the controller
+     * file from withing this class.
      *
+     * @access public
+     * @return string|false
+     */
+    public function method() {
+      return $this->valid ? $this->m : false;
+    }
+
+    /**
+     * Get Segment
+     *
+     * Return a specified segment from the URI string.
+     *
+     * @access public
      * @param integer $n
-     * @param boolean $return
-     * @return string|mixed
+     * @param mixed $return
+     * @return string|false|mixed
      */
-    public function segment($n, $return = false)
-    {
-      if (isset($this->rsegments[$n]))
-      {
-        return $this->rsegments[$n];
+    public function segment($n, $return  = false) {
+      if(!$this->valid || !is_numeric($n)) {
+        return false;
       }
-      return $return;
+      $n = (int) $n;
+      return isset($this->segments[$n]) ? $this->segments[$n] : $return;
     }
 
     /**
-     * Segments
+     * Get Re-Routed Segment
      *
-     * Return an array of all the segments in the re-routed URI.
+     * Return a specified segment from the re-routed URI string.
      *
-     * @return array
+     * @access public
+     * @param integer $n
+     * @param mixed $return
+     * @return string|false|mixed
      */
-    public function segments()
-    {
-      return $this->rsegments;
-    }
-
-    /**
-     * Total Segments
-     *
-     * Return the number of segments in the re-routed URI string.
-     *
-     * @return integer
-     */
-    public function total_segments()
-    {
-      static $count = false;
-      if(is_int($count)) {
-        return $count;
+    public function rsegment($n, $return  = false) {
+      if(!$this->valid || !is_numeric($n)) {
+        return false;
       }
-      $count = count($this->rsegments);
-      return $count;
+      $n = (int) $n;
+      return isset($this->rsegments[$n]) ? $this->segments[$n] : $return;
     }
 
     /**
-     * URI String
+     * Get Segments
      *
-     * Return the re-routed URI.
+     * Return all the segments of the URI string as an array.
      *
-     * @return string
+     * @access public
+     * @return array|false
      */
-    public function uri_string()
-    {
-      return $this->ruri_string;
+    public function segments() {
+      return $this->valid ? $this->segments : false;
     }
 
     /**
-     * Suffix
+     * Get Re-Routed Segments
      *
-     * Return the suffix from the re-routed URI string.
+     * Return all the segments of the re-routed URI string as an array.
      *
-     * @return string
+     * @access public
+     * @return array|false
      */
-    public function suffix()
-    {
-      return $this->rsuffix;
+    public function rsegments() {
+      return $this->valid ? $this->rsegments : false;
     }
 
   }

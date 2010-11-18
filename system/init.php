@@ -186,7 +186,7 @@
   load_class('library', false);
   load_class('core', false);
   load_class('controller', false);
-  $r = load_class('routerbeta');
+  $r = load_class('router');
 
   // We want to know what request this application is meant to serve!
   if(!$r->valid) {
