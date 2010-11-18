@@ -3,8 +3,8 @@
 /**
  * Router Library
  *
- * Takes the URI string (segments and suffix). Checks to see if it should
- * re-route the request to a different one. Then finds the appropriate
+ * Takes the URI string (module, segments and suffix). Checks to see if it
+ * should re-route the request to a different one. Then finds the appropriate
  * controller and method, and determines which folder the controller class is
  * in.
  *
@@ -35,8 +35,11 @@
     protected $segments = array(),
               $rsegments = array(),
               $module = false,
+              $rmodule = false,
               $segment_string = false,
+              $rsegment_string = false,
               $suffix = false,
+              $rsuffix = false,
               $p = false,
               $c = false,
               $m = false;
@@ -112,6 +115,24 @@
       if($uri_string) {
         $this->uri_string = $uri_string;
       }
+      // Now we have data for the URI half of the Library, move onto the other
+      // half of the library, and reroute any requests if necessary.
+      $this->reroute();
+      // We have done everything we need to do in terms of data collection and
+      // parsing, publicise all our just publicise the data in an accessible way
+      // for our user to use. This will allow the data to be accessed using the
+      // public methods (which are used by the determine() method).
+      $this->publicise();
+      // Now we need to determine the path, controller and method from the given
+      // URI string now.
+      $this->determine();
+      // If the determine() method fails, it means that no controller could be
+      // found. It would be a good idea to check whether the route is valid
+      // still.
+      if(!$this->valid) {
+        return false;
+      }
+      
       // Yes, yes, I know. We can't return a value from the constructor method,
       // but this does help you see the flow of the application - which parts of
       // the method mean it was successful and which mean failure.
@@ -170,6 +191,28 @@
     }
 
     /**
+     * Re-Route Request
+     */
+    protected function reroute() {}
+
+    /**
+     * Publicise Data
+     *
+     * Make all the data we collected in the constructor method into usable,
+     * accessible data for the user.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function publicise() {
+      $this->segments = xplode('/', $this->segment_string);
+      $this->rsegments = xplode('/', $this->rsegment_string);
+      array_unshift($this->segments, null);
+      array_unshift($this->rsegments, null);
+      unset($this->segments[0], $this->rsegments[0]);
+    }
+
+    /**
      * Route Path
      *
      * Return the path to the controller file. If the request is not valid, or
@@ -210,11 +253,81 @@
       return $this->valid ? $this->m : false;
     }
 
+    /**
+     * Segment
+     *
+     * Return a specified segment from the URI string.
+     *
+     * @access public
+     * @param integer $n
+     * @param mixed $return
+     * @return string|false|mixed
+     */
+    public function segment($n, $return  = false) {
+      if(!$this->valid || !is_numeric($n)) {
+        return false;
+      }
+      $n = (int) $n;
+      return isset($this->segments[$n]) ? $this->segments[$n] : $return;
+    }
+
+    /**
+     * Re-Routed Segment
+     *
+     * Return a specified segment from the re-routed URI string.
+     *
+     * @access public
+     * @param integer $n
+     * @param mixed $return
+     * @return string|false|mixed
+     */
+    public function rsegment($n, $return  = false) {
+      if(!$this->valid || !is_numeric($n)) {
+        return false;
+      }
+      $n = (int) $n;
+      return isset($this->rsegments[$n]) ? $this->segments[$n] : $return;
+    }
+
+    /**
+     * Segments
+     *
+     * Return all the segments of the URI string as an array.
+     *
+     * @access public
+     * @return array|false
+     */
+    public function segments() {
+      return $this->valid ? $this->segments : false;
+    }
+
+    /**
+     * Re-Routed Segments
+     *
+     * Return all the segments of the re-routed URI string as an array.
+     *
+     * @access public
+     * @return array|false
+     */
+    public function rsegments() {
+      return $this->valid ? $this->rsegments : false;
+    }
+
   }
 
-/**
- * Router Class
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
 class E_routerbeta {
   
   protected $uri_string = false,
