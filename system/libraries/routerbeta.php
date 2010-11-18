@@ -60,9 +60,12 @@
       if($data === false) {
         // This is a request to route the main application, this is where the
         // URI part of the library is required.
-        $this->uri_string = $this->get_uri();
-        $data = uri($this->uri_string);
-        var_dump($data);
+        $uri_string = $this->get_uri();
+        // The uri() function will allow whitespace, but this is not acceptable
+        // for a URI string. Do not set the data.
+        if(strpos($uri_string, ' ') === false) {
+          $data = uri($uri_string);
+        }
       }
       // Check that we have the required parts.
       $this->valid = is_object($data)
