@@ -29,20 +29,23 @@
   class router extends library {
 
     protected static $_instance = false;
-    public    $valid = false,
-              $uri_string = false,
-              $ruri_string = false;
-    protected $segments = array(),
-              $rsegments = array(),
-              $module = false,
-              $rmodule = false,
-              $segment_string = false,
-              $rsegment_string = false,
-              $suffix = false,
-              $rsuffix = false,
-              $p = false,
-              $c = false,
-              $m = false;
+
+    public    $valid            = false,
+              $uri_string       = false,
+              $ruri_string      = false;
+
+    protected $segments         = array(),
+              $rsegments        = array(),
+              $fefault_suffix   = false,
+              $module           = false,
+              $rmodule          = false,
+              $segment_string   = false,
+              $rsegment_string  = false,
+              $suffix           = false,
+              $rsuffix          = false,
+              $p                = false,
+              $c                = false,
+              $m                = false;
 
     /**
      * Constructor Method
