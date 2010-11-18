@@ -28,6 +28,8 @@
 
   class routerbeta extends library {
 
+    protected static $_instance = false;
+
     /**
      * Constructor Method
      *
@@ -39,6 +41,12 @@
      * @return void
      */
     protected function __construct() {
+      // Store the original instance of this class, it will be application
+      // default.
+      if(!self::$_instance) {
+        self::$_instance =& $this;
+      }
+      
     }
 
   }

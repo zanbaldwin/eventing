@@ -72,6 +72,7 @@
         return false;
       }
       $objects[$class] = isset($class::$_instance)
+                      && is_object($class::$_instance)
                        ? $class::$_instance
                        : new $class;
       $super = bool($super);
