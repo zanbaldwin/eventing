@@ -8,8 +8,9 @@
   $config = array(
 
     'module@segments.suffix'  => 'home/index',
-    'user/*'                  => 'user/profile',
+    'user/*/'                 => 'user/profile',
     'bands'                   => 'bands@list/bands',
     'feed/'                   => 'rss@main.rss',
+    'item/#'                  => 'products/view_item_$1',
 
   );
