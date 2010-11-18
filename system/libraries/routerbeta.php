@@ -35,7 +35,7 @@
     protected $segments = array(),
               $rsegments = array(),
               $module = false,
-              $segment = false,
+              $segment_string = false,
               $suffix = false,
               $p = false,
               $c = false,
@@ -49,40 +49,73 @@
      * called from the init.php file.
      *
      * @access protected
+     * @param object|string|false $data
      * @return void
      */
     protected function __construct($data = false) {
-      // Store the original instance of this class, it will be application
+      // Store the original instance of this class, it will be the application
       // default.
       if(!self::$_instance) {
         self::$_instance =& $this;
       }
-      if($data === false) {
-        // This is a request to route the main application, this is where the
-        // URI part of the library is required.
-        $uri_string = $this->get_uri();
-        // The uri() function will allow whitespace, but this is not acceptable
-        // for a URI string. Do not set the data.
-        if(strpos($uri_string, ' ') === false) {
-          $data = uri($uri_string);
+
+      // If the data is not an object, the user must have passed a string to be
+      // parsed by the uri() function.
+      if(!is_object($data)) {
+        // If the data is not a string or an object, it means this constructor
+        // method was called via the getInstance() Singleton library method.
+        // Unless something has gone horribly wrong, this is the call from the
+        // initialisation script asking for the route of the main application.
+        if(!is_string($data)) {
+          // Grab the URI string for the application.
+          $data = $this->get_uri();
+          if(preg_match('#\\s#', $data)) {
+            // If the application URI string contains whitespace, then do not
+            // continue. We cannot return a value from the constructor function,
+            // but we're specifying false here just to emphasise that it is a
+            // failure for quick development reference.
+            return false;
+          }
+        }
+        // Now we know we have a string, parse it with the uri() function.
+        $data = uri($data);
+      }
+
+      // If after all this the data is not in object form, then we obviously got
+      // an invalid URI string.
+      $this->valid = is_object($data);
+      if(!$this->valid) {
+        return false;
+      }
+      // Create a temporary URI string variable for now, we don't want to
+      // overwrite the default value for the class property just yet.
+      $uri_string = '';
+      // Check that module, segments and suffix exist in the data, and set them
+      // to class properties and the computed URI string.
+      if(isset($data->module) && $data->module) {
+        $this->module = $data->module;
+        $uri_string .= $this->module . '@';
+      }
+      if(isset($data->segments) && $data->segments) {
+        $this->segment_string = $data->segments;
+        $uri_string .= $this->segment_string;
+        // The URL suffix will only get set if segments are present. You can't
+        // have a file extension if you are specifying the root directory.
+        // Additionally, it would be unwise to allow *nix hidden files.
+        if(isset($data->suffix) && $data->suffix) {
+          $this->suffix = $data->suffix;
+          $uri_string .= $this->suffix;
         }
       }
-      // Check that we have the required parts.
-      $this->valid = is_object($data)
-                  && isset($data->module)
-                  && isset($data->segments)
-                  && isset($data->suffix);
-      if(!$this->valid) {
-        // We can't return a value from inside our constructor method.
-        return;
+      // If the URI string is not empty, set the URI string to what was
+      // extracted from the passed data, instead of the default (false).
+      if($uri_string) {
+        $this->uri_string = $uri_string;
       }
-      $this->module   = $data->module;
-      $this->segment  = $data->segments;
-      $this->suffix   = $data->suffix;
-      // Set the URI String to a specific format.
-      $this->uri_string = $this->module . '@'
-                        . $this->segment
-                        . $this->suffix;
+      // Yes, yes, I know. We can't return a value from the constructor method,
+      // but this does help you see the flow of the application - which parts of
+      // the method mean it was successful and which mean failure.
+      return true;
     }
 
     // Parse an Eventing URI
