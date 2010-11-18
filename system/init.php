@@ -182,14 +182,11 @@
 
   // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
   // for functionality. Then we can have the lean, mean, big-boss libraries! To
-  // make it simple: Library, URI, Router, Core, Controller libraries...
+  // make it simple: Library, Core, Controller, Router libraries...
   load_class('library', false);
-  load_class('uri');
-
-  $r = load_class('routerbeta');
-  var_dump($r);
   load_class('core', false);
   load_class('controller', false);
+  $r = load_class('routerbeta');
 
   // We want to know what request this application is meant to serve!
   if(!$r->valid) {
