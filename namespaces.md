@@ -75,3 +75,6 @@ not need altering; just module and suffix referencing.
 Edit: It has been decided upon the following syntax.
 
     module @ segments .suffix ?query? #fragment
+
+All hyphens in the application URI string will get replaced by underscores in
+the re-routed URI.
