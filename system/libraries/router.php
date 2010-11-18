@@ -114,6 +114,9 @@
       if(isset($data->segments) && $data->segments) {
         $this->segment_string = $data->segments;
         $uri_string .= $this->segment_string;
+        // We don't want a suffix of false, so set the default suffix as a
+        // directory separator.
+        $this->suffix = '/';
         // The URL suffix will only get set if segments are present. You can't
         // have a file extension if you are specifying the root directory.
         // Additionally, it would be unwise to allow *nix hidden files.
