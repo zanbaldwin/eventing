@@ -61,7 +61,6 @@
       if(!self::$_instance) {
         self::$_instance =& $this;
       }
-
       // If the data is not an object, the user must have passed a string to be
       // parsed by the uri() function.
       if(!is_object($data)) {
@@ -125,23 +124,27 @@
       $this->publicise();
       // Now we need to determine the path, controller and method from the given
       // URI string now.
-      $this->determine();
-      // If the determine() method fails, it means that no controller could be
-      // found. It would be a good idea to check whether the route is valid
-      // still.
-      if(!$this->valid) {
-        return false;
-      }
-      
-      // Yes, yes, I know. We can't return a value from the constructor method,
-      // but this does help you see the flow of the application - which parts of
-      // the method mean it was successful and which mean failure.
-      return true;
+      // However, if the route is not valid, due to the re-route not being
+      // correct, then don't bother.
+      $this->valid && $this->determine();
     }
 
-    // Parse an Eventing URI
-    public function route($uri_string) {}
-    protected static function create_route($segments, $suffix = false, $module = false) {}
+    /**
+     * New Route
+     *
+     *
+     *
+     * @access public
+     * @param string $uri_string
+     * @return object|false
+     */
+    public function route($uri_string) {
+      $data = uri($uri_string);
+      if(!is_object($data)) {
+        return false;
+      }
+      return new $this($data);
+    }
 
     /**
      * Get URI
