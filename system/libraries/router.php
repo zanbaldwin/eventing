@@ -36,7 +36,7 @@
 
     protected $segments         = array(),
               $rsegments        = array(),
-              $fefault_suffix   = false,
+              $default_suffix   = false,
               $module           = false,
               $rmodule          = false,
               $segment_string   = false,
