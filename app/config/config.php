@@ -66,7 +66,7 @@
     ),
 
     // Router Class Settings:
-    'default_suffix' => '/',
+    'default_suffix' => '.htm',
     'file_over_folder' => false,
     'default_controller' => 'home',
     'default_method' => 'index',
