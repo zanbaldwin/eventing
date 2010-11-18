@@ -132,7 +132,8 @@
     /**
      * New Route
      *
-     *
+     * Create a new instance of the Router library, specifying a request passed
+     * by the URI string in the first parameter.
      *
      * @access public
      * @param string $uri_string
@@ -140,6 +141,9 @@
      */
     public function route($uri_string) {
       $data = uri($uri_string);
+      // If the URI string wasn't formatted correctly, or it wasn't a string at
+      // all, the uri() function will not return a data object. If this is the
+      // case, don't bother creating a new instance of the Router library.
       if(!is_object($data)) {
         return false;
       }
