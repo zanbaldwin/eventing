@@ -439,7 +439,8 @@
         require theme_path('errors') . 'error' . EXT;
       }
       else {
-        // No HTML document to show? Dump out the data in an XML document instead.
+        // No HTML document to show? Dump out the data in an XML document
+        // instead.
         echo '<?xml version="1.0" encoding="utf-8" ?>' . "\n<error>\n";
         foreach($error as $element => $value) {
           echo "  <{$element}>\n    {$value}\n  </{$element}>\n";
@@ -536,7 +537,8 @@
     /**
      * URI Parser
      *
-     * Parse a string, in the format designed for Eventing URIs and return an object containing data about the different parts.
+     * Parse a string, in the format designed for Eventing URIs and return an
+     * object containing data about the different parts.
      *
      * @access public
      * @param string $uri
@@ -558,15 +560,15 @@
         // The suffix is just like a regular file extension, except it can only
         // contain alphanumeric characters.
         $regex['suffix']    = '?:\.?([a-zA-Z0-9]+)';
-        // The query string can only contain certain characters, but according to
-        // RFC 3986, a query string is a URL part starting from the first question
-        // mark, and terminating at the end of the URL, or at the '#' character,
-        // if one is present.
+        // The query string can only contain certain characters, but according
+        // to RFC 3986, a query string is a URL part starting from the first
+        // question mark, and terminating at the end of the URL, or at the '#'
+        // character, if one is present.
         $regex['query']     = '\?(?:[a-zA-Z_][a-zA-Z0-9_]*\?|[^#? ]*)';
-        // The URL fragment can basically be anything from the first occurance of
-        // the '#' character to the end of the URL. It is only used client-side,
-        // so we don't need to bother with it... It's just here so we can pump it
-        // into our anchors
+        // The URL fragment can basically be anything from the first occurance
+        // of the '#' character to the end of the URL. It is only used
+        // client-side, so we don't need to bother with it... It's just here so
+        // we can pump it into our anchors
         $regex['fragment']  = '#.*';
         // Wrap each part so we can assign them as matches, and combine the PCRE
         // RegEx string.
@@ -594,10 +596,13 @@
                      && ($u['segments'] = trim(filter_path($matches[2]), '/'))
                       ? $u['segments']
                       : false;
+      // A trailing slash on the segments indicates the URI points to a
+      // directory. Before filtering the segments, make a note of this.
+      $trailing       = isset($matches[2]) && substr($matches[2], -1) == '/';
       // If we have a suffix, prepend it with a full stop, else false.
       $u['suffix']    = isset($matches[3]) && $matches[3] && $u['segments']
                       ? '.' . $matches[3]
-                      : $trailing ? '/' : false;
+                      : ($trailing ? '/' : false);
       // If we have a query string placeholder, just return the placeholder
       // name. If we have an actual query string, parse it and return the query
       // array.
@@ -624,14 +629,14 @@
     /**
      * Anchor
      * 
-     * Function relating to all things Framework URL, plus a bit more! Segments to
-     * URL, with file extension and query string support, plain old
+     * Function relating to all things Framework URL, plus a bit more! Segments
+     * to URL, with file extension and query string support, plain old
      * wrap-link-in-html-tag, and fetch link from config file. If the second
-     * parameter is a non-empty string, it will wrap the link in the HTML 'a' tag
-     * with text.
+     * parameter is a non-empty string, it will wrap the link in the HTML 'a'
+     * tag with text.
      * If the URL has already been used by this function, it will add the
-     * attribute rel="nofollow" to prevent search engines thinking you are trying
-     * to spam them.
+     * attribute rel="nofollow" to prevent search engines thinking you are
+     * trying to spam them.
      * 
      * @access public
      * @param string $path
@@ -666,8 +671,8 @@
       if(!is_string($title) || $title == '') {
         $title = false;
       }
-      // If the path is a config reference, load it up so we can perform the check
-      // on it as if it had been passed to the function directly.
+      // If the path is a config reference, load it up so we can perform the
+      // check on it as if it had been passed to the function directly.
       if(preg_match('|^~([a-zA-Z0-9_-]+)$|', $path, $matches)) {
         $link = c($matches[1], 'links');
         if(!is_string($link)) {
@@ -849,9 +854,9 @@
      * Content URL
      *
      * Takes a file path, relative to the content folder, checks that it exists,
-     * and returns the absolute URL. If $force is set to true, it will return the
-     * path regardless of whether the file exists (content path still needs to be
-     * set).
+     * and returns the absolute URL. If $force is set to true, it will return
+     * the path regardless of whether the file exists (content path still needs
+     * to be set).
      *
      * @access public
      * @param string $file
@@ -979,6 +984,17 @@
   }
 
   if(!function_exists('copyright')) {
+    /**
+     * Copyright Notice
+     *
+     * Echo out a copyright notice, which automatically updates the copyright
+     * years.
+     *
+     * @access public
+     * @param string $holder
+     * @param integer $since
+     * @return string
+     */
     function copyright($holder = 'Copyright Holder', $since = false) {
       $since = is_numeric($since) ? (int) $since : (int) strftime('%Y');
       $year = (int) strftime('%Y');
