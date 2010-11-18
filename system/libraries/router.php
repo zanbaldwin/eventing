@@ -261,7 +261,7 @@
         // route, we don't want a user's route causing preg_match() to throw an
         // error or warning, that would look bad on the framework. NEVER TRUST
         // USER DATA.
-        if(!preg_match('/^[a-zA-Z0-9\*&#/@\._-]+$/', $uri)) {
+        if(!preg_match('~^[a-zA-Z0-9\*&#/@\._-]+$~', $uri)) {
           continue;
         }
         // If the route matcher does not contain a suffix ('/' counts as a
@@ -301,7 +301,7 @@
           if($data->segments) {
             $this->rsegment_string = $data->segments;
             $ruri_string .= $this->rsegment_string;
-            $this->rsuffix = '/';
+            $this->rsuffix = $this->default_suffix;
             if($data->suffix) {
               $this->rsuffix = $data->suffix;
               $ruri_string .= $this->rsuffix;
@@ -310,9 +310,16 @@
           if($ruri_string) {
             $this->ruri_string = $ruri_string;
           }
+          return;
         }
       }
-      return;
+      // If we have finished the loop, and still in the function, it means that
+      // we didn't find a matched route. Set the Re-Routed URI and it's parts to
+      // the defaults (the original URI).
+      $this->ruri_string      = $this->uri_string;
+      $this->rmodule          = $this->module;
+      $this->rsegment_string  = $this->segment_string;
+      $this->rsuffix          = $this->suffix;
     }
 
     /**
