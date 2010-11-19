@@ -17,13 +17,71 @@
     }
 
     public function index() {
-      echo "<h2>Viewing default controller/action.</h2><br />\n";
-      echo '<tt>\\' . __METHOD__ . "()</tt><br />\n";
-      $indent = '&nbsp;&nbsp;&nbsp;&nbsp;';
-      echo $indent . "<strong>extends</strong> <tt>\\Eventing\\Library\\controller</tt><br />\n";
-      echo $indent . "<strong>extends</strong> <tt>\\Eventing\\Library\\core</tt><br />\n";
-      echo $indent . '<strong>extends</strong> <tt>\\Eventing\\Library\\library</tt>';
-      return;
+     $this->template->create(array('s' => 'html5shell'));
+     $this->template->load('s');
+    
+      echo '<h1>' . __METHOD__ . '(' . $this->router->suffix() . ')</h1>';
+
+      // Compile a list of routes to test.
+      $routes = array(
+        'example@mycontroller',
+        '',
+        'home',
+
+        'controller',
+        '/controller',
+
+        'controller/',
+        '/controller/',
+        
+        'controller/method',
+        '/controller/method',
+        
+        'controller.suffix',
+        '/controller.suffix',
+        
+        'controller/method.suffix',
+        '/controller/method.suffix',
+        
+        'controller/method.suffix/',
+        '/controller/method.suffix/',
+        
+        'module@controller/method.suffix',
+        'module@/controller/method.suffix',
+        
+        'module@',
+        'module@/',
+        
+        'module@.suffix',
+        'module@/.suffix',
+        
+        '?query=parse',
+        '/?query=parse',
+        
+        '?query?',
+        '/?query?',
+        
+        '#fragment',
+        '/#fragment',
+        
+        'module@/controller/method/param.suffix?query=param#fragment',
+        'module @ /controller/method/param .suffix ?query=param #fragment',
+      );
+
+      // Echo out all the route tests.
+      if(is_array($routes) && $routes) {
+        echo '<table>';
+        foreach($routes as $route) {
+          $a = a($route);
+          if($a) {
+            echo "<tr><td><a href=\"{$a}\">{$route}</a></td><td>{$a}</td></tr>\n";
+          }
+          else {
+            echo "<tr><td><span style=\"color:#d00;\">{$route}</span></td><td><span style=\"color:#d00;\">{$route}</span></td></tr>\n";
+          }
+        }
+        echo '</table>';
+      }
     }
 
   }
