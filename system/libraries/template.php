@@ -15,8 +15,7 @@
  * @subpackage Template
  * @author     Alexander Baldwin
  * @copyright  (c) 2010 Alexander Baldwin
- * @license    http://www.gnu.org/licenses/gpl.txt GNU General Public License
- * @license    http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
  * @since      v0.1

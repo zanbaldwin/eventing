@@ -12,7 +12,7 @@
  * @package    Libraries
  * @subpackage core
  * @copyright  (c) 2009 Alexander Baldwin
- * @license    http://www.gnu.org/licenses/gpl.txt - GNU General Public License
+ * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
  * @since      v0.1
