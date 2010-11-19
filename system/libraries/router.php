@@ -354,7 +354,8 @@
      * @access protected
      * @return void
      */
-    public function determine() {}
+    public function determine() {
+    }
 
     /**
      * Get Route Path
@@ -455,6 +456,169 @@
      */
     public function rsegments() {
       return $this->valid ? $this->rsegments : false;
+    }
+
+    /**
+     * Number of Segments
+     *
+     * Return the number of segments in the URI string.
+     *
+     * @access public
+     * @return integer
+     */
+    public function total_segments() {
+      return $this->valid ? count($this->segments) : false;
+    }
+
+    /**
+     * Number of Re-Routed Segments
+     *
+     * Return the number of segments in the re-routed URI string.
+     *
+     * @access public
+     * @return integer
+     */
+    public function total_rsegments() {
+      return $this->valid ? count($this->rsegments) : false;
+    }
+
+    /**
+     * URI String
+     *
+     * Return the URI string. If the URI string is empty/false, then return the
+     * value specified in the first parameter.
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function uri_string($return = '') {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->uri_string ? $this->uri_string : $return;
+    }
+
+    /**
+     * Re-Routed URI String
+     *
+     * Return the re-routed URI string. If the URI string is empty/false, then
+     * return the value specified in the first parameter; defaults to an empty
+     * string
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function ruri_string($return = '') {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->ruri_string ? $this->ruri_string : $return;
+    }
+
+    /**
+     * Segment String
+     *
+     * Return the segments imploded together with a directory separator. If the
+     * URI string is empty, then return the value specified in the first
+     * parameter; defaults to an empty string.
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function segment_string($return = '') {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->segment_string ? $this->segment_string : $return;
+    }
+
+    /**
+     * Re-Routed Segment String
+     *
+     * Return the re-routed segments imploded together with a directory
+     * separator. If the URI string is empty, then return the value specified in
+     * the first parameter; defaults to an empty string.
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function rsegment_string($return = '') {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->rsegment_string ? $this->rsegment_string : $return;
+    }
+
+    /**
+     * Module
+     *
+     * Return the module name. If there is no module, return the value specified
+     * in the first parameter; defaults to a boolean false.
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function module($return = false) {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->module ? $this->module : $return;
+    }
+
+    /**
+     * Re-Routed Module
+     *
+     * Return the re-routed module name. If there is no module, return the value
+     * specified in the first parameter; defaults to a boolean false.
+     *
+     * @access public
+     * @param mixed $return
+     * @return string|mixed
+     */
+    public function rmodule($return = false) {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->rmodule ? $this->rmodule : $return;
+    }
+
+    /**
+     * Suffix
+     *
+     * Return the URI suffix. This method will return a string - either in the
+     * style of a file extension or directory separator. If no segments are set,
+     * then this method will return the default suffix.
+     *
+     * @access public
+     * @return string
+     */
+    public function suffix() {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->suffix ? $this->suffix : $this->default_suffix;
+    }
+
+    /**
+     * Re-Routed Suffix
+     *
+     * Return the re-routed URI suffix. This method will return a string -
+     * either in the style of a file extension or directory separator. If no
+     * segments are set, then this method will return the default suffix.
+     *
+     * @access public
+     * @return string
+     */
+    public function rsuffix() {
+      if(!$this->valid) {
+        return false;
+      }
+      return $this->suffix ? $this->rsuffix : $this->default_suffix;
     }
 
   }
