@@ -28,11 +28,13 @@
 
   class router extends library {
 
-    protected static
-              $_instance          = false,
+    public    static
               $default_suffix     = false,
               $default_controller = false,
               $default_method     = false;
+
+    protected static
+              $_instance          = false;
 
     public    $valid              = false,
               $uri_string         = false,
