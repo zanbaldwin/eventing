@@ -31,8 +31,10 @@
    * This library does NOT extend the library class, as multiple instances are
    * required.
    */
-  class module extends library {
+  class module extends core {
 
-    protected function __construct() {}
+    protected function __construct() {
+      parent::__construct();
+    }
 
   }

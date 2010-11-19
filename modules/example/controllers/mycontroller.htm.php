@@ -7,12 +7,13 @@
     exit('Direct script access is disallowed.');
   }
 
-  class testcon extends someclassthatihaventdecidedyet {
+  class mycontroller extends \Eventing\Library\module {
 
     protected function __construct() {}
 
     public function index() {
-      // Your module controller, default action.
+      echo 'Viewing a module controller.<br />';
+      echo '<tt>' . __METHOD__ . '()</tt>.<br />';
     }
 
   }
