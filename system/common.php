@@ -600,9 +600,12 @@
       // directory. Before filtering the segments, make a note of this.
       $trailing       = isset($matches[2]) && substr($matches[2], -1) == '/';
       // If we have a suffix, prepend it with a full stop, else false.
-      $u['suffix']    = isset($matches[3]) && $matches[3] && $u['segments']
-                      ? '.' . $matches[3]
-                      : ($trailing ? '/' : false);
+      $u['suffix'] = '/';
+      if($u['segments']) {
+        $u['suffix'] = isset($matches[3]) && $matches[3]
+                     ? '.' . $matches[3]
+                     : ($trailing ? '/' : DEFAULTSUFFIX);
+      }
       // If we have a query string placeholder, just return the placeholder
       // name. If we have an actual query string, parse it and return the query
       // array.
