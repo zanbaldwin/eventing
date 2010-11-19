@@ -371,6 +371,66 @@
      * @return void
      */
     public function determine() {
+      // Set up a couple of variables that we will need use in order to
+      // determine the controller file. The directory in which the controllers
+      // are held, the segments to search sub-directories through, and the file
+      // suffix.
+      $dir = $this->rmodule
+           ? MOD . $this->rmodule . '/controllers/'
+           : APP . 'controllers/';
+      $ext = $this->rsuffix != '/'
+           ? $this->rsuffix . EXT
+           : EXT;
+      $segments = $this->rsegments;
+      // If the suffix is a directory separator, then add the default controller
+      // onto the sub-directory segments, acting as if the user is accessing the
+      // default controller that many levels deep, just like DirectoryIndex in
+      // Apache.
+      if($this->rsuffix == '/') {
+        $segments[] = self::$default_controller;
+      }
+      // Declare the $subdir variable so we don't get a Notice thrown at us.
+      $subdir = '';
+      reset($segments);
+      // Loop through the sub-directory segments, testing each level to see if a
+      // controller file exists.
+      do {
+        $controller = current($segments);
+        $file = $dir . $subdir . $controller . $ext;
+        $subdir .= $controller . '/';
+        if(file_exists($file)) {
+          $path = $file;
+          break;
+        }
+      } while(next($segments));
+      // If we couldn't find a controller file, return from this function,
+      // leaving the $p, $c and $m class properties at their defaults (boolean
+      // false).
+      if(!isset($path) || !$path) {
+        return false;
+      }
+      // Save the file path that we just discovered to the $p class property.
+      $this->p = $path;
+      // Save the controller to the $c class property, remembering to prepend
+      // the namespace to the class name.
+      $namespace  = $this->rmodule
+                  ? ns(NS, NSMODULE, $this->rmodule, NSCONTROLLER)
+                  : ns(NS, NSCONTROLLER);
+      $this->c = $namespace . $controller;
+      // If we added the default controller onto the end of the array, we need
+      // to remove it.
+      if($this->rsuffix == '/') {
+        array_pop($segments);
+      }
+      // The following seems to work as far as my testing has gone, but I'm
+      // still not convinced. I'm sure the array pointer gets reset on a call to
+      // array_pop(), so logically the $m class property assignment should be
+      // incorrect when the suffix is a directory separator. I'll look into
+      // again another time after I have sorted out problems with getting the
+      // URI on the root controller/action.
+      $this->m = ($this->m = next($segments))
+               ? $this->m
+               : self::$default_method;
     }
 
     /**
