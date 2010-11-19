@@ -80,11 +80,13 @@
         // Also create defaults for the controller and method. While it can be
         // configured in the config files, we don't want to rely on them as they
         // may not be set.
-        self::$default_controller = is_string(c('default_controller'))
-                                  ? strtolower(c('default_controller'))
+        self::$default_controller = is_string($c = c('default_controller'))
+                                 && preg_match('~^' . VALIDLABEL . '$~', $c)
+                                  ? strtolower($c)
                                   : 'home';
-        self::$default_method     = is_string(c('default_method'))
-                                  ? strtolower(c('default_method'))
+        self::$default_method     = is_string($m = c('default_method'))
+                                 && preg_match('~^' . VALIDLABEL . '$~', $m)
+                                  ? strtolower($m)
                                   : 'index';
       }
       // If the data is not an object, the user must have passed a string to be
