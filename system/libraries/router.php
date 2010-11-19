@@ -197,7 +197,7 @@
       // Get the URI string from the following methods: PATH_INFO,
       // ORIG_PATH_INFO and REQUEST_URI. If none of those provide a URI, just
       // continue with an empty string.
-      $server_methods = array('PATH_INFO', 'ORIGIN_PATH_INFO', 'REQUEST_URI');
+      $server_methods = array('PATH_INFO', 'ORIG_PATH_INFO', 'REQUEST_URI');
       foreach($server_methods as $method) {
         $uri_string = isset($_SERVER[$method])
                     ? $_SERVER[$method]
@@ -216,6 +216,7 @@
       // located in, or the application file, remove them. They have nothing to
       // do with the flow of the application now.
       foreach(array(URL, SELF) as $method) {
+        $method = trim($method, '/');
         if($uri_string == $method) {
           $uri_string = '';
           break;
