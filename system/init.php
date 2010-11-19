@@ -180,20 +180,24 @@
     );
   }
 
-  // Cool. We have functions. Now we want libraries! Big, fat juicy ones first,
-  // for functionality. Then we can have the lean, mean, big-boss libraries! To
-  // make it simple: Library, Core, Controller, Router libraries...
+  // Cool. We have functions. Now we want libraries! Big, fat juicy ones!
+  // Firstly, we want the Singleton and Core libraries, because these are what
+  // every other library extend from.
   load_class('library', false);
   load_class('core', false);
+  // Load both controller and module class definitions, because we don't know at
+  // this point whether we are loading a controller from the main application or
+  // a module.
   load_class('controller', false);
   load_class('module', false);
+  // Load the Router library and grab an instance.
   $r = load_class('router');
 
   // We want to know what request this application is meant to serve!
   if(!$r->valid) {
     show_404();
   }
-  
+
   // Make sure that the path has been set, and then include the controller file.
   $r->path() && require_once $r->path();
 
@@ -238,4 +242,9 @@
   $E =& getInstance();
   $E->output->display();
 
-  // KTHXBAI!
+  //  _  _________ _    ___   ______          _____ _ 
+  // | |/ /__   __| |  | \ \ / /  _ \   /\   |_   _| |
+  // | ' /   | |  | |__| |\ V /| |_) | /  \    | | | |
+  // |  <    | |  |  __  | > < |  _ < / /\ \   | | | |
+  // | . \   | |  | |  | |/ . \| |_) / ____ \ _| |_|_|
+  // |_|\_\  |_|  |_|  |_/_/ \_\____/_/    \_\_____(_)
