@@ -95,7 +95,6 @@
         // Now we know we have a string, parse it with the uri() function.
         $data = uri($data);
       }
-
       // If after all this the data is not in object form, then we obviously got
       // an invalid URI string.
       $this->valid = is_object($data);
@@ -122,8 +121,10 @@
         // Additionally, it would be unwise to allow *nix hidden files.
         if(isset($data->suffix) && $data->suffix) {
           $this->suffix = $data->suffix;
-          $uri_string .= $this->suffix;
         }
+        // Because we set a default suffix as a fallback, we can safely append
+        // the suffix onto the segments of the URI string.
+        $uri_string .= $this->suffix;
       }
       // If the URI string is not empty, set the URI string to what was
       // extracted from the passed data, instead of the default (false).
@@ -274,7 +275,8 @@
         $uri = str_replace($wildcards['match'], $wildcards['replace'], $uri);
         // Use the RegEx we generated to check against the route matcher, and
         // save the wildcards to an array if we do match.
-        if(preg_match('~^' . $uri . '$~', $this->uri_string, $matches)) {
+        $uri_regex = '~^' . str_replace('.', '\\.', $uri) . '$~';
+        if(preg_match($uri_regex, $this->uri_string, $matches)) {
           // We found a route match! If the user has back references, insert
           // them into the route replacer.
           unset($matches[0]);
