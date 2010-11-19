@@ -1,8 +1,8 @@
 <?php
 
-  namespace Eventing\Model
+  namespace Eventing\Model;
 
-  class example extends model {
+  class example extends \Eventing\Library\model {
 
     public function __construct() {
       parent::__construct();
