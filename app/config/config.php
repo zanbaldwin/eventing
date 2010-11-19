@@ -55,6 +55,7 @@
     'redirect_refresh' => false,
     'save_gets' => array('l'),
     'cookie_name' => 'E_cookie',
+    'mod_rewrite' => false,
 
     // Input Class Settings:
     // '^(get|post):[a-zA-Z0-9_-]+$'
