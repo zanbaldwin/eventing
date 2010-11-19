@@ -38,14 +38,6 @@
   defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
   defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
 
-  // Define a PCRE RegEx for a valid label in PHP. This check a string to make
-  // sure that it follows the same syntax as variables, functions and class
-  // names.
-  defined('VALIDLABEL') || define(
-    'VALIDLABEL',
-    '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
-  );
-
   // This is against standard practice, to set error reporting to full, especially
   // for production, but in truth, if you don't want errors coming up in your
   // applications, start writing better code!
@@ -653,7 +645,7 @@
      * @return string|false
      */
     
-    function a2($path, $title = false, $options = array()) {
+    function a($path, $title = false, $options = array()) {
       static $used_urls = array();
       if(!is_string($path)) {
         return false;
@@ -661,7 +653,9 @@
       // Set the optional parameters to safe values.
       $options = (array) $options;
       $title = !is_string($title) || !$title ? false : $title;
-      $shortcut_regex = '|^~([a-zA-Z_][a-zA-Z0-9_]+)$|';
+      // If $path is a reference to a link inside the links configuration file,
+      // then grab the shortcut name, and fetch it from the config array.
+      $shortcut_regex = '#^~('.VALIDLABEL.')$#';
       if(preg_match($shortcut_regex, $path, $matches)) {
         $link = c($matches[1], 'links');
         if(!is_string($link)) {
@@ -669,140 +663,89 @@
         }
         $path = $link;
       }
-    }
-    
-    function a($path, $title = false, $options = array()) {
-      static $used_urls = array();
-      if(!is_array($options)) {
-        $options = array();
-      }
-      if(!is_string($title) || $title == '') {
-        $title = false;
-      }
-      // If the path is a config reference, load it up so we can perform the
-      // check on it as if it had been passed to the function directly.
-      if(preg_match('|^~([a-zA-Z0-9_-]+)$|', $path, $matches)) {
-        $link = c($matches[1], 'links');
-        if(!is_string($link)) {
+      // Check that the $path is not an absolute URL. If not, then treat $path
+      // as an Eventing-style URI.
+      if(!filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
+        $data = uri($path);
+        if(!is_object($data)) {
           return false;
         }
-        $path = $link;
+        // Build the query string depending on what source we are going to use.
+        $query = '';
+        if($data->query) {
+          // An array has been returned, build direct from the data.
+          if(is_array($data->query)) {
+            $query = '?' . http_build_query($data->query, '', '&');
+          }
+          // A string or false has returned. If the string is a key to an array
+          // in the options array, use that array to build the query from.
+          elseif(isset($options[$data->query])
+              && is_array($options[$data->query])
+          ) {
+            $query = '?' . http_build_query($options[$data->query], '', '&');
+            // Unset the query data, we don't want it as HTML attributes.
+            unset($options[$data->query]);
+          }
+        }
+        // Rebuild our path from the data parsed from the originally passed
+        // string.
+        $path = ($data->absolute    ? BASEURL               : URL)
+              . (!c('mod_rewrite')  ? SELF . '/'            : '')
+              . ($data->module      ? $data->module . '@'   : '')
+              . $data->segments
+              . ($data->suffix      ? $data->suffix         : DEFAULTSUFFIX)
+              . $query
+              . ($data->fragment    ? '#' . $data->fragment : '');
       }
-      // The segment regular expression is not easy to read, so we'll break it
-      // down here.
-      $segment_regex['suffix'] = '[a-zA-Z0-9]*\:';
-      // Segments can only contain alphanumeric characters, underscores, hyphens
-      // and segment separators.
-      $segment_regex['segments'] = '[a-zA-Z0-9/_-]+';
-      // The query string is a bit different, because there are so many ways of
-      // including it.
-      $segment_regex['query'] = array(
-        '\?(?:[a-zA-Z][a-zA-Z\:]*)?\?',
-        '\?[^\?#]*',
-      );
-      $segment_regex['query'] = '(?:' . implode('|', $segment_regex['query']) . ')';
-      // The fragment is easy. Pretty much any characters are allowed after a hash
-      // symbol.
-      $segment_regex['fragment'] = '#.*';
-      // Now combine all the part regular expressions together to form an AWESOME
-      // ALLIANCE!
-      foreach($segment_regex as &$regex) {
-        $regex = '(' . $regex . ')?';
-      }
-      $segment_regex = '~^' . implode('', $segment_regex) . '$~';
-      // Filter $path.
-      // Depending on what format the path is in, is how we grab the URL from it.
-      switch(true) {
-        // Valid URL.
-        case filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED):
-          $url = $path;
-          break;
-        // Segments.
-        case preg_match($segment_regex, $path, $matches):
-          if(!isset($matches[1]) || strlen($matches[1]) == 0) {
-            $matches[1] = c('url_default_suffix') . ':';
+      // The path is now a valid URL!
+      
+      
+      if(in_array($path, $used_urls)) {
+        if(isset($options['rel'])) {
+          if(!is_array($options['rel'])) {
+            $rels = xplode(' ', (string) $options['rel']);
           }
-          $suffix = strlen($matches[1]) > 1
-                  ? '.' . substr($matches[1], 0, -1)
-                  : '/';
-          if(!isset($matches[2])) {
-            $matches[2] = '';
+          if(!in_array('nofollow', $rels)) {
+            $rels[] = 'nofollow';
           }
-          $base = substr($matches[2], 0, 1) == '/';
-          $segments = trim($matches[2], '/');
-          if($segments == '') {
-            $suffix = '';
-          }
-          $query = '';
-          if(isset($matches[3]) && strlen($matches[3]) > 1) {
-            if(substr($matches[3], -1) == '?') {
-              $matches[3] = trim($matches[3], '?');
-              if($matches[3] == '') {
-                $matches[3] = 'query_string';
-              }
-              if(isset($options[$matches[3]])) {
-                $query = is_array($options[$matches[3]])
-                       ? http_build_query($options[$matches[3]])
-                       : $options[$matches[3]];
-                if($title) {
-                  $query = htmlentities($query);
-                }
-                unset($options[$matches[3]]);
-                if(substr($query, 0, 1) != '?') {
-                  $query = '?' . $query;
-                }
-              }
-            }
-            else {
-              $query = $matches[3];
-            }
-          }
-          $fragment = '';
-          if(isset($matches[4]) && strlen($matches[4]) > 1) {
-            $fragment = $matches[4];
-          }
-          
-          $url = $base ? BASEURL : URL;
-          $url .= c('url_mod_rewrite') ? '' : SELF . '/';
-          $url .= $segments . $suffix . $query . $fragment;
-          break;
-        // Anthing else.
-        default:
-          return false;
-          break;
-      }
-      // Rel Nofollow
-      if(in_array($url, $used_urls)) {
-        $options['rel'] = isset($options['rel'])
-                        ? trim($options['rel'] . ' nofollow')
-                        : 'nofollow';
+          $options['rel'] = implode(' ', $rels);
+        }
+        else {
+          $options['rel'] = 'nofollow';
+        }
       }
       elseif($title) {
-        $used_urls[] = $url;
+        $used_urls[] = $path;
       }
-      // Title
-      if(is_string($title)) {
-        // Compile the options string
-        $attributes = '';
-        if(is_array($options) && count($options)) {
-          // We do not want the href attribute being overwritten.
-          if(isset($options['href'])) {
-            unset($options['href']);
+      // If the title evaluates to true, it means we have a valid string (we
+      // have already done checks on it). We want to wrap the URL in an anchor
+      // tag, and add a title and attributes.
+      if($title) {
+        // Compile the options string from the array passed in the third
+        // parameter.
+        $o = '';
+        foreach($options as $attr => $value) {
+          // We do not want our href attribute being overwritten, else there
+          // would be no point in having the first parameter!
+          if($attr = 'href') {
+            continue;
           }
-          // Loop through and add them all as a single string.
-          foreach($options as $attr => $value) {
-            if (is_string($attr)
-             && is_string($value)
-             && preg_match('|^[a-zA-Z][a-zA-Z\:]*$|', $attr)
-             && strpos($value, '"') === false
-            ) {
-              $attributes .= ' ' . $attr . '="' . $value . '"';
+          // If the attribute isn't a string, then it can't go in the HTML tag.
+          if(is_string($attr)) {
+            // If the value is an array (such as an array of rel tags or class
+            // names), implode them into a space-separated string.
+            if(is_array($value)) {
+              $value = implode(' ', $value);
             }
+            $o .= ' ' . $attr . '="' . htmlentities((string) $value) . '"';
           }
         }
-        $url = '<a href="' . $url . '"' . $attributes . '>' . $title . '</a>';
+        // Build our HTML tag.
+        $path = '<a href="' . htmlentities($path) . '"' . $o . '>'
+              . $title
+              . '</a>';
       }
-      return $url;
+      return $path;
     }
   }
 
@@ -1010,6 +953,21 @@
       return 'Copyright &#169; ' . $holder . ' ' . $since . $year;
     }
   }
+
+  // Define a PCRE RegEx for a valid label in PHP. This check a string to make
+  // sure that it follows the same syntax as variables, functions and class
+  // names.
+  defined('VALIDLABEL') || define(
+    'VALIDLABEL',
+    '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
+  );
+  defined('DEFAULTSUFFIX') || define(
+    'DEFAULTSUFFIX',
+    is_string($s = c('default_suffix'))
+   && preg_match('/^\.[a-zA-Z0-9]+$/', $s)
+    ? strtolower($s)
+    : '/'
+  );
 
   // If we don't do this, PHP (we use versions above 5.2 remember?) will throw a
   // little tantrum. Let's keep it happy :)
