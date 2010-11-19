@@ -34,8 +34,8 @@
     // store an instance of this class in the following variable.
     protected static $_instance;
     //  Prepend the variables with underscores as to not clash with libraries.
-    protected $_models = array(),
-              $_modules = array();
+    private $_models = array(),
+            $_modules = array();
 
     protected function __construct() {
       self::$_instance =& $this;
