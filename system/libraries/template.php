@@ -54,6 +54,7 @@ class template extends library {
   $valid_name = '[a-zA-Z_][a-zA-Z0-9_]*';
 
   protected function __construct() {
+    $this->section_class = ns(NS, NSLIBRARY) . $this->section_class;
     $theme = c('default_theme');
     $this->theme = is_string($theme)
     && $theme != ''
