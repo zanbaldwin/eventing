@@ -190,6 +190,8 @@
   // a module.
   load_class('controller', false);
   load_class('module', false);
+  // Load the model library, so it can be extended when we load a model.
+  load_class('model', false);
   // Load the Router library and grab an instance.
   $r = load_class('router');
 
@@ -235,7 +237,6 @@
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!
-
   $E =& getInstance();
   $E->output->display();
 
