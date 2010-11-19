@@ -673,6 +673,17 @@
         if(!is_object($data)) {
           return false;
         }
+        // Determine how our URL should reference the domain and application
+        // directory.
+        $server = ($data->absolute    ? BASEURL             : URL)
+                . (!c('mod_rewrite')  ? SELF . '/'          : '');
+        // Build the URL part that gets used by the application for routing.
+        $application = ltrim(
+          ($data->module              ? $data->module . '@' : '')
+        . $data->segments
+        . $data->suffix,
+          '/'
+        );
         // Build the query string depending on what source we are going to use.
         $query = '';
         if($data->query) {
@@ -690,15 +701,11 @@
             unset($options[$data->query]);
           }
         }
-        // Rebuild our path from the data parsed from the originally passed
-        // string.
-        $path = ($data->absolute    ? BASEURL               : URL)
-              . (!c('mod_rewrite')  ? SELF . '/'            : '')
-              . ($data->module      ? $data->module . '@'   : '')
-              . $data->segments
-              . ($data->suffix      ? $data->suffix         : DEFAULTSUFFIX)
-              . $query
-              . ($data->fragment    ? '#' . $data->fragment : '');
+        // Include a URL fragment if one has been set.
+        $fragment = $data->fragment ? '#' . $data->fragment : '';
+        // Rebuild our path from the URL parts we just created from the string
+        // that was originally passed to the function.
+        $path = $server . $application . $query . $fragment;
       }
       // The path is now a valid URL!
       
