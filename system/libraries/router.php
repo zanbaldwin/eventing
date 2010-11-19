@@ -247,13 +247,6 @@
       // the module as false. We have already set the suffix, so grab it from
       // the class properties.
       if(!$this->uri_string) {
-        $this->rsegment_string = implode(
-          '/',
-          array(
-            self::$default_controller,
-            self::$default_method
-          )
-        );
         $this->rsuffix = $this->suffix;
         return;
       }
