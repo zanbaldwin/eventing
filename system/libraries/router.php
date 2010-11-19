@@ -75,13 +75,16 @@
         // separator.
         self::$default_suffix     = is_string($s = c('default_suffix'))
                                  && preg_match('/^\.[a-zA-Z0-9]+$/', $s)
-                                  ? $s
+                                  ? strtolower($s)
                                   : '/';
+        // Also create defaults for the controller and method. While it can be
+        // configured in the config files, we don't want to rely on them as they
+        // may not be set.
         self::$default_controller = is_string(c('default_controller'))
-                                  ? c('default_controller')
+                                  ? strtolower(c('default_controller'))
                                   : 'home';
         self::$default_method     = is_string(c('default_method'))
-                                  ? c('default_method')
+                                  ? strtolower(c('default_method'))
                                   : 'index';
       }
       // If the data is not an object, the user must have passed a string to be
@@ -117,11 +120,11 @@
       // Check that module, segments and suffix exist in the data, and set them
       // to class properties and the computed URI string.
       if(isset($data->module) && $data->module) {
-        $this->module = $data->module;
+        $this->module = strtolower($data->module);
         $uri_string .= $this->module . '@';
       }
       if(isset($data->segments) && $data->segments) {
-        $this->segment_string = $data->segments;
+        $this->segment_string = strtolower($data->segments);
         $uri_string .= $this->segment_string;
         // We don't want a suffix of false, so set the default suffix as a
         // directory separator.
@@ -130,7 +133,7 @@
         // have a file extension if you are specifying the root directory.
         // Additionally, it would be unwise to allow *nix hidden files.
         if(isset($data->suffix) && $data->suffix) {
-          $this->suffix = $data->suffix;
+          $this->suffix = strtolower($data->suffix);
         }
         // Because we set a default suffix as a fallback, we can safely append
         // the suffix onto the segments of the URI string.
@@ -244,6 +247,7 @@
       // defaults and return.
       $routes = get_config('routes');
       if(!is_array($routes) || !$routes) {
+        $this->ruri_string      = $this->uri_string;
         $this->rmodule          = $this->module;
         $this->rsegment_string  = $this->segment_string;
         $this->rsuffix          = $this->suffix;
@@ -307,17 +311,17 @@
           // to the Re-Routed parts, instead of the URL parts.
           $ruri_string = '';
           if($data->module) {
-            $this->rmodule = $data->module;
+            $this->rmodule = strtolower($data->module);
             $ruri_string .= $this->rmodule . '@';
           }
           if($data->segments) {
-            $this->rsegment_string = $data->segments;
+            $this->rsegment_string = strtolower($data->segments);
             $ruri_string .= $this->rsegment_string;
             $this->rsuffix = self::$default_suffix;
             if($data->suffix) {
-              $this->rsuffix = $data->suffix;
-              $ruri_string .= $this->rsuffix;
+              $this->rsuffix = strtolower($data->suffix);
             }
+            $ruri_string .= $this->rsuffix;
           }
           if($ruri_string) {
             $this->ruri_string = $ruri_string;
