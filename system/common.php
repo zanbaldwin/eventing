@@ -345,7 +345,7 @@
         }
         require_once $file;
       }
-      if(!is_array($config)) {
+      if(!isset($config) || !is_array($config)) {
         return false;
       }
       $main_config[$config_file] =& $config;
