@@ -235,10 +235,7 @@
 
   // Right, that's everything done! Just dump the output to the client end
   // finish the script!
-  
-  $C =& \Eventing\Library\controller::getInstance();
-  $C->output->display();
-  
+
   $E =& getInstance();
   $E->output->display();
 
