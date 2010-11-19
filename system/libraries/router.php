@@ -28,24 +28,27 @@
 
   class router extends library {
 
-    protected static $_instance = false;
+    protected static
+              $_instance          = false,
+              $default_suffix     = false,
+              $default_controller = false,
+              $default_method     = false;
 
-    public    $valid            = false,
-              $uri_string       = false,
-              $ruri_string      = false;
+    public    $valid              = false,
+              $uri_string         = false,
+              $ruri_string        = false;
 
-    protected $segments         = array(),
-              $rsegments        = array(),
-              $default_suffix   = false,
-              $module           = false,
-              $rmodule          = false,
-              $segment_string   = false,
-              $rsegment_string  = false,
-              $suffix           = false,
-              $rsuffix          = false,
-              $p                = false,
-              $c                = false,
-              $m                = false;
+    protected $segments           = array(),
+              $rsegments          = array(),
+              $module             = false,
+              $rmodule            = false,
+              $segment_string     = false,
+              $rsegment_string    = false,
+              $suffix             = false,
+              $rsuffix            = false,
+              $p                  = false,
+              $c                  = false,
+              $m                  = false;
 
     /**
      * Constructor Method
@@ -63,17 +66,22 @@
       // default.
       if(!self::$_instance) {
         self::$_instance =& $this;
+        // Instead of worrying all the time about the confusion of URI suffixes,
+        // like we have in the past, define the default suffix here and be done
+        // with it. It must either be a file extension containing only
+        // alphanumeric characters, preceded with a full stop, or a directory
+        // separator.
+        self::$default_suffix     = is_string($s = c('default_suffix'))
+                                 && preg_match('/^\.[a-zA-Z0-9]+$/', $s)
+                                  ? $s
+                                  : '/';
+        self::$default_controller = is_string(c('default_controller'))
+                                  ? c('default_controller')
+                                  : 'home';
+        self::$default_method     = is_string(c('default_method'))
+                                  ? c('default_method')
+                                  : 'index';
       }
-      // Instead of worrying all the time about the confusion of URI suffixes,
-      // like we have in the past, define the default suffix here and be done
-      // with it. It must either be a file extension containing only
-      // alphanumeric characters, preceded with a full stop, or a directory
-      // separator.
-      $ds = c('default_suffix');
-      $this->default_suffix = is_string($ds)
-                           && preg_match('/^\.[a-zA-Z0-9]+$/', $ds)
-                            ? $ds
-                            : '/';
       // If the data is not an object, the user must have passed a string to be
       // parsed by the uri() function.
       if(!is_object($data)) {
@@ -269,7 +277,7 @@
         // suffix), add the default suffix to the end because our application's
         // URI will always contain one.
         if(substr($uri, -1) != '/' && strpos($uri, '.') === false) {
-          $uri .= $this->default_suffix;
+          $uri .= self::$default_suffix;
         }
         // Replace wildcards in the route matcher with the correct PCRE RegEx.
         $uri = str_replace($wildcards['match'], $wildcards['replace'], $uri);
@@ -303,7 +311,7 @@
           if($data->segments) {
             $this->rsegment_string = $data->segments;
             $ruri_string .= $this->rsegment_string;
-            $this->rsuffix = $this->default_suffix;
+            $this->rsuffix = self::$default_suffix;
             if($data->suffix) {
               $this->rsuffix = $data->suffix;
               $ruri_string .= $this->rsuffix;
@@ -601,7 +609,7 @@
       if(!$this->valid) {
         return false;
       }
-      return $this->suffix ? $this->suffix : $this->default_suffix;
+      return $this->suffix ? $this->suffix : self::$default_suffix;
     }
 
     /**
@@ -618,7 +626,7 @@
       if(!$this->valid) {
         return false;
       }
-      return $this->suffix ? $this->rsuffix : $this->default_suffix;
+      return $this->suffix ? $this->rsuffix : self::$default_suffix;
     }
 
   }
