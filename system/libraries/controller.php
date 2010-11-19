@@ -35,7 +35,7 @@
      */
     protected function __construct() {
       parent::__construct();
-      $libs = array('uri', 'router', 'load', 'input', 'output', 'template');
+      $libs = array('router', 'load', 'input', 'output', 'template');
       foreach($libs as $lib) {
         // We want to load the libraries to be stored in variables of the Core
         // object, not the controller ($this) object. This is so our models can
