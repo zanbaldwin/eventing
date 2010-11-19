@@ -242,9 +242,19 @@
     protected function reroute() {
       // First of all we need to know if the URI string exists. If you wanted to
       // re-route the root URI, then change your default controller, method and
-      // suffix in the configuration files. Return here, the defaults are set to
-      // false already, just like the non-routed URI if it points to root.
+      // suffix in the configuration files.
+      // Set the controller and method/action to the config defaults, keeping
+      // the module as false. We have already set the suffix, so grab it from
+      // the class properties.
       if(!$this->uri_string) {
+        $this->rsegment_string = implode(
+          '/',
+          array(
+            self::$default_controller,
+            self::$default_method
+          )
+        );
+        $this->rsuffix = $this->suffix;
         return;
       }
       // Next we need to see if we have any routes, if we haven't, set the
