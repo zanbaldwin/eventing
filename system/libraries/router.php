@@ -125,20 +125,21 @@
         $this->module = strtolower($data->module);
         $uri_string .= $this->module . '@';
       }
+      // We don't want a suffix of false, so set the default suffix as a
+      // directory separator.
+      $this->suffix = '/';
+      // The URL suffix will only get set if segments are present. You can't
+      // have a file extension if you are specifying the root directory.
+      // Additionally, it would be unwise to allow *nix hidden files.
+      if(isset($data->suffix) && $data->suffix) {
+        $this->suffix = strtolower($data->suffix);
+      }
       if(isset($data->segments) && $data->segments) {
         $this->segment_string = strtolower($data->segments);
         $uri_string .= $this->segment_string;
-        // We don't want a suffix of false, so set the default suffix as a
-        // directory separator.
-        $this->suffix = '/';
-        // The URL suffix will only get set if segments are present. You can't
-        // have a file extension if you are specifying the root directory.
-        // Additionally, it would be unwise to allow *nix hidden files.
-        if(isset($data->suffix) && $data->suffix) {
-          $this->suffix = strtolower($data->suffix);
-        }
-        // Because we set a default suffix as a fallback, we can safely append
-        // the suffix onto the segments of the URI string.
+        // We do not want to append a suffix onto the URI string if there are no
+        // segments, but because we set a default suffix as a fallback, we can
+        // safely append the suffix onto the segments here.
         $uri_string .= $this->suffix;
       }
       // If the URI string is not empty, set the URI string to what was
@@ -224,7 +225,7 @@
         if(strlen($uri_string) > strlen($method)
            && substr($uri_string, 0, strlen($method)) == $method
         ) {
-          $uri_string = substr($uri_string, strlen($method));
+          $uri_string = trim(substr($uri_string, strlen($method)), '/');
         }
       }
       return trim(filter_path($uri_string), '/');
