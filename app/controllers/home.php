@@ -61,6 +61,9 @@
         
         '#fragment',
         '/#fragment',
+      
+        '#',
+        '/#',
         
         'module@/controller/method/param.suffix?query=param#fragment',
         'module @ /controller/method/param .suffix ?query=param #fragment',
@@ -68,17 +71,26 @@
 
       // Echo out all the route tests.
       $data = array();
+      $invalid = content('images/slash.png');
+      $invalid = $invalid
+               ? '<img src="' . $invalid . '" alt="Invalid" width="16" height="16" />'
+               . ' <span style="color:#900;">Invalid</span>'
+               : '';
+      $valid = content('images/tick.png');
+      $valid = $valid
+             ? '<img src="' . $valid . '" alt="Invalid" width="16" height="16" />'
+             : '';
       if(is_array($routes) && $routes) {
         foreach($routes as $route) {
           $r = $this->router->route($route);
           $rvalid = is_object($r) && $r->valid;
           $temp = array(
             'euri'  => $route,
-            'url'   => a($route, a($route)),
+            'url'   => ($a = a($route, htmlentities(a($route)))) ? $valid . ' ' . $a : $invalid,
             'route' => $rvalid
-                     ? $r->controller() . '::' . $r->method()
+                     ? $valid . ' ' . $r->controller() . '::' . $r->method()
                      . '(<span>' . $r->rsuffix() . '</span>)'
-                     : '',
+                     : $invalid,
           );
           $data[] = (object) $temp;
         }
