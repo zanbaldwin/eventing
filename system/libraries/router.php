@@ -410,8 +410,10 @@
       } while(next($segments));
       // If we couldn't find a controller file, return from this function,
       // leaving the $p, $c and $m class properties at their defaults (boolean
-      // false).
+      // false). Don't forget to specify that this was unsuccessful, and
+      // therefore the route is invalid.
       if(!isset($path) || !$path) {
+        $this->valid = false;
         return false;
       }
       // Save the file path that we just discovered to the $p class property.
