@@ -17,11 +17,7 @@
     }
 
     public function index() {
-     $this->template->create(array('s' => 'html5shell'));
-     $this->template->load('s');
-    
-      echo '<h1>' . __METHOD__ . '(' . $this->router->suffix() . ')</h1>';
-
+      $this->template->create(array('s' => 'html5shell'));
       // Compile a list of routes to test.
       $routes = array(
         'example@mycontroller',
@@ -61,6 +57,9 @@
         '?query?',
         '/?query?',
         
+        '?query',
+        '/?query',
+        
         '#fragment',
         '/#fragment',
         
@@ -69,19 +68,28 @@
       );
 
       // Echo out all the route tests.
+      $data = array();
       if(is_array($routes) && $routes) {
-        echo '<table>';
         foreach($routes as $route) {
-          $a = a($route);
-          if($a) {
-            echo "<tr><td><a href=\"{$a}\">{$route}</a></td><td>{$a}</td></tr>\n";
-          }
-          else {
-            echo "<tr><td><span style=\"color:#d00;\">{$route}</span></td><td><span style=\"color:#d00;\">{$route}</span></td></tr>\n";
-          }
+          $r = $this->router->route($route);
+          $rvalid = is_object($r) && $r->valid;
+          $temp = array(
+            'euri'  => $route,
+            'url'   => a($route, a($route)),
+            'route' => $rvalid
+                     ? $r->controller() . '::' . $r->method()
+                     . '(<span>' . $r->rsuffix() . '</span>)'
+                     : '',
+          );
+          $data[] = (object) $temp;
         }
-        echo '</table>';
       }
+      $this->template->section('s')->add(array(
+        'title'   => 'Eventing PHP Application Framework',
+        'heading' => __METHOD__ . '(<span>' . $this->router->suffix() . '</span>)',
+        'routes'  => $data,
+      ));
+      $this->template->load('s');
     }
 
   }

@@ -58,6 +58,29 @@ code {
   font-size: 100%;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+}
+tr:nth-child(2n-1) {
+  background-color: #eee;
+}
+thead td {
+  font-weight: bold;
+  background-color: #fff !important;
+}
+td {
+  margin: 0;
+  padding: 5px;
+}
+h1 span, td span {
+  color: #999;
+}
 footer p {
   margin: 0;
   padding: 0;

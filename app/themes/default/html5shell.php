@@ -1,60 +1,71 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <!-- This page was generated in {elapsed_time} seconds and took {memory_usage} of memory. -->
+    <!-- This page was generated in {elapsed_time} seconds, rendered in {render_time} seconds and took {memory_usage} of memory. -->
     <title><?php echo $title; ?></title>
     <meta charset="utf-8" />
-    <link href="<?php echo content('css/main.less'); ?>" rel="stylesheet/less" media="screen, projection" title="Eventing Styles" />
-    <script src="<?php echo content('js/mootools.js'); ?>"></script>
-    <script src="<?php echo content('js/less.js'); ?>"></script>
-    <script src="<?php echo content('js/main.js'); ?>"></script>
+    <link href="<?php echo content('css/main.css'); ?>" rel="stylesheet" media="screen, projection" title="Eventing Styles" type="text/css" />
   </head>
 
   <body><div id="container">
 
     <header>
       <hgroup>
-        <h1>Eventing Framework / <a href="<?php echo BASEURL; ?>user_guide/">User Guide</a></h1>
-        <h2>PHP Application Framework based on CodeIgniter</h2>
+        <h1><?php echo isset($heading) ? $heading : 'Eventing'; ?></a></h1>
+        <h2>PHP Application Framework based on the HMVC design pattern.</h2>
       </hgroup>
     </header>
 
     <section>
       <article>
         <p>
-          Eventing is a <strong>PHP Application Framework</strong> based on <?php echo a('~ci', 'CodeIgniter'); ?> by <?php echo a('~profile', 'Alexander Baldwin'); ?>,
-          licensed under either <?php echo a('~licensemit', 'MIT'); ?> or <?php echo a('~licensegpl', 'GPL v3'); ?>, whichever suits you best.
+          <?php echo a('~eventingsource', 'Eventing'); ?> is a PHP framework
+          based on the HMVC design pattern by
+          <?php echo a('~profile', 'Alexander Baldwin'); ?>, licensed under the
+          <?php echo a('~licensemit', 'MIT/X11 license'); ?>. At the core, the
+          basic structure is similar to <?php echo a('~ci', 'CodeIgniter'); ?>
+          (the early core libraries were inspired by Codeigniter's design), but
+          the framework boasts features such as <?php echo a('module@', 'modules'); ?>,
+          namespaces, <?php echo a('example.aspx', 'multiple URL suffixes'); ?>,
+          a moderately advanced theme templating system, etc.
         </p>
         <p>
-          Like CodeIgniter, it uses <strong>Model-View-Controller</strong>, but adds other features like <?php echo a('aspx:example', 'multiple suffixes (file extensions)'); ?>
-          and a moderately advanced view templating system.
+          The Eventing Framework, at this moment in time, is a fun side-project
+          and is not recommended for production use. You can grab a copy of the
+          source <?php echo a('~eventingsource', 'on GitHub'); ?>, or follow
+          development progress <?php echo a('~eventingtwitter', 'on Twitter'); ?>.
         </p>
         <p>
-          At this moment in time, Eventing is a personal project and is not recommended for production use (late-alpha development). If you would like to tinker around with it,
-          the source code is <?php echo a('~eventingsource', 'hosted on GitHub'); ?>.
+          Eventing requires <?php echo a('~php53', 'PHP v5.3'); ?> or greater.
         </p>
         <p>
-          If you already have the source, the page you are viewing is calling the
-          <?php
-            echo a(
-              'home/index??',
-              '<code>home::index()</code>',
-              array(
-                'query_string' => array(
-                  'rel' => 'install',
-                  'version' => '1.0'
-                )
-              )
-            );
-          ?>
-          controller, located in the file 
-          "<code title="Load the default controller in a modal window.">app/controllers/home.php</code>".<br />
-          The HTML of this page is found in the file "<code title="Load the HTML page in a modal window.">app/themes/default/html5shell.php</code>".
+          Enjoy!
         </p>
-        <p>
-          <?php /* For the documentation link, we are using BASEURL instead of a(), incase SELF is in the URL. */ ?>
-          Before you dive in, you might want to read the <a href="<?php echo BASEURL; ?>user_guide/">documentation</a>.
-        </p>
+      </article>
+    </section>
+    <section>
+      <article>
+        <header>
+          <h3>Development Testing</h3>
+        </header>
+        <table>
+          <thead>
+            <td>Eventing URI</td>
+            <td>Translated URL</td>
+            <td>Route</td>
+          </thead>
+          <tbody>
+            <?php foreach($routes as $route): ?>
+              <tr>
+                <td><span>"</span><?php echo $route->euri; ?><span>"</span></td>
+                <td><?php echo $route->url; ?></td>
+                <td>
+                  <?php echo $route->route; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
       </article>
     </section>
 
