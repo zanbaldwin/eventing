@@ -704,8 +704,17 @@
         // Include a URL fragment if one has been set.
         $fragment = $data->fragment ? '#' . $data->fragment : '';
         // Rebuild our path from the URL parts we just created from the string
-        // that was originally passed to the function.
-        $path = $server . $application . $query . $fragment;
+        // that was originally passed to the function. If only the fragment was
+        // passed, then only use the fragment part, as passing more than that
+        // will make the page reload. Fragment is usually intended for internal
+        // page navigation or Javascript, neither of which want the page to
+        // reload.
+        $uri = $application . $query . $fragment;
+        if($path != '#') {
+        	$path = substr($uri, 0, 1) == '#' && !$data->absolute
+        	      ? $fragment
+        	      : $server . $uri;
+        }
       }
       // The path is now a valid URL!
       
