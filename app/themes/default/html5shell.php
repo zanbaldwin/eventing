@@ -5,6 +5,7 @@
     <title><?php echo $title; ?></title>
     <meta charset="utf-8" />
     <link href="<?php echo content('css/main.css'); ?>" rel="stylesheet" media="screen, projection" title="Eventing Styles" type="text/css" />
+    <link href="<?php echo content('images/crown.png'); ?>" rel="shortcut icon" type="image/png" />
   </head>
 
   <body><div id="container">
@@ -47,6 +48,7 @@
       <article>
         <header>
           <h3>Development Testing</h3>
+          <?php echo a('#', 'Add a route'); ?>.
         </header>
         <table>
           <thead>

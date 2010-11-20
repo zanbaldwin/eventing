@@ -27,6 +27,10 @@ h2 {
   font-size: 1.25em;
   color: #040;
 }
+h3 {
+	display: block;
+	display: run-in;
+}
 
 section {
   border: 1px solid #999;
