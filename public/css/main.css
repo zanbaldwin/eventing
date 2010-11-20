@@ -20,6 +20,9 @@ h1, h2 {
   color: #020;
   margin: 0 0 8px 0;
 }
+h1 {
+  border-bottom: 1px dotted #060;
+}
 h2 {
   font-size: 1.25em;
   color: #040;
@@ -31,6 +34,12 @@ section {
   padding: 20px 20px 12px 20px;
   margin: 0 0 1em;
   overflow:hidden;
+  border-radius: 7px;
+  -webkit-box-shadow: #caa 0px 1px 8px;
+  box-shadow: #caa 0px 1px 8px;
+  background-image: none;
+  background-color: #dff;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dff), to(#fff));
 }
 
 a {
@@ -67,12 +76,8 @@ tr {
   border-bottom: 1px solid #ddd;
   margin: 0;
 }
-tr:nth-child(2n-1) {
-  background-color: #eee;
-}
 thead td {
   font-weight: bold;
-  background-color: #fff !important;
 }
 td {
   margin: 0;
@@ -86,3 +91,14 @@ footer p {
   padding: 0;
 }
 
+section:hover {
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease-in-out;
+  
+  -webkit-box-shadow: 0 2px 10px #bbb;
+  box-shadow: 0 2px 10px #bbb;
+  background-image: -webkit-gradient();
+}

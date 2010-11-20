@@ -17,7 +17,6 @@
     }
 
     public function index() {
-      $this->template->create(array('s' => 'html5shell'));
       // Compile a list of routes to test.
       $routes = array(
         'example@mycontroller',
@@ -84,6 +83,7 @@
           $data[] = (object) $temp;
         }
       }
+      $this->template->create(array('s' => 'html5shell'));
       $this->template->section('s')->add(array(
         'title'   => 'Eventing PHP Application Framework',
         'heading' => __METHOD__ . '(<span>' . $this->router->suffix() . '</span>)',
