@@ -141,7 +141,7 @@ class output extends library
     4);
     $pseudo = array(
                 '{elapsed_time}' => $benchmark,
-                '{memory_usage}' => round(memory_get_usage() / 1024 / 1024, 2) . ' Mb'
+                '{memory_usage}' => round((memory_get_usage() - E_MEMORY) / 1024 / 1024, 2) . ' Mb'
                 );
                 foreach($pseudo as $match => $replace)
                 {
