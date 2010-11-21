@@ -51,7 +51,7 @@
      * @return fatalerror
      */
     final public function __clone() {
-      trigger_error('Cannot clone Singleton library.', E_USER_ERROR);
+      trigger_error('Cannot clone framework library.', E_USER_ERROR);
     }
 
     /**

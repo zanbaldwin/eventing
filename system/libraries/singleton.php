@@ -27,7 +27,7 @@
    * instances of classes can be returned with the getInstance() method, whilst
    * new instances are forbidden.
    */
-  abstract class library
+  abstract class singleton
   {
 
     /**
@@ -51,7 +51,7 @@
      * @return fatalerror
      */
     final public function __clone() {
-      trigger_error('Cannot clone Singleton library.', E_USER_ERROR);
+      trigger_error('Cannot clone framework global library.', E_USER_ERROR);
     }
 
     /**
