@@ -179,13 +179,18 @@
     . ', but this framework requires version 5.3.0 or greater.'
     );
   }
-
-  // Cool. We have functions. Now we want libraries! Big, fat juicy ones!
-  // Firstly, we want the Singleton and Core libraries, because these are what
-  // every other library extend from.
+  
+  // Cool. We have functions. Now we want libraries! Big, fat, juicy libraries!
+  
+  // Firstly, we want the Singleton and Library libraries. These are the classes
+  // that force you to grab existing instances of Eventing libraries, rather
+  // than create new ones.
+  load_class('singleton', false);
   load_class('library', false);
+  // The Core library is a commonground between application controllers and
+  // module controllers.
   load_class('core', false);
-  // Load both controller and module class definitions, because we don't know at
+  // Load both Controller and Module class definitions, because we don't know at
   // this point whether we are loading a controller from the main application or
   // a module.
   load_class('controller', false);
