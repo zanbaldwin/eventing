@@ -746,7 +746,7 @@
         foreach($options as $attr => $value) {
           // We do not want our href attribute being overwritten, else there
           // would be no point in having the first parameter!
-          if($attr = 'href') {
+          if($attr == 'href') {
             continue;
           }
           // If the attribute isn't a string, then it can't go in the HTML tag.
