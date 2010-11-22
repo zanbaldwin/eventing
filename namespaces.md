@@ -86,6 +86,7 @@ Modules
 
 Modules are proving to be rather tricky. So a couple of development decisions
 must be made on simple ground rules governing how modules should be implemented.
+
 - Firstly, the router might need to be rewritten AGAIN; module controllers
   should not be publicly accessible.
 - A module is meant to be THIRD-PARTY functionality that is not part of your
@@ -95,3 +96,4 @@ must be made on simple ground rules governing how modules should be implemented.
   should therefore only have access to the Router and Input libraries (need some
   thought on whether they should be allowed other libraries such as HTTP, Prowl,
   etc.)
+
