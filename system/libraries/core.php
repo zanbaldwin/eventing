@@ -28,7 +28,7 @@
   /**
    *
    */
-  class core extends library {
+  class core extends singleton {
 
     // We don't want to create an extra instance when extending classes, so
     // store an instance of this class in the following variable.
@@ -38,7 +38,19 @@
             $_modules = array();
 
     protected function __construct() {
+      // Save the instance, in case another one is created by another module
+      // extending the Core library.
       self::$_instance =& $this;
+      // Load libraries that are common to both application and modules.
+      $libs = array('router', 'input', 'output');
+      foreach($libs as $lib) {
+        if(!isset($this->$lib)) {
+          $obj = load_class($lib);
+          if(is_object($obj)) {
+            $this->$lib = load_class($lib);
+          }
+        }
+      }
     }
 
     /**

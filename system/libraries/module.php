@@ -35,6 +35,16 @@
 
     protected function __construct() {
       parent::__construct();
+      // Load the libraries that need separate instances for separate modules.
+      $libs = array('load', 'template');
+      foreach($libs as $lib) {
+        if(!isset($this->$lib)) {
+          $obj = load_class($lib);
+          if(is_object($obj)) {
+            $this->$lib = load_class($lib);
+          }
+        }
+      }
     }
 
   }
