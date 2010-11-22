@@ -75,15 +75,18 @@ not need altering; just module and suffix referencing.
 Edit: It has been decided upon the following syntax. Throughout the framework,
 the following syntax is refered to as an "eURI".
 
-    module @ segments .suffix ?query[?] #fragment
+    module[ ]@ segments .suffix ?query[?] #fragment
 
-A directory separator (slash) preceeding the segments indicates that the
-resulting URL should be absolute, (ie. including the HTTP scheme and domain).
-The brackets infer that a character, or set of characters is optional within a
-part of the eURI. Each part of the eURI is optional, though the suffix will be
-ignored if there are no segments, regardless to what it has been set to.
-All hyphens in the application URI string will get replaced by underscores in
-the re-routed URI.
+- A directory separator (slash) preceeding the segments indicates that the
+  resulting URL should be absolute, (ie. including the HTTP scheme and domain).
+- Each part of the eURI is separated with a space in the above example, although
+  any (any type and any amount) whitespace at these points is permitted. Each part
+  of the eURI is optional, though the suffix will be ignored if there are no
+  segments, regardless of what it has been set to.
+- (square) Brackets infer that a character, or set of characters is optional within a
+  part of the eURI.
+- All hyphens in the application URI string will get replaced by underscores in
+  the re-routed URI.
 
 Modules
 -------
