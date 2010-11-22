@@ -22,9 +22,14 @@
         'example@mycontroller',
         '',
         'home',
+        'home/',
+        'home/index/',
 
         'controller',
         '/controller',
+
+        'welcome/home',
+        'welcome/home/',
 
         'controller/',
         '/controller/',
@@ -74,46 +79,9 @@
         '/?prowl',
       );
 
-      if(isset($_GET['npm'])) {
-        $this->load->library('http');
-        $json = file_get_contents('/var/www/npm/registry.json');
-        $url = 'http://registry.npmjs.org/';
-        if($this->http->fetch('npm', $url)) {
-          $request = $this->http->request('npm');
-          if($request->code() == 200) {
-            $json = $request->body();
-          }
-        }
-        if(!$json) {
-          $ch = curl_init($url);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-          curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-          $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-          if($code == 200) {
-            $json = curl_exec($ch);
-            curl_close($ch);
-          }
-        }
-        $json = (array) json_decode($json);
-        $this->template->create(array('content' => 'registry'));
-        $this->template->section('content')->add(array('packages' => $json));
-      }
-      else {
-        $this->template->create(array('content'));
-      }
-
-      // Prowl Testing
-      $api = '7acd7cb102e50d2d16e44e3bd98375519ea6e365';
-      $this->load->library('prowl');
-      //if($this->prowl->verify($api)) {
-        $this->prowl->create('eventing', 'LessHub');
-        $prowler = $this->prowl->app('eventing');
-        if($prowler) {
-          $prowler->keys($api);
-          $prowler->notify('New User', 'A new user has just registered under the name of "Alexander Baldwin" (mynameiszanders).');
-        }
-      //}
-
+      // Success Rates
+      $anchor_success = 0;
+      $router_success = 0;
       // Echo out all the route tests.
       $data = array();
       $invalid = content('images/slash.png');
@@ -131,12 +99,26 @@
           $rvalid = is_object($r) && $r->valid;
           $temp = array(
             'euri'  => $route,
-            'url'   => ($a = a($route, htmlentities(a($route)))) ? $valid . ' ' . $a : $invalid,
-            'route' => $rvalid
-                     ? $valid . ' ' . $r->controller() . '::' . $r->method()
-                     . '(<span>' . $r->rsuffix() . '</span>)'
-                     : $invalid,
           );
+          if($a = a($route, htmlentities(a($route)))) {
+            $temp['url'] = $valid . ' ' . $a;
+            $anchor_success++;
+          }
+          else {
+            $temp['url'] = $invalid;
+          }
+          if($rvalid) {
+            $temp['controller'] = $valid . ' ' . $r->controller() . '::' . $r->method();
+            if($r->suffix() != '/') {
+              $temp['controller'] .= '(<span>'.$r->suffix().'</span>)';
+            }
+            $temp['file'] = $valid . ' ' . $r->path();
+            $router_success++;
+          }
+          else {
+            $temp['controller'] = $invalid;
+            $temp['file'] = $invalid;
+          }
           $data[] = (object) $temp;
         }
       }
