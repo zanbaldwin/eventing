@@ -17,6 +17,7 @@
     }
 
     public function index() {
+      echo __METHOD__ . '(' . $this->router->suffix() . ')';
     }
 
   }
