@@ -17,7 +17,8 @@
       <thead>
         <td>Eventing URI</td>
         <td>Translated URL</td>
-        <td>Route</td>
+        <td>Controller::Method(Suffix)</td>
+        <td>Controller File</td>
       </thead>
       <tbody>
         <?php foreach($routes as $route): ?>
@@ -25,7 +26,10 @@
             <td><span>"</span><?php echo $route->euri; ?><span>"</span></td>
             <td><?php echo $route->url; ?></td>
             <td>
-              <?php echo $route->route; ?>
+              <?php echo $route->controller; ?>
+            </td>
+            <td>
+              <?php echo $route->file; ?>
             </td>
           </tr>
         <?php endforeach; ?>
