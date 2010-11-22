@@ -564,7 +564,7 @@
         // to RFC 3986, a query string is a URL part starting from the first
         // question mark, and terminating at the end of the URL, or at the '#'
         // character, if one is present.
-        $regex['query']     = '\?(?:[a-zA-Z_][a-zA-Z0-9_]*\?|[^#? ]*)';
+        $regex['query']     = '\?(?:(?:'.VALIDLABEL.')?\?|[^#? ]*)';
         // The URL fragment can basically be anything from the first occurance
         // of the '#' character to the end of the URL. It is only used
         // client-side, so we don't need to bother with it... It's just here so
@@ -610,10 +610,12 @@
       // name. If we have an actual query string, parse it and return the query
       // array.
       if(!isset($matches[4])) {
-        $u['query'] = false;
+        $u['query']   = false;
       }
       elseif(substr($matches[4], -1) == '?') {
-        $u['query']   = trim($matches[4], '?');
+        $u['query']   = ($query_varname = trim($matches[4], '?'))
+                      ? $query_varname
+                      : 'query';
       }
       else {
         parse_str(trim(substr($matches[4], 1)), $u['query']);
