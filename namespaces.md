@@ -76,5 +76,22 @@ Edit: It has been decided upon the following syntax.
 
     module @ segments .suffix ?query? #fragment
 
+A directory separator (slash) preceeding the segments indicates that the
+resulting URL should be absolute, (ie. including the HTTP scheme and domain.).
 All hyphens in the application URI string will get replaced by underscores in
 the re-routed URI.
+
+Modules
+-------
+
+Modules are proving to be rather tricky. So a couple of development decisions
+must be made on simple ground rules governing how modules should be implemented.
+- Firstly, the router might need to be rewritten AGAIN; module controllers
+  should not be publicly accessible.
+- A module is meant to be THIRD-PARTY functionality that is not part of your
+  main application. Your main application should access modules to extend, not
+  replace.
+- A module should have access to input, but not output of the application. They
+  should therefore only have access to the Router and Input libraries (need some
+  thought on whether they should be allowed other libraries such as HTTP, Prowl,
+  etc.)
