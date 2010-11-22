@@ -89,11 +89,10 @@ must be made on simple ground rules governing how modules should be implemented.
 
 - Firstly, the router might need to be rewritten AGAIN; module controllers
   should not be publicly accessible.
-- A module is meant to be THIRD-PARTY functionality that is not part of your
-  main application. Your main application should access modules to extend, not
-  replace.
-- A module should have access to input, but not output of the application. They
-  should therefore only have access to the Router and Input libraries (need some
-  thought on whether they should be allowed other libraries such as HTTP, Prowl,
-  etc.)
-
+- A module is meant to be THIRD-PARTY generic add-on functionality that is not
+  specific to your main application. Your main application should access modules
+  to extend, not replace.
+- A module should have access to the input, but not output of the application.
+  They should therefore only have access to the Router and Input libraries by
+  default (need some thought on whether they should be allowed other libraries
+  such as HTTP, Prowl, etc.)
