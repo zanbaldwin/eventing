@@ -6,7 +6,11 @@
  * Takes the URI string (module, segments and suffix). Checks to see if it
  * should re-route the request to a different one. Then finds the appropriate
  * controller and method, and determines which folder the controller class is
- * in.
+ * located in.
+ * This library also acts as a replicator, allowing you to create a new instance
+ * from an eURI string. The new instance will have all the same methods, but
+ * routed to the eURI you specified rather than the URI string request to the
+ * main application.
  *
  * @category   Eventing
  * @package    Libraries
