@@ -72,12 +72,16 @@ As the `load_class()` function now uses the syntax `module:path/to/lib`, this
 might be a good place to start. The query string, fragment and segment syntax do
 not need altering; just module and suffix referencing.
 
-Edit: It has been decided upon the following syntax.
+Edit: It has been decided upon the following syntax. Throughout the framework,
+the following syntax is refered to as an "eURI".
 
-    module @ segments .suffix ?query? #fragment
+    module @ segments .suffix ?query[?] #fragment
 
 A directory separator (slash) preceeding the segments indicates that the
-resulting URL should be absolute, (ie. including the HTTP scheme and domain.).
+resulting URL should be absolute, (ie. including the HTTP scheme and domain).
+The brackets infer that a character, or set of characters is optional within a
+part of the eURI. Each part of the eURI is optional, though the suffix will be
+ignored if there are no segments, regardless to what it has been set to.
 All hyphens in the application URI string will get replaced by underscores in
 the re-routed URI.
 
