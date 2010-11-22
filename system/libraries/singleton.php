@@ -3,10 +3,8 @@
 /**
  * Eventing Framework Singleton Library
  *
- * Eventing PHP Framework by Alexander Baldwin (zanders [at] zafr [dot] net).
- * http://eventing.zafr.net/
- * The Eventing Framework is an object-orientated PHP Framework, designed to rapidly build applications.
- * This is where we start all our settings, libraries and other odd-jobs to get the ball rolling...
+ * The Singleton library is designed to only allow one instance of any library
+ * that extends it to exist during the execution of the framework.
  *
  * @category   Eventing
  * @package    Libraries
