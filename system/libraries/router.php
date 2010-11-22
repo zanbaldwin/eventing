@@ -203,7 +203,7 @@
         $uri_string = isset($_SERVER[$method])
                     ? $_SERVER[$method]
                     : @getenv($method);
-        $uri_string = trim(filter_path($uri_string), '/');
+        $uri_string = ltrim(filter_path($uri_string), '/');
         if($uri_string != '' && $uri_string != SELF) {
           break;
         }
@@ -225,10 +225,10 @@
         if(strlen($uri_string) > strlen($method)
            && substr($uri_string, 0, strlen($method)) == $method
         ) {
-          $uri_string = trim(substr($uri_string, strlen($method)), '/');
+          $uri_string = ltrim(substr($uri_string, strlen($method)), '/');
         }
       }
-      return trim(filter_path($uri_string), '/');
+      return ltrim(filter_path($uri_string), '/');
     }
 
     /**
