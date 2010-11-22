@@ -100,7 +100,7 @@
           $temp = array(
             'euri'  => $route,
           );
-          if($a = a($route, htmlentities(a($route)))) {
+          if($a = a($route, htmlentities(a($route)), array('query' => array('action' => 'do')))) {
             $temp['url'] = $valid . ' ' . $a;
             $anchor_success++;
           }
@@ -122,7 +122,7 @@
           $data[] = (object) $temp;
         }
       }
-      $this->template->create(array('s' => 'html5shell'));
+      $this->template->create(array('s' => 'html5shell', 'content'));
       $this->template->section('s')->add(array(
         'title'   => 'Eventing PHP Application Framework',
         'heading' => __METHOD__ . '(<span>' . $this->router->suffix() . '</span>)',
