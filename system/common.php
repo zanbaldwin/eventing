@@ -678,7 +678,9 @@
         // Determine how our URL should reference the domain and application
         // directory.
         $server = ($data->absolute    ? BASEURL             : URL)
-                . (!c('mod_rewrite')  ? SELF . '/'          : '');
+                . (!c('mod_rewrite')
+                  && ($data->module || $data->segments)
+                  ? SELF . '/'                              : '');
         // Build the URL part that gets used by the application for routing.
         $application = ltrim(
           ($data->module              ? $data->module . '@' : '')
