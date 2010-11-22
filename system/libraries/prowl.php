@@ -281,7 +281,6 @@
      * @return integer
      */
     protected function result($result_body) {
-      var_dump($result_body);
     }
 
     /**
@@ -307,7 +306,7 @@
 
     protected $name = 'Eventing Prowl',
               $keys = array(),
-              $priority = 1;
+              $priority = 0;
 
     public function __construct($name) {
       if(!is_string($name) || !$name) {

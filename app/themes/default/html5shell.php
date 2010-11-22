@@ -44,32 +44,7 @@
         </p>
       </article>
     </section>
-    <section>
-      <article>
-        <header>
-          <h3>Development Testing</h3>
-          <?php echo a('#', 'Add a route'); ?>.
-        </header>
-        <table>
-          <thead>
-            <td>Eventing URI</td>
-            <td>Translated URL</td>
-            <td>Route</td>
-          </thead>
-          <tbody>
-            <?php foreach($routes as $route): ?>
-              <tr>
-                <td><span>"</span><?php echo $route->euri; ?><span>"</span></td>
-                <td><?php echo $route->url; ?></td>
-                <td>
-                  <?php echo $route->route; ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </article>
-    </section>
+    <!--{content}-->
 
     <footer>
       <p>This page was generated in {elapsed_time} seconds and took {memory_usage} of memory.</p>
