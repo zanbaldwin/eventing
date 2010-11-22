@@ -559,7 +559,7 @@
         $regex['segments']  = '[a-zA-Z0-9/_-]+';
         // The suffix is just like a regular file extension, except it can only
         // contain alphanumeric characters.
-        $regex['suffix']    = '?:\.?([a-zA-Z0-9]+)';
+        $regex['suffix']    = '?:\.?([a-zA-Z0-9]+)/?';
         // The query string can only contain certain characters, but according
         // to RFC 3986, a query string is a URL part starting from the first
         // question mark, and terminating at the end of the URL, or at the '#'
