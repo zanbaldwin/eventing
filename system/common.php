@@ -689,18 +689,20 @@
         // Build the query string depending on what source we are going to use.
         $query = '';
         if($data->query) {
-          // An array has been returned, build direct from the data.
-          if(is_array($data->query)) {
-            $query = '?' . http_build_query($data->query, '', '&');
-          }
-          // A string or false has returned. If the string is a key to an array
-          // in the options array, use that array to build the query from.
-          elseif(isset($options[$data->query])
-              && is_array($options[$data->query])
+          // If the query data returned is a string, it means that it's a
+          // placeholder for a query array held in the $options array.
+          if(is_string($data->query)
+             && isset($options[$data->query])
+             && is_array($options[$data->query])
           ) {
-            $query = '?' . http_build_query($options[$data->query], '', '&');
-            // Unset the query data, we don't want it as HTML attributes.
-            unset($options[$data->query]);
+            $query_identifier = $data->query;
+            $data->query = $options[$data->query];
+            unset($options[$query_identifier], $query_identifier);
+          }
+          // Now we have satisfied the query placeholder, check that the query
+          // data is an array ready to be made into a query string.
+          if(is_array($data->query)) {
+            $query = '?' . http_build_query($data->query, null, '&');
           }
         }
         // Include a URL fragment if one has been set.
@@ -713,14 +715,15 @@
         // reload.
         $uri = $application . $query . $fragment;
         if($path != '#') {
-        	$path = substr($uri, 0, 1) == '#' && !$data->absolute
-        	      ? $fragment
-        	      : $server . $uri;
+          $path = substr($uri, 0, 1) == '#' && !$data->absolute
+                ? $fragment
+                : $server . $uri;
         }
       }
       // The path is now a valid URL!
-      
-      
+      // Check that we haven't already used the URL already. If we have, add a
+      // rel="nofollow" to stop search engine crawlers thinking we're trying to
+      // spam them.
       if(in_array($path, $used_urls)) {
         if(isset($options['rel'])) {
           if(!is_array($options['rel'])) {
