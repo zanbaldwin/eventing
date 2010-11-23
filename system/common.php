@@ -33,11 +33,6 @@
     );
   }
 
-  // Define each part of the version ID for easy access.
-  defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', (int) $version[0]);
-  defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
-  defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
-
   // This is against standard practice, to set error reporting to full, especially
   // for production, but in truth, if you don't want errors coming up in your
   // applications, start writing better code!
