@@ -941,13 +941,8 @@
     }
   }
 
-  // Define a PCRE RegEx for a valid label in PHP. This check a string to make
-  // sure that it follows the same syntax as variables, functions and class
-  // names.
-  defined('VALIDLABEL') || define(
-    'VALIDLABEL',
-    '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
-  );
+  // Define the default suffix, so that we know what to use incase one isn't
+  // given in the application URI or any eURI's.
   defined('DEFAULTSUFFIX') || define(
     'DEFAULTSUFFIX',
     is_string($s = c('default_suffix'))

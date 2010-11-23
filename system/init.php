@@ -124,11 +124,16 @@
   }
 
   // Define our list of namespaces used throughout our framework.
-  $c['ns']          = 'Eventing';
-  $c['nslibrary']   = 'Library';
-  $c['nscontroller'] = 'Application';
-  $c['nsmodel']     = 'Model';
-  $c['nsmodule']    = 'Module';
+  $c['ns']            = 'Eventing';
+  $c['nslibrary']     = 'Library';
+  $c['nscontroller']  = 'Application';
+  $c['nsmodel']       = 'Model';
+  $c['nsmodule']      = 'Module';
+
+  // Define a PCRE RegEx for a valid label in PHP. This check a string to make
+  // sure that it follows the same syntax as variables, functions and class
+  // names.
+  $c['validlabel']    = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
 
   /**
    * Namespace String
