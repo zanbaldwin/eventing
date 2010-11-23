@@ -31,12 +31,12 @@
    * This library does NOT extend the library class, as multiple instances are
    * required.
    */
-  class module extends core {
+  class module extends library {
 
     protected function __construct() {
       parent::__construct();
       // Load the libraries that need separate instances for separate modules.
-      $libs = array('load', 'template');
+      $libs = array('input');
       foreach($libs as $lib) {
         if(!isset($this->$lib)) {
           $obj = load_class($lib);

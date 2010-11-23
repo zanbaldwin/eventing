@@ -73,11 +73,6 @@
                       && is_object($class::$_instance)
                        ? $class::$_instance
                        : new $class;
-      $super = bool($super);
-      if($super) {
-        // Find some way of merging objects, maintaining both properties and
-        // methods? That would be nice. KTHXBAI!
-      }
       return $objects[$class];
     }
 
