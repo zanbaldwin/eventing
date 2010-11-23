@@ -42,7 +42,7 @@
       // extending the Core library.
       self::$_instance =& $this;
       // Load the libraries that need separate instances for separate modules.
-      $libs = array('router', 'input', 'output', 'load', 'template');
+      $libs = array('router', 'input', 'output', 'load');
       foreach($libs as $lib) {
         if(!isset($this->$lib)) {
           $obj = load_class($lib);
