@@ -14,13 +14,16 @@
 
     protected function __construct() {
       parent::__construct();
+      $this->load->library('template');
     }
 
     public function index() {
+    
       // Compile a list of routes to test.
       $routes = array(
         'example@mycontroller',
         '',
+        '/',
         'home',
         'home/',
         'home/index/',
@@ -55,8 +58,11 @@
         'module@.suffix',
         'module@/.suffix',
         
-        '?query=parse',
-        '/?query=parse',
+        '/.suffix',
+        '.suffix',
+        
+        '?inline=http_q_array',
+        '/?inline=http_q_array',
         
         '?query?',
         '/?query?',
@@ -100,7 +106,8 @@
           $temp = array(
             'euri'  => $route,
           );
-          if($a = a($route, htmlentities(a($route)), array('query' => array('action' => 'do')))) {
+          $example_options = array('query' => array('action' => 'do'));
+          if($a = a($route, htmlentities(a($route, false, $example_options)), $example_options)) {
             $temp['url'] = $valid . ' ' . $a;
             $anchor_success++;
           }
@@ -112,7 +119,7 @@
             if($r->suffix() != '/') {
               $temp['controller'] .= '(<span>'.$r->suffix().'</span>)';
             }
-            $temp['file'] = $valid . ' ' . $r->path();
+            $temp['file'] = $valid . ' ' . str_replace(BASEPATH, '', $r->path());
             $router_success++;
           }
           else {

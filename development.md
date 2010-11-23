@@ -158,7 +158,7 @@ Modules are proving to be rather tricky. So a couple of development decisions
 must be made on simple ground rules governing how modules should be implemented.
 
 - Firstly, the router might need to be rewritten AGAIN; module controllers
-  should not be publicly accessible.
+  should not be publicly accessible (although they may be re-routed to).
 - A module is meant to be THIRD-PARTY generic add-on functionality that is not
   specific to your main application. Your main application should access modules
   to extend, not replace.
@@ -193,7 +193,7 @@ Modules should be accessed from a controller, ideally like:
       'new_path'    => '/path/to/image.png',
     );
     $output_format = 'png';
-    $this->module('image')->run('image/resize.' . $output_format, $data);
+    $this->module('image')->run('resize.' . $output_format, $data);
 
 [1]: http://en.wikipedia.org/wiki/Libjpeg "libjpeg on Wikipedia"
 [2]: http://www.ubuntu.com/ "Ubuntu Linux Distrobution"
