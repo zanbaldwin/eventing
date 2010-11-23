@@ -171,17 +171,8 @@
   );
   require_once $common;
 
-  // This framework now requires PHP5.3 for quite a lot of functionality. If we
-  // are running anything less, terminate.
-  if(PHP_VERSION_ID < 50300) {
-    show_error(
-      'This installation of PHP is running version ' . PHP_VERSION
-    . ', but this framework requires version 5.3.0 or greater.'
-    );
-  }
-  
   // Cool. We have functions. Now we want libraries! Big, fat, juicy libraries!
-  
+
   // Firstly, we want the Singleton and Library libraries. These are the classes
   // that force you to grab existing instances of Eventing libraries, rather
   // than create new ones.

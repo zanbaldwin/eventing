@@ -24,16 +24,29 @@
     exit('Direct script access is disallowed.');
   }
 
-  $version = explode('.', PHP_VERSION);
-  if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
-    $version[2] = $matches[1];
+  if(!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+    if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
+      $version[2] = $Matches[1];
+    }
+    define(
+      'PHP_VERSION_ID',
+      $version[0] * 10000
+    + $version[1] * 100
+    + $version[2]
+    );
   }
-  defined('PHP_VERSION_ID') || define(
-    'PHP_VERSION_ID',
-    $version[0] * 10000
-  + $version[1] * 100
-  + $version[2]
-  );
+
+  // This framework now requires PHP5.3 for quite a lot of functionality. If we
+  // are running anything less, terminate.
+  if(PHP_VERSION_ID < 50300) {
+    show_error(
+      'This installation of PHP is running version ' . PHP_VERSION
+    . ', but this framework requires version 5.3.0 or greater.'
+    );
+  }
+
+  // Define each part of the version ID for easy access.
   defined('PHP_MAJOR_VERSION') || define('PHP_MAJOR_VERSION', (int) $version[0]);
   defined('PHP_MINOR_VERSION') || define('PHP_MINOR_VERSION', (int) $version[1]);
   defined('PHP_RELEASE_VERSION') || define('PHP_RELEASE_VERSION', (int) $version[2]);
