@@ -25,7 +25,11 @@
   /**
    * Eventing Controller Class
    */
-  class controller extends core {
+  class controller extends singleton {
+
+    // We don't want to create an extra instance when extending classes, so
+    // store an instance of this class in the following variable.
+    protected static $_instance;
 
     /**
      * Controller Construct Function
@@ -34,9 +38,11 @@
      * @return void
      */
     protected function __construct() {
-      parent::__construct();
+      // Save the instance, in case another one is created by another module
+      // extending the Core library.
+      self::$_instance =& $this;
       // Load the libraries that need separate instances for separate modules.
-      $libs = array('load', 'template');
+      $libs = array('router', 'input', 'output', 'load', 'template');
       foreach($libs as $lib) {
         if(!isset($this->$lib)) {
           $obj = load_class($lib);

@@ -239,7 +239,7 @@
      * @return object
      */
     function &getInstance() {
-      $core = ns(NS, NSLIBRARY) . 'core';
+      $core = ns(NS, NSLIBRARY) . 'controller';
       return $core::getInstance();
     }
   }
