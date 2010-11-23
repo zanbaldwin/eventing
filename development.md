@@ -30,6 +30,7 @@ following:
 ### Directory Structure
 
     /
+        /index.php
         /app
             /config
                 /autoload.php
@@ -119,9 +120,12 @@ attributes.
 
 ### URI Parser `uri()`
 
-The `uri()` function will take a string as it's only parameter, validate and
+The `uri()` function will take a string as it's first parameter, validate and
 parse the string, and return an object with data about the string (or an array
-if specified).
+if specified). The second parameter is a boolean value, false meaning to return
+the result as an associative array, and true meaning to return the result as an
+object (defaults to true). If the string does not validate, the function returns
+a boolean false.
 
 Note: Throughout the framework, the following syntax is refered to as an "eURI".
 
@@ -162,10 +166,23 @@ must be made on simple ground rules governing how modules should be implemented.
   They should therefore only have access to the Router and Input libraries by
   default (need some thought on whether they should be allowed other libraries
   such as HTTP, Prowl, etc.)
-- A module should not be able to access the main application, either the
-  controller that is requesting it, or any other controller.
+- A module should not be able to access the main application, either
+  controllers, models or views.
 
 Modules should be accessed from a controller, ideally like:
 
     $this->load->module('module_name');
     $module = $this->module('module_name');
+    $module->run('controller/method', $data);
+    
+    // For example:
+    $this->load->module('image');
+    $data = array(
+      'img_path'    => '/path/to/image.jpg',
+      'new_height'  => 300,
+      'new_width'   => 300,
+      'crop'        => true,
+      'new_path'    => '/path/to/image.png',
+    );
+    $output_format = 'png';
+    $this->module('image')->run('image/resize.' . $output_format, $data);
