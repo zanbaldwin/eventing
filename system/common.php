@@ -24,19 +24,6 @@
     exit('Direct script access is disallowed.');
   }
 
-  if(!defined('PHP_VERSION_ID')) {
-    $version = explode('.', PHP_VERSION);
-    if(preg_match('|^([0-9]+)|', $version[2], $matches)) {
-      $version[2] = $Matches[1];
-    }
-    define(
-      'PHP_VERSION_ID',
-      $version[0] * 10000
-    + $version[1] * 100
-    + $version[2]
-    );
-  }
-
   // This framework now requires PHP5.3 for quite a lot of functionality. If we
   // are running anything less, terminate.
   if(PHP_VERSION_ID < 50300) {
