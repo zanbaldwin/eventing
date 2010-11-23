@@ -181,11 +181,7 @@
   // Firstly, we want the Singleton and Library libraries. These are the classes
   // that force you to grab existing instances of Eventing libraries, rather
   // than create new ones.
-  load_class('singleton', false);
   load_class('library', false);
-  // The Core library is a commonground between application controllers and
-  // module controllers.
-  load_class('core', false);
   // Load both Controller and Module class definitions, because we don't know at
   // this point whether we are loading a controller from the main application or
   // a module.
@@ -197,7 +193,7 @@
   $r = load_class('router');
 
   // We want to know what request this application is meant to serve!
-  if(!$r->valid) {
+  if(!is_object($r) || !$r->valid || $r->module()) {
     show_404();
   }
 
