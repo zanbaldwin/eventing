@@ -113,11 +113,6 @@
         }
         // Now we know we have a string, parse it with the uri() function.
         $data = uri($data);
-        // If the main application URI contains a module reference, invalidate.
-        // Modules should not be publicly accessible.
-        if($data->module) {
-          $this->valid = false;
-        }
       }
       // If after all this the data is not in object form, then we obviously got
       // an invalid URI string.
