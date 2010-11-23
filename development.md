@@ -86,7 +86,7 @@ accessible from the super object like so...
 
 By default, only libraries should be accessible from the super object
 properties, though this can be overwritten (via the second parameter); models
-should be returned from the model() method of the Core library.
+should be returned from the `model()` method of the [Core][7] library.
 
     $this->load->module('some_module');
     
@@ -98,7 +98,7 @@ should be returned from the model() method of the Core library.
 ## URLs
 
 The two main functions for URLs and URIs are anchor function `a()` and the URI
-parser function `uri()`.
+parser function `uri()`. These can be found in [common functions][4].
 
 ### Anchor `a()`
 
@@ -163,11 +163,19 @@ must be made on simple ground rules governing how modules should be implemented.
   specific to your main application. Your main application should access modules
   to extend, not replace.
 - A module should have access to the input, but not output of the application.
-  They should therefore only have access to the Router and Input libraries by
+  They should therefore only have access to the [Router][5] and [Input][6] libraries by
   default (need some thought on whether they should be allowed other libraries
   such as HTTP, Prowl, etc.)
 - A module should not be able to access the main application, either
-  controllers, models or views.
+  controllers, models or views. Nor should the main application be able to
+  access the libraries or models of the module.
+
+Essentially, you can imagine modules as applications - a collection of
+controllers that provide an interface to their libraries and models - that
+provide the lower-level functionality, whilst your main application provides the
+higher-level user interaction. This can be compared to [Shotwell][3] (photo
+viewing software in [Ubuntu][2] 10.10) being the main application, providing the
+user interface for a lower-level library, [libjpeg][1].
 
 Modules should be accessed from a controller, ideally like:
 
@@ -186,3 +194,15 @@ Modules should be accessed from a controller, ideally like:
     );
     $output_format = 'png';
     $this->module('image')->run('image/resize.' . $output_format, $data);
+
+[1]: http://en.wikipedia.org/wiki/Libjpeg "libjpeg on Wikipedia"
+[2]: http://www.ubuntu.com/ "Ubuntu Linux Distrobution"
+[3]: http://yorba.org/shotwell/ "Shotwell: Open source photo manager for GNOME"
+[4]: https://github.com/mynameiszanders/eventing/blob/master/system/common.php
+     "Common functions (mynameiszanders/eventing@master)"
+[5]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/router.php
+     "Router library (mynameiszanders/eventing@master)"
+[6]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/input.php
+     "Input library (mynameiszanders/eventing@master)"
+[7]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/core.php
+     "Core library (mynameiszanders/eventing@master)"
