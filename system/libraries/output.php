@@ -18,178 +18,222 @@
  * @since      v0.1
  */
 
-namespace Eventing\Library;
+  namespace Eventing\Library;
 
   if(!defined('E_FRAMEWORK')) {
     headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
     exit('Direct script access is disallowed.');
   }
 
-class output extends library
-{
+  class output extends library {
 
-  private $output = '', $headers = array();
+    protected $output   = '',
+              $headers  = array();
+              $status   = 200,
+              $message  = 'OK',
+              // The following status codes were taken from the list found at
+              // http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+              $status_codes = array(
+                // Informational
+                100 => 'Continue',
+                101 => 'Switching Protocols',
+                102 => 'Processing',
+                // Success
+                200 => 'OK',
+                201 => 'Created',
+                202 => 'Accepted',
+                203 => 'Non-Authoritative Information',
+                204 => 'No Content',
+                205 => 'Reset Content',
+                206 => 'Partial Content',
+                207 => 'Multi-Status',
+                // Redirection
+                300 => 'Multiple Choices',
+                301 => 'Moved Permanently',
+                302 => 'Found',
+                303 => 'See Other',
+                304 => 'Not Modified',
+                305 => 'Use Proxy',
+                306 => 'Switch Proxy',
+                307 => 'Temporary Redirect',
+                // Client Error
+                400 => 'Bad Request',
+                401 => 'Unauthorized',
+                402 => 'Payment Required',
+                403 => 'Forbidden',
+                404 => 'Not Found',
+                405 => 'Method Not Allowed',
+                406 => 'Not Acceptable',
+                407 => 'Proxy Authentication Required',
+                408 => 'Request Timeout',
+                409 => 'Conflict',
+                410 => 'Gone',
+                411 => 'Length Required',
+                412 => 'Precondition Failed',
+                413 => 'Request Entity Too Large',
+                414 => 'Request-URI Too Long',
+                415 => 'Unsupported Media Type',
+                416 => 'Requested Range Not Satisfiable',
+                417 => 'Expectation Failed',
+                418 => 'I\'m a teapot',
+                422 => 'Unprocessable Entity',
+                423 => 'Locked',
+                424 => 'Failed Dependency',
+                425 => 'Unordered Collection',
+                426 => 'Upgrade Required',
+                449 => 'Retry With',
+                450 => 'Blocked by Windows Parental Controls',
+                // Server Error
+                500 => 'Internal Server Error',
+                501 => 'Not Implemented',
+                502 => 'Bad Gateway',
+                503 => 'Service Unavailable',
+                504 => 'Gateway Timeout',
+                505 => 'HTTP Version Not Supported',
+                506 => 'Variant Also Negotiates',
+                507 => 'Insufficient Storage',
+                509 => 'Bandwidth Limit Exceeded',
+                510 => 'Not Extended',
+              );
 
-  protected function __construct()
-  {
-    // Do nothing!
-  }
+    protected function __construct() {}
 
-  public function set_output($output)
-  {
-    if(!is_string($output))
-    {
-      return false;
-    }
-    $this->output = $output;
-    return true;
-  }
-
-  /**
-   * Append Output
-   *
-   * @param  $output
-   * @return void
-   */
-  public function append_output($output)
-  {
-    if(!is_string($output))
-    {
-      return false;
-    }
-    $this->output .= $output;
-    return true;
-  }
-
-  /**
-   * Get Output
-   *
-   * @return void
-   */
-  public function get_output()
-  {
-    return $this->output;
-  }
-
-  /**
-   * Add Header
-   *
-   * Add a header to the output buffer.
-   *
-   * @param string $header
-   * @param boolean $status_code
-   * @return boolean
-   */
-  public function add_header($header, $status_code = false)
-  {
-    if(!is_string($header))
-    {
-      return false;
-    }
-    if(is_int($status_code))
-    {
-      if($status_code >= 100 && $status_code < 600)
-      {
-        $this->headers[] = array($header, $status_code);
-        return true;
-      }
-      else
-      {
+    /**
+     * Set Output
+     *
+     * Set the output, replacing what has already been set.
+     *
+     * @access public
+     * @param string $output
+     * @return boolean
+     */
+    public function set($output) {
+      if(!is_string($output)) {
         return false;
       }
-    }
-    $this->headers[] = $header;
-    return true;
-  }
-
-  /**
-   * Parse Headers
-   *
-   * Parse headers from buffer and flush them to the client if the output hasn't started already.
-   *
-   * @access private
-   * @return void
-   */
-  private function _parse_headers()
-  {
-    if(headers_sent())
-    {
-      return false;
-    }
-    foreach($this->headers as $header)
-    {
-      if(is_array($header))
-      {
-        header($header[0], true, $header[1]);
-        continue;
-      }
-      header($header);
-    }
-    return true;
-  }
-
-  /**
-   * Parse Output
-   *
-   * Parse output and return what is generated.
-   *
-   * @access private
-   * @return void
-   */
-  private function _parse_output($output)
-  {
-    $benchmark = (string) round(
-    preg_replace('/^0\.([0-9]+) ([0-9]+)$/', '$2.$1', microtime()) -
-    preg_replace('/^0\.([0-9]+) ([0-9]+)$/', '$2.$1', E_FRAMEWORK),
-    4);
-    $pseudo = array(
-                '{elapsed_time}' => $benchmark,
-                '{memory_usage}' => round((memory_get_usage() - E_MEMORY) / 1024 / 1024, 2) . ' Mb'
-                );
-                foreach($pseudo as $match => $replace)
-                {
-                  if(strpos($output, $match) !== false)
-                  {
-                    $output = str_replace($match, $replace, $output);
-                  }
-                }
-                return $output;
-  }
-
-  /**
-   * Display
-   *
-   * @return void
-   */
-  public function display($continue = false, $set_output = false, $use_headers = false)
-  {
-    $continue = bool($continue);
-    if(is_string($set_output))
-    {
-      if(bool($use_headers))
-      {
-        $this->_parse_headers();
-      }
-      echo $this->_parse_output($set_output);
-      if($continue)
-      {
-        flush();
-        return true;
-      }
-      exit;
-    }
-    // No need to put this in an else statement. The above if statement results in a return or exit.
-    $this->_parse_headers();
-    echo $this->_parse_output($this->output);
-    if($continue)
-    {
-      flush();
-      // We've already sent the buffered output, get rid of it!
-      $this->output = '';
+      $this->output = $output;
       return true;
     }
-    exit;
+
+    /**
+     * Append Output
+     *
+     * Append a string onto what the output that has already been set.
+     *
+     * @access public
+     * @param string $output
+     * @return boolean
+     */
+    public function append($output) {
+      if(!is_string($output)) {
+        return false;
+      }
+      $this->output .= $output;
+      return true;
+    }
+
+    /**
+     * Get Output
+     *
+     * Return a string containing what has been set as the output.
+     *
+     * @access public
+     * @return string
+     */
+    public function get_output() {
+      return $this->output;
+    }
+
+    /**
+     * Set Header
+     *
+     * Set a header to be sent along with the output.
+     *
+     * @access public
+     * @param string $header
+     * @param string $value
+     * @return boolean
+     */
+    public function header($header, $value) {
+      if(!is_string($header) || !is_string($value)) {
+        return false;
+      }
+      $header = trim($header, '-');
+      if(!preg_match('/^[a-zA-Z-]+$/', $header)) {
+        return false
+      }
+      $value = preg_replace('/\\s+/', ' ', $value);
+      $this->headers[$header] = trim($value);
+      return true;
+    }
+
+    /**
+     * Status Code
+     *
+     * Set the HTTP/1.1 status code, and an optional message, if a message is
+     * not set, it will be determined from the status code.
+     *
+     * @access public
+     * @param integer $code
+     * @param string $message
+     * @return boolean
+     */
+    public function status($code, $message = false) {
+      if(!is_numeric($code)) {
+        return false;
+      }
+      $code = (int) $code;
+      // We have a pretty exhaustive list of status codes. You shouldn't be
+      // passing any others, if you really REALLY need to, add them to the array
+      // above.
+      if(!isset($this->status_codes[$code])) {
+        return false;
+      }
+      // Get the message, either by filtering 
+      if(!is_string($message)) {
+        $message = $this->status_codes[$code];
+      }
+      // Filter user input and assign to class property.
+      $this->status = $code;
+      $this->message = trim(preg_replace('/\\s+/', ' ', $message));
+      return true;
+    }
+
+    /**
+     * Display Output
+     *
+     * Display the buffered output, sending the appropriate headers.
+     *
+     * @access public
+     * @param boolean $continue
+     * @return boolean|exit
+     */
+    public function display($continue = false) {
+      // Can we sent the headers? Or has output already started?
+      if(!headers_sent()) {
+        // Send the HTTP Status Code and Message.
+        header(
+          'HTTP/1.1 ' . $this->status . ' ' . $this->message,
+          true,
+          $this->status
+        );
+        // Send each header that the user specified.
+        foreach($this->headers as $header => $value) {
+          header($header . ': ' . $value);
+        }
+      }
+      // Echo the buffered output to the client.
+      echo $this->output;
+      // Do we want to continue running the application, or should we terminate
+      // now the client has got what they requested?
+      if($continue) {
+        // Reset the buffer. No point keeping the output if it has already been
+        // sent to the client.
+        $this->output = '';
+        return true;
+      }
+      // YOU ARE TERMINATED, BABY.
+      exit;
+    }
+
   }
-
-
-}
