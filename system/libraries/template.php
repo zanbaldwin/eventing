@@ -515,7 +515,7 @@ class template extends library {
       echo $rendered;
     }
     else {
-      $E->output->append_output($rendered);
+      $E->output->append($rendered);
     }
     return true;
   }

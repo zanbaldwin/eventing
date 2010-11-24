@@ -28,7 +28,7 @@
   class output extends library {
 
     protected $output   = '',
-              $headers  = array();
+              $headers  = array(),
               $status   = 200,
               $message  = 'OK',
               // The following status codes were taken from the list found at
@@ -160,7 +160,7 @@
       }
       $header = trim($header, '-');
       if(!preg_match('/^[a-zA-Z-]+$/', $header)) {
-        return false
+        return false;
       }
       $value = preg_replace('/\\s+/', ' ', $value);
       $this->headers[$header] = trim($value);
