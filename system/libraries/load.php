@@ -37,15 +37,50 @@
       // Autoload from the autoload.php configuration file.
     }
 
+    /**
+     * Load Library
+     *
+     * @access public
+     * @param string $library
+     * @param string $name
+     * @return boolean
+     */
     public function library($library, $name = false) {
     }
 
+    /**
+     * Load Model
+     *
+     * @access public
+     * @param string $model
+     * @param string $name
+     * @param boolean $super
+     * @return boolean
+     */
     public function model($model, $name = false, $super = false) {
     }
 
+    /**
+     * Load Module
+     *
+     * @access public
+     * @param string $module
+     * @param string $name
+     * @param boolean $super
+     * @return boolean
+     */
     public function module($module, $name = false, $super = false) {
     }
 
+    /**
+     * Load View
+     *
+     * @access public
+     * @param string $view
+     * @param array $data
+     * @param string $theme
+     * @return false|string
+     */
     public function view($view, $data = false, $theme = false) {
       // Determine the theme subfolder, falling back to defaults if one has not
       // been specified.
