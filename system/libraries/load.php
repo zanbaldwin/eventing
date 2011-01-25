@@ -49,13 +49,17 @@
       if(!is_string($library)) {
         return false;
       }
-      // If a valid name has not been set, use the library name. We don't need
-      // to check the library name, as the load_class() common function will
-      // fail if it is not valid.
+      $library = trim(filter_path($library), '/');
+      // If a valid name has not been set, use the library name.
       if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
         $name = xplode('/', $library);
         $name = end($name);
+        // If the library name itself is not a valid label, return false.
+        if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
+          return false;
+        }
       }
+      $name = strtolower($name);
       // If the library has already been loaded (or another by the same name),
       // return true to state that it is loaded.
       if(isset($this->E->$name)) {
