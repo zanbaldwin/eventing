@@ -246,7 +246,7 @@
 
   if(!function_exists('bool')) {
     /**
-     * Check Boolean
+     * Check Strict Boolean
      *
      * Returns boolean equivelant of value passed to function.
      *
@@ -254,22 +254,21 @@
      * @return boolean
      */
     function bool($var) {
-      return $var === true ? true : false;
+      return $var ? true : false;
     }
   }
 
   if(!function_exists('bl')) {
     /**
-     * Make Boolean
+     * Check Boolean
      *
-     * Takes a variable, and makes into a boolean by reference.
+     * Returns strict boolean equivelant of value passed to function.
      *
      * @param mixed $var
      * @return boolean
      */
-    function bl(&$var) {
-      $var = bool($var);
-      return $var;
+    function bl($var) {
+      return $var === true ? true : false;
     }
   }
 
