@@ -514,7 +514,7 @@
       if(!$r) {
         $regex = array();
         // The module name must also be a valid PHP class name.
-        $regex['module']    = '[a-zA-Z_][a-zA-Z0-9_]*\\s*@';
+        $regex['module']    = VALIDLABEL . '\\s*@';
         // Segments must be alphanumeric, hyphens or underscores, separated by
         // *nix-style directory separators.
         $regex['segments']  = '[a-zA-Z0-9/_-]+';
