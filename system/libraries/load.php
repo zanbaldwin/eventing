@@ -158,7 +158,7 @@
              : (is_string($theme = c('default_theme'))
                 ? $theme
                 : 'default');
-      $theme = trim($theme, '/') . '/';
+      $theme = $theme ? trim($theme, '/') . '/' : '';
       // Compile the view's absolute file path.
       $view = APP . 'themes/' . $theme . $view . EXT;
       // Return if the view does not exist, there is nothing more we can do.
