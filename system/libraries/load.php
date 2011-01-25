@@ -83,6 +83,46 @@
      * @return boolean
      */
     public function model($model, $name = false, $super = false) {
+      if(!is_string($model)) {
+        return false;
+      }
+      $model = trim(filter_path($model), '/');
+      // If a valid name has not been set, use the model name.
+      if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
+        $name = xplode('/', $model);
+        $name = end(model);
+        // If the model name itself is not a valid label, return false.
+        if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
+          return false;
+        }
+      }
+      $name = strtolower($name);
+      // If the model has already been loaded (or another by the same name),
+      // return true to state that it is loaded.
+      if(isset($this->E->models[$name])) {
+        return true;
+      }
+      // Check that the model file exists.
+      if(!file_exists($file = APP . 'models/' . $model . EXT)) {
+        return false;
+      }
+      // Figure out the model class name.
+      $model = xplode('/', $model);
+      $model = ns(NS, NSMODEL) . strtolower(end($model));
+      // Get the file, and the class.
+      require_once $file;
+      if(!class_exists($model)) {
+        return false;
+      }
+      $model = $model::getInstance();
+      // Save the model to the super models array in the controller.
+      $controller = ns(NS, NSLIBRARY) . 'controller';
+      $controller::setModel($name, $model);
+      // If specified, create a super property for the model.
+      if(bool($super) && !isset($this->E->$name)) {
+        $this->E->$name = $model;
+      }
+      return true;
     }
 
     /**
