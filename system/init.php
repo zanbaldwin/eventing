@@ -135,19 +135,6 @@
   // names.
   $c['validlabel']    = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
 
-  /**
-   * Namespace String
-   *
-   * @access public
-   * @params strings
-   * @return string
-   */
-  if(!function_exists('ns')) {
-    function ns() {
-      return '\\' . implode('\\', func_get_args()) . '\\';
-    }
-  }
-
   // All our constants are really great, but they're a little soft at the
   // moment... Shall we make them hardcore?
   foreach ($c as $name => $const) {
@@ -161,6 +148,19 @@
     $content_folder, $skeleton_mode, $config_type, $c, $name, $const,
     $modules_folder
   );
+
+  /**
+   * Namespace String
+   *
+   * @access public
+   * @params strings
+   * @return string
+   */
+  if(!function_exists('ns')) {
+    function ns() {
+      return '\\' . implode('\\', func_get_args()) . '\\';
+    }
+  }
 
   // Right, we have all out constants defined, with no loose variables floating
   // about... I think we're doing pretty well! Shall we load some common
