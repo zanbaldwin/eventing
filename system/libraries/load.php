@@ -176,7 +176,7 @@
       }
       // Grab the contents of the view, and return the output.
       ob_start();
-      require $view;
+      require ${'1v'};
       $output = ob_get_contents();
       ob_end_clean();
       return $output;
