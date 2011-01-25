@@ -23,6 +23,12 @@
         'shell' => 'html5shell'
       ));
       $this->load->model('example', 'dumdum', true);
+      // Adding data via the model super method.
+      $this->page->section('shell')->add(
+        'text',
+        $this->model('dumdum')->dummy()
+      );
+      // Adding data via the model super property.
       $this->page->section('shell')->add(
         'text',
         $this->dumdum->dummy()
