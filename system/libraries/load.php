@@ -46,6 +46,31 @@
      * @return boolean
      */
     public function library($library, $name = false) {
+      if(!is_string($library)) {
+        return false;
+      }
+      // If a valid name has not been set, use the library name. We don't need
+      // to check the library name, as the load_class() common function will
+      // fail if it is not valid.
+      if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
+        $name = xplode('/', $library);
+        $name = end($name);
+      }
+      // If the library has already been loaded (or another by the same name),
+      // return true to state that it is loaded.
+      if(isset($this->E->$name)) {
+        return true;
+      }
+      // Since the library has not already been loaded, grab an instance of it
+      // via the load_class() common function.
+      $lib = load_class($library);
+      // If the library does not exist, do the obvious.
+      if(!is_object($lib)) {
+        return false;
+      }
+      // Add the library onto the super-object.
+      $this->E->$name = $lib;
+      return true;
     }
 
     /**
