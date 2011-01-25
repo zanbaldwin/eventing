@@ -17,6 +17,13 @@
       $this->load->library('template');
     }
 
+    public function debug() {
+      if(!headers_sent()) {
+        header('Content-Type: text/plain');
+      }
+      echo 'Debug page.';
+    }
+
     public function index() {
     
       // Compile a list of routes to test.
