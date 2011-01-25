@@ -56,4 +56,80 @@
       }
     }
 
+    /**
+     * Set Model
+     * Set a model into the super models array, ready to be accessed via
+     * controllers, views, etc.
+     *
+     * @static
+     * @access public
+     * @param string $name
+     * @param object $model
+     * @param boolean $overwrite
+     * @return boolean
+     */
+    public static function setModel($name, $model, $overwrite = false) {
+      if(!is_string($name)
+        || !preg_match('#^' . VALIDLABEL . '$#', $name)
+        || !is_a($model, ns(NS, NSLIBRARY) . 'model')
+      ) {
+        return false;
+      }
+      if(isset(self::$models[$name]) && !bool($overwrite)) {
+        return false;
+      }
+      self::$models[$name] = $model;
+      return true;
+    }
+
+    /**
+     * Model
+     * Return an instance of a model.
+     *
+     * @access protected
+     * @param string $model
+     * @return false|object
+     */
+    protected function model($model) {
+      return isset(self::$models[$model]) ? self::$models[$model] : false;
+    }
+
+    /**
+     * Set Module
+     * Set a model into the super modules array, ready to be accessed via
+     * controllers, models, etc.
+     *
+     * @static
+     * @access public
+     * @param string $name
+     * @param object $module
+     * @param boolean $overwrite
+     * @return boolean
+     */
+    public static function setModule($name, $module, $overwrite = false) {
+      if(!is_string($name)
+        || !preg_match('#^' . VALIDLABEL . '$#', $name)
+        || !is_a($module, ns(NS, NSLIBRARY) . 'module')
+      ) {
+        return false;
+      }
+      if(isset(self::$modules[$name]) && !bool($overwrite)) {
+        return false;
+      }
+      self::$modules[$name] = $module;
+      return true;
+    }
+
+    /**
+     * Module
+     * Return an instance of a module
+     *
+     * @access protected
+     * @param string $module
+     * @return false|object
+     */
+    protected function module($module) {
+      return isset(self::$modules[$module]) ? self::$modules[$module] : false;
+    }
+
   }
