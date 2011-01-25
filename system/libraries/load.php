@@ -47,6 +47,35 @@
     }
 
     public function view($view, $data = false, $theme = false) {
+      // Determine the theme subfolder, falling back to defaults if one has not
+      // been specified.
+      $theme = is_string($theme)
+             ? $theme
+             : (is_string($theme = c('default_theme'))
+                ? $theme
+                : 'default');
+      $theme = trim($theme, '/') . '/';
+      // Compile the view's absolute file path.
+      $view = APP . 'themes/' . $theme . $view . EXT;
+      // Return if the view does not exist, there is nothing more we can do.
+      if(!file_exists($view)) {
+        return false;
+      }
+      // Save the view's filepath to a variable who's name is not a valid label
+      // and unset all the variables we don't need so there aren't any clashes
+      // with the extract() function.
+      ${'1v'} = $view;
+      unset($view, $theme);
+      // Extract the data, if there is any.
+      if(is_array($data)) {
+        extract($data, EXTR_SKIP);
+      }
+      // Grab the contents of the view, and return the output.
+      ob_start();
+      require $view;
+      $output = ob_get_contents();
+      ob_end_clean();
+      return $output;
     }
 
     public function helper($helper) {
