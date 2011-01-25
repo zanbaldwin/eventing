@@ -17,6 +17,7 @@
     }
 
     public function debug() {
+      $this->load->view('welcome_message', array());
       $this->load->library('template', 'page');
       $this->page->create(array(
         'shell' => 'html5shell'
