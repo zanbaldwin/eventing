@@ -65,7 +65,7 @@
      * @access public
      * @return object|false
      */
-    final public static function &getInstance($super = false) {
+    final public static function &getInstance() {
       static $objects = array();
       $class = get_called_class();
       if(isset($objects[$class]) && is_object($objects[$class])) {
