@@ -144,11 +144,7 @@
    */
   if(!function_exists('ns')) {
     function ns() {
-      if(func_num_args() == 0) {
-        return '\\';
-      }
-      $ns_str = implode('\\', func_get_args());
-      return '\\' . $ns_str . '\\';
+      return '\\' . implode('\\', func_get_args()) . '\\';
     }
   }
 
