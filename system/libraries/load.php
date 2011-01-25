@@ -25,7 +25,39 @@
     exit('Direct script access is disallowed.');
   }
 
-class load extends library
+  class load extends library {
+
+    protected $E;
+
+    protected function __construct() {
+      $this->E =& getInstance();
+    }
+
+    public function autoload() {
+      // Autoload from the autoload.php configuration file.
+    }
+
+    public function library($library, $name = false) {
+    }
+
+    public function model($model, $name = false, $super = false) {
+    }
+
+    public function module($module, $name = false, $super = false) {
+    }
+
+    public function view($view, $data = false, $theme = false) {
+    }
+
+    public function helper($helper) {
+      // Load a helper file.
+    }
+
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+
+class load0 extends library
 {
 
   private $E;
