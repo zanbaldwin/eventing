@@ -14,18 +14,23 @@
 
     protected function __construct() {
       parent::__construct();
-      $this->load->library('template');
     }
 
     public function debug() {
-      if(!headers_sent()) {
-        header('Content-Type: text/plain');
-      }
-      echo 'Debug page.';
+      $this->load->library('template', 'page');
+      $this->page->create(array(
+        'shell' => 'html5shell'
+      ));
+      $this->load->model('example', 'dumdum', true);
+      $this->page->section('shell')->add(
+        'text',
+        $this->dumdum->dummy()
+      );
     }
 
     public function index() {
-    
+      
+      $this->load->library('template');
       // Compile a list of routes to test.
       $routes = array(
         'example@mycontroller',
