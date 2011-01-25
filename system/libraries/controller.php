@@ -31,6 +31,9 @@
     // store an instance of this class in the following variable.
     protected static $_instance;
 
+    private static $models = array(),
+                   $modules = array();
+
     /**
      * Controller Construct Function
      *
