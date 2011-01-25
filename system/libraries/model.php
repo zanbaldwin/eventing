@@ -32,8 +32,8 @@
     protected function __construct()
     {
       // Do nothing for the moment?
-      // This is just so all models have access to the Eventing super object instead of having to use the
-      // getInstance() method. Happy days!
+      // This is just so all models have access to the Eventing super object
+      // instead of having to use the getInstance() method. Happy days!
     }
 
   }
