@@ -29,10 +29,22 @@
 
     protected $E;
 
+    /**
+     * Constructor Method
+     *
+     * @access protected
+     * @return void
+     */
     protected function __construct() {
       $this->E =& getInstance();
     }
 
+    /**
+     * Autoload
+     *
+     * @access public
+     * @return boolean
+     */
     public function autoload() {
       // Autoload from the autoload.php configuration file.
     }
