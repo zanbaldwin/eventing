@@ -46,7 +46,25 @@
      * @return boolean
      */
     public function autoload() {
-      // Autoload from the autoload.php configuration file.
+      // Grab the objects from the autoload.php configuration file.
+      $load = get_config('autoload');
+      if(!is_array($load)) {
+        return false;
+      }
+      // Iterate through each initial key-value pair to determine which method
+      // to invoke.
+      foreach($load as $method => $vars) {
+        // If the method does not exist, or the objects to load is not an array,
+        // move onto the next method.
+        if(!method_exists($this, $method) || !is_array($vars)) {
+          continue;
+        }
+        // Load the objects via the method specified in the array key.
+        foreach($vars as $name => $object) {
+          $this->$method($object, $name);
+        }
+      }
+      return true;
     }
 
     /**
