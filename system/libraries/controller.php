@@ -30,6 +30,7 @@
     // We don't want to create an extra instance when extending classes, so
     // store an instance of this class in the following variable.
     protected static $_instance;
+    private $loader = 'load';
 
     private static $models = array(),
                    $modules = array();
@@ -44,15 +45,36 @@
       // Save the instance, in case another one is created by another module
       // extending the Core library.
       self::$_instance =& $this;
-      // Load the libraries that need separate instances for separate modules.
-      $libs = array('router', 'input', 'output', 'load');
-      foreach($libs as $lib) {
-        if(!isset($this->$lib)) {
-          $obj = load_class($lib);
-          if(is_object($obj)) {
-            $this->$lib = load_class($lib);
-          }
-        }
+      // Define the core minimal required libraries that the application needs
+      // to run.
+      $libs = array('router', 'input', 'output');
+      // Initialise the Framework's core loading class.
+      $loadobj = load_class($this->loader);
+      if(!is_object($loadobj)) {
+        show_error(
+          'Framework application dependancy "Loader" class does not exist.',
+          '500 Framework Core Error'
+        );
+      }
+      // Set the Framework core loader to a property of the super object. If the
+      // loader property has already been set by something else that is
+      // unusable, overwrite it.
+      if(!isset($this->{$this->loader}) || !method_exists($this->{$this->loader}, 'library')) {
+        $this->{$this->loader} = $loadobj;
+      }
+      // Run one final check on the loader class itself, before attempting to use
+      // it.
+      if(!method_exists($this->{$this->loader}, 'library')) {
+        show_error(
+          'Framework application dependancy "Loader" class missing library '
+        . 'method.',
+          '500 Framework Core Error'
+        );
+      }
+      // Loop through all the core required libraries and load them using the
+      // Framework Loader we just set.
+      foreach($libs as $name => $library) {
+        $this->{$this->loader}->library($library, $name);
       }
     }
 
