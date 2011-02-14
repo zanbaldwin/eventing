@@ -71,6 +71,7 @@
     'file_over_folder' => false,
     'default_controller' => 'home',
     'default_method' => 'index',
+    'remap_method' => '_remap',
 
     // To enable usage of Zend Libraries within the framework, set this to where
     // the Zend Library folder is located. For example, if the Zend Loader class
