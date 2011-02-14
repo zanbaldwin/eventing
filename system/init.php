@@ -35,6 +35,7 @@
     'default_app'     => 'app',
     'modules_folder'  => 'modules',
     'system_folder'   => 'system',
+    'skeleton'        => false,
   );
 
   // Incorporate the user's settings into the default settings. We trust the
@@ -134,6 +135,10 @@
   // sure that it follows the same syntax as variables, functions and class
   // names.
   $c['validlabel']    = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+
+  // Do we want to run an instance of the framework with stripped down
+  // functionality, to make it faster and use less resources?
+  $c['skeleton']      = $skeleton ? true : false;
 
   // All our constants are really great, but they're a little soft at the
   // moment... Shall we make them hardcore?

@@ -32,11 +32,12 @@
 
   $user_config = array(
     // Can be "ini" or "array". Defaults to "array".
-    'config_type'    => 'array',
-    'content_folder' => 'public',
-    'default_app'    => 'app',
-    'modules_folder' => 'modules',
-    'system_folder'  => 'system',
+    'config_type'     => 'array',
+    'content_folder'  => 'public',
+    'default_app'     => 'app',
+    'modules_folder'  => 'modules',
+    'system_folder'   => 'system',
+    'skeleton'        => false,
   );
 
   # ========================================================================== #
