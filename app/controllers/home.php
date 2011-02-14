@@ -17,13 +17,11 @@
     }
 
     public function index() {
-      $this->load->library('template');
-      $this->template->create(array(
-        'shell' => 'welcome_message',
-        'head' => 'head',
-      ));
-      $this->template->section('shell')->add('title', 'Eventing PHP Framework');
-      $this->template->load('shell');
+      $data = array(
+        'title' => 'Eventing PHP Framework',
+      );
+      $view = $this->load->view('welcome_message', $data);
+      $this->output->append($view);
     }
 
   }
