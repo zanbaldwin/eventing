@@ -199,6 +199,24 @@
       return true;
     }
 
+    protected function render_vars($output, $precision = 4) {
+      if(!is_string($output)) {
+        return false;
+      }
+      if(!is_int($precision)) {
+        $precision = 4;
+      }
+      $elapsed_time = round(microtime(true) - E_FRAMEWORK, $precision);
+      $output = str_replace('{elapsed_time}', $elapsed_time, $output);
+      $memory_usage = round(
+                        (memory_get_usage() - E_MEMORY) / pow(1024, 2),
+                        $precision
+                      )
+                    . ' Mb';
+      $output = str_replace('{memory_usage}', $memory_usage, $output);
+      return $output;
+    }
+
     /**
      * Display Output
      *
@@ -223,7 +241,7 @@
         }
       }
       // Echo the buffered output to the client.
-      echo $this->output;
+      echo $this->render_vars($this->output);
       // Do we want to continue running the application, or should we terminate
       // now the client has got what they requested?
       if($continue) {
