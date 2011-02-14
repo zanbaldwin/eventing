@@ -187,7 +187,8 @@
   // this point whether we are loading a controller from the main application or
   // a module.
   load_class('controller', false);
-  load_class('module', false);
+  // If we are in skeleton mode, don't enable the use of modules.
+  SKELETON || load_class('module', false);
   // Load the model library, so it can be extended when we load a model.
   load_class('model', false);
   // Load the Router library and grab an instance.
@@ -214,7 +215,7 @@
   // exist. It's just a little more friendly to show our custom 404 page than
   // the user get a fatal error stating the ReflectionMethod class does not
   // exist.
-  if(class_exists('\\ReflectionMethod')) {
+  if(!SKELETON && class_exists('\\ReflectionMethod')) {
     $reflection = new \ReflectionMethod($r->controller(), $r->method());
     $reflection->isPublic() || show_404();
   }
