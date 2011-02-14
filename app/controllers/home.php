@@ -24,4 +24,15 @@
       $this->output->append($view);
     }
 
+    public function template() {
+
+      $this->output->header('Content-Type', 'text/plain');
+
+      // Example Template library usage.
+      $this->load->library('template');
+      $this->template->create('shell', 'welcome_message');
+      $this->template->section('shell')->add('title', 'Eventing: Template Usage Example');
+      $this->template->load('shell');
+    }
+
   }
