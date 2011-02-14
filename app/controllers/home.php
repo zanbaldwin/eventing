@@ -16,25 +16,6 @@
       parent::__construct();
     }
 
-    public function debug() {
-      $this->load->view('welcome_message', array());
-      $this->load->library('template', 'page');
-      $this->page->create(array(
-        'shell' => 'html5shell'
-      ));
-      $this->load->model('example', 'dumdum', true);
-      // Adding data via the model super method.
-      $this->page->section('shell')->add(
-        'text',
-        $this->model('dumdum')->dummy()
-      );
-      // Adding data via the model super property.
-      $this->page->section('shell')->add(
-        'text',
-        $this->dumdum->dummy()
-      );
-    }
-
     public function index() {
       $this->load->library('template');
       $this->template->create(array(
