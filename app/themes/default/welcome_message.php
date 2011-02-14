@@ -40,7 +40,7 @@
       <code>app/controllers/home.php</code>
       
       <p>Unfortunately, documentation is rather lacking at the moment. This will be rectified by the time we get round to releasing a public version (still under development).</p>
-      <p>Page rendered in {elapsed_time} seconds.</p>
+      <p>Page rendered in {elapsed_time} seconds and used {memory_usage} of memory.</p>
 
     </div>
   </body>
