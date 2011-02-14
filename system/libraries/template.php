@@ -507,7 +507,7 @@ class template extends library {
       return false;
     }
     $rendered = $this->combine($section);
-    if(!is_string($rendered)) {
+    if(!is_string($rendered) || $rendered == '') {
       return false;
     }
     $E =& getInstance();
