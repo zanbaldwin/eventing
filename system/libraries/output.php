@@ -11,7 +11,7 @@
  * @category   Eventing
  * @package    Libraries
  * @subpackage output
- * @copyright  (c) 2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -189,7 +189,7 @@
       if(!isset($this->status_codes[$code])) {
         return false;
       }
-      // Get the message, either by filtering 
+      // Get the message, either by filtering
       if(!is_string($message)) {
         $message = $this->status_codes[$code];
       }

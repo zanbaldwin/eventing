@@ -16,7 +16,7 @@
  * @package    Libraries
  * @subpackage router
  * @author     Alexander Baldwin
- * @copyright  (c) 2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -264,7 +264,7 @@
         $this->rsuffix          = $this->suffix;
         return;
       }
-      
+
       // We could do a quick check to see if the URI is set in the array keys of
       // $routes, but I've decided against this to prevent unexpected results
       // with suffixes. Just loop through the array. This shouldn't have too
@@ -309,7 +309,7 @@
             $route = str_replace('$' . $ref, $wild, $route);
           }
           // Now we have the URI the user wants to route to, treat it as the
-          // ruri_string from now on. 
+          // ruri_string from now on.
           $data = uri($route);
           if(!is_object($data)) {
             // Oh no! After all that hard work, the route the user supplied
@@ -317,7 +317,7 @@
             $this->valid = false;
             return;
           }
-          
+
           // Do exactly the same as in the constructor function, except saving
           // to the Re-Routed parts, instead of the URL parts.
           $ruri_string = '';

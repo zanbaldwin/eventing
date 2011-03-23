@@ -14,7 +14,7 @@
  * @package    Libraries
  * @subpackage Template
  * @author     Alexander Baldwin
- * @copyright  (c) 2010 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -61,7 +61,7 @@ class template extends library {
     ? $theme . '/'
     : false;
   }
-   
+
   /**
    * View Exists
    *
@@ -387,7 +387,7 @@ class template extends library {
    * @return boolean
    */
   protected function combine($section, $limit = 1) {
-     
+
     // Need to go away and think about this method. Rushing into it ends up
     // with me thinking of something that I should of done differently 5
     // minutes ago.
@@ -522,9 +522,9 @@ class template extends library {
 
   /**
    * Load Config
-   * 
+   *
    * Load the template settings from a pre-defined config file.
-   * 
+   *
    * @access public
    * @param string $config_file
    * @return boolean
@@ -546,7 +546,7 @@ class template extends library {
     isset($config['prefix']) && $this->set_prefix($config['prefix']);
     // Now to iterate over the rest...
   }
-  
+
 }
 
 //------------------------------------------------------------------------------

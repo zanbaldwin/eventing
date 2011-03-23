@@ -9,7 +9,7 @@
  * @package    Libraries
  * @subpackage router
  * @author     Alexander Baldwin
- * @copyright  (c) 2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -82,7 +82,7 @@
       return false;
     }
 
-    
+
     public function send($event, $description = '') {
       if(!is_string($event)) {
         return false;
@@ -106,9 +106,9 @@
       curl_setopt($ch, CURLOPT_POSTFIELDS , http_build_query($data, '', '&'));
       $return = curl_exec($ch);
       $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-      
+
       curl_close($ch);
-      
+
       switch($code) {
         case self::INVALID:
           return 'The application was passed incorrect parameters.';
@@ -254,7 +254,7 @@
         $params['providerkey'] = self::$provider;
       }
       // GO FETCH!
-      
+
       $url = $this->public_api . $method;
       $ch = curl_init($url);
       curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);

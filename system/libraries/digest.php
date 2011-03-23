@@ -13,7 +13,7 @@
  * @package    Libraries
  * @subpackage uri
  * @author     Alexander Baldwin
- * @copyright  (c) 2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing

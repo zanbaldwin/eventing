@@ -13,7 +13,7 @@
  * @package    Libraries
  * @subpackage HTTP
  * @author     Alexander Baldwin
- * @copyright  (c) 2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -33,7 +33,7 @@ class http extends library
 
   protected function __construct() {
   }
-  
+
   public function fetch($name, $url, $post_data = false, $headers = false) {
     if (isset($this->requests[$name])) {
       // That one already exists. Think of another name... It can't be that

@@ -9,7 +9,7 @@
  * @category   Eventing
  * @package    Core
  * @subpackage init
- * @copyright  2009 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Alexander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -146,7 +146,7 @@
     $name = strtoupper($name);
     defined($name) || define($name, $const);
   }
-  
+
   // You know what? I've had enough of you lot... Yeah, you heard me! Get lost!
   unset(
     $main_config, $user_config, $key, $value, $system_folder, $default_app,
@@ -239,7 +239,7 @@
   $E =& getInstance();
   $E->output->display();
 
-  //  _  _________ _    ___   ______          _____ _ 
+  //  _  _________ _    ___   ______          _____ _
   // | |/ /__   __| |  | \ \ / /  _ \   /\   |_   _| |
   // | ' /   | |  | |__| |\ V /| |_) | /  \    | | | |
   // |  <    | |  |  __  | > < |  _ < / /\ \   | | | |

@@ -12,7 +12,7 @@
    * @category   Eventing
    * @package    Core
    * @subpackage common
-   * @copyright  2009 Alexander Baldwin
+   * @copyright  (c) 2009 - 2011 Alexander Baldwin
    * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
    * @version    v0.4
    * @link       http://github.com/mynameiszanders/eventing
@@ -42,10 +42,10 @@
   if (!function_exists('eventing_error_handler')) {
     /**
      * Eventing Error Handler
-     * 
+     *
      * Custom error handler for error's thrown by PHP or ones that have been
      * triggered with trigger_error().
-     * 
+     *
      * @access public
      * @param integer $err
      * @param string $msg
@@ -99,10 +99,10 @@
   if(!function_exists('binary_parts')) {
     /**
      * Binary Parts
-     * 
+     *
      * Returns an array of integers. Each integer is a power of 2 that adds up
      * to the number passed to the function.
-     * 
+     *
      * @access public
      * @param integer $int
      * @return array|false
@@ -201,7 +201,7 @@
       }
       // Whack it in, baby!
       // This is where we hope the file actually doesn't contain anything to
-      // screw up the framework, like inline HTML, or worse, 
+      // screw up the framework, like inline HTML, or worse,
       require_once $file;
       // Check that the library class exists.
       if(!class_exists($class)) {
@@ -446,9 +446,9 @@
   if(!function_exists('show_teapot_error')) {
     /**
      * Show Teapot Error
-     * 
+     *
      * Show the HTTP Teapot error according to RFC2324.
-     * 
+     *
      * @access public
      * @return exit
      */
@@ -593,7 +593,7 @@
   if(!function_exists('a')) {
     /**
      * Anchor
-     * 
+     *
      * Function relating to all things Framework URL, plus a bit more! Segments
      * to URL, with file extension and query string support, plain old
      * wrap-link-in-html-tag, and fetch link from config file. If the second
@@ -602,14 +602,14 @@
      * If the URL has already been used by this function, it will add the
      * attribute rel="nofollow" to prevent search engines thinking you are
      * trying to spam them.
-     * 
+     *
      * @access public
      * @param string $path
      * @param string $title
      * @param array $options
      * @return string|false
      */
-    
+
     function a($path, $title = false, $options = array()) {
       static $used_urls = array();
       if(!is_string($path)) {
@@ -738,10 +738,10 @@
   if(!function_exists('theme_path')) {
     /**
      * Theme Path
-     * 
+     *
      * Specify a theme and will return the absolute path to the theme directory.
      * Will return false if the theme directory does not exist.
-     * 
+     *
      * @access public
      * @param string $theme
      * @return string|false
@@ -761,9 +761,9 @@
   if(!function_exists('get_themes')) {
     /**
      * Get Themes
-     * 
+     *
      * Returns an array of folders that are inside the themes directory.
-     * 
+     *
      * @access public
      * @return array
      */
