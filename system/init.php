@@ -26,6 +26,11 @@
 		E_USER_ERROR
 	);
 
+	// This framework now requires PHP5.3 for quite a lot of functionality. If we are running anything less, terminate.
+	if(PHP_VERSION_ID < 50300) {
+		trigger_error('This installation of PHP is running version ' . PHP_VERSION . ', but this framework requires version 5.3.0 or greater.', E_USER_ERROR);
+	}
+
 	// Set the defaults for the user index config array.
 	$main_config = array(
 		'config_type'     => 'array',

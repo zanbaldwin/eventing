@@ -16,15 +16,6 @@
 		exit('Direct script access is disallowed.');
 	}
 
-	// This framework now requires PHP5.3 for quite a lot of functionality. If we
-	// are running anything less, terminate.
-	if(PHP_VERSION_ID < 50300) {
-		show_error(
-			'This installation of PHP is running version ' . PHP_VERSION
-			. ', but this framework requires version 5.3.0 or greater.'
-		);
-	}
-
 	// This is against standard practice, to set error reporting to full, especially
 	// for production, but in truth, if you don't want errors coming up in your
 	// applications, start writing better code!
