@@ -97,7 +97,7 @@
       ) {
         return false;
       }
-      if(isset(self::$models[$name]) && !bool($overwrite)) {
+      if(isset(self::$models[$name]) && !$overwrite) {
         return false;
       }
       self::$models[$name] = $model;
@@ -135,7 +135,7 @@
       ) {
         return false;
       }
-      if(isset(self::$modules[$name]) && !bool($overwrite)) {
+      if(isset(self::$modules[$name]) && !$overwrite) {
         return false;
       }
       self::$modules[$name] = $module;

@@ -26,6 +26,16 @@
 		E_USER_ERROR
 	);
 
+	// This framework now requires PHP5.3 for quite a lot of functionality. If we are running anything less, terminate.
+	if(PHP_VERSION_ID < 50300) {
+		trigger_error('This installation of PHP is running version ' . PHP_VERSION . ', but this framework requires version 5.3.0 or greater.', E_USER_ERROR);
+	}
+
+	// This is against standard practice, to set error reporting to full, especially for production. However, the truth
+	//of the matter is, if you don't want errors coming up in your applications, start writing better code!
+	error_reporting(-1);
+	ini_set('display_errors', 1);
+
 	// Set the defaults for the user index config array.
 	$main_config = array(
 		'config_type'     => 'array',
@@ -48,10 +58,9 @@
 
 	// Bring them... ALIVE!!!
 	@extract($main_config);
-	$c = array();
 
 	// CONSTANTS.
-	$constants = 'init/constants.php';
+	$constants = rtrim(str_replace('\\', '/', dirname(__FILE__)), '/') . '/init/constants.php';
 	file_exists($constants) || trigger_error('Constant declarations could not be loaded.', E_USER_ERROR);
 	require_once $constants;
 
