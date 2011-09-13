@@ -51,16 +51,15 @@
 	$c = array();
 
 	// CONSTANTS.
-	require_once "init/constants.php";
+	$constants = 'init/constants.php';
+	file_exists($constants) || trigger_error('Constant declarations could not be loaded.', E_USER_ERROR);
+	require_once $constants;
 
 	// Right, we have all out constants defined, with no loose variables floating
 	// about... I think we're doing pretty well! Shall we load some common
 	// functions? Let's!
 	$common = SYS . 'init/common' . EXT;
-	file_exists($common) || trigger_error(
-		'Common functions could not be loaded.',
-		E_USER_ERROR
-	);
+	file_exists($common) || trigger_error('Common functions could not be loaded.', E_USER_ERROR);
 	require_once $common;
 
 	// Cool. We have functions. Now we want libraries! Big, fat, juicy libraries!
