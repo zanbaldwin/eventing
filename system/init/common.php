@@ -24,7 +24,6 @@
 		'load_class',
 		'getinstance',
 		'bool',
-		'bl',
 		'get_config',
 		'c',
 		'filter_path',
