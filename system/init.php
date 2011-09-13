@@ -53,19 +53,6 @@
 	// CONSTANTS.
 	require_once "init/constants.php";
 
-	/**
-	 * Namespace String
-	 *
-	 * @access public
-	 * @params strings
-	 * @return string
-	 */
-	if(!function_exists('ns')) {
-		function ns() {
-			return '\\' . implode('\\', func_get_args()) . '\\';
-		}
-	}
-
 	// Right, we have all out constants defined, with no loose variables floating
 	// about... I think we're doing pretty well! Shall we load some common
 	// functions? Let's!

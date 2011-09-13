@@ -124,6 +124,19 @@
 		}
 	}
 
+	if(!function_exists('ns')) {
+		/**
+		 * Namespace String
+		 *
+		 * @access public
+		 * @params strings
+		 * @return string
+		 */
+		function ns() {
+			return '\\' . implode('\\', func_get_args()) . '\\';
+		}
+	}
+
 	if (!function_exists('load_class')) {
 		/**
 		 * Load Class
