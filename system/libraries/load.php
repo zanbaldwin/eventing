@@ -153,7 +153,7 @@
       $controller = ns(NS, NSLIBRARY) . 'controller';
       $controller::setModel($name, $model);
       // If specified, create a super property for the model.
-      if(bool($super) && !isset($this->E->$name)) {
+      if($super && !isset($this->E->$name)) {
         $this->E->$name = $model;
       }
       return true;

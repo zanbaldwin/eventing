@@ -102,6 +102,6 @@
 				: false;
 			// Return the data we've collected in the format the function callee
 			// requested.
-			return bool($object) ? (object) $u : $u;
+			return $object ? (object) $u : $u;
 		}
 	}

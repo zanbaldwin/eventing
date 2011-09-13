@@ -24,7 +24,7 @@
 			if(!is_string($url) || headers_sent()) {
 				return false;
 			}
-			$header = bool($location) ? 'Location: ' : 'Refresh: 0; url=';
+			$header = $location ? 'Location: ' : 'Refresh: 0; url=';
 			$header .= $url;
 			header('HTTP/1.1 307 Temporary Redirect', true, 307);
 			header($header);

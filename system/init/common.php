@@ -23,7 +23,6 @@
 		'ns',
 		'load_class',
 		'getinstance',
-		'bool',
 		'get_config',
 		'c',
 		'filter_path',

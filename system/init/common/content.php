@@ -24,7 +24,6 @@
 		 * @return false|string
 		 */
 		function content($file, $force = false) {
-			$force = bool($force);
 			if(is_null(CONTENTPATH) || is_null(CONTENT)) {
 				return false;
 			}

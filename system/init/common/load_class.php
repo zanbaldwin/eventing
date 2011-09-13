@@ -30,7 +30,6 @@
 			if(!is_string($identifier)) {
 				return false;
 			}
-			$return = bool($return);
 			// Check if the specified library is an empty string and that it adheres
 			// to the "module:path/to/library" syntax.
 			$regex = '#^(([a-zA-Z_][a-zA-Z0-9_]*)?@)?([a-zA-Z_][a-zA-Z0-9_/]*)$#';
