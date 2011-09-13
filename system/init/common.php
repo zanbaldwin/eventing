@@ -57,7 +57,8 @@
 	/**
 	 * Post loading logic
 	 *
-	 * Any logic that requires the common functions to be loaded should be declared here.
+	 * Any logic that requires the common functions to be loaded should be declared here. Anything that is not to do
+	 * with the loading or configuration of common functions should go back into the initialisation script.
 	 */
 
 	// Set PHP's error handler to the Eventing error handler.
