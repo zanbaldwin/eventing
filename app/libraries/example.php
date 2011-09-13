@@ -1,10 +1,10 @@
 <?php
 
-  namespace Eventing\Application\Library;
+	namespace Eventing\Application\Library;
 
-  class example extends \Eventing\Library\library {
+	class example extends \Eventing\Library\library {
 
-    protected function __construct() {
-    }
+		protected function __construct() {
+		}
 
-  }
+	}
