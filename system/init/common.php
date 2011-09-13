@@ -16,12 +16,6 @@
 		exit('Direct script access is disallowed.');
 	}
 
-	// This is against standard practice, to set error reporting to full, especially
-	// for production, but in truth, if you don't want errors coming up in your
-	// applications, start writing better code!
-	error_reporting(-1);
-	ini_set('display_errors', 1);
-
 	// Define a list of functions that should be loaded.
 	$common_functions = array(
 		'error_handler',
