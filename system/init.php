@@ -58,10 +58,9 @@
 
 	// Bring them... ALIVE!!!
 	@extract($main_config);
-	$c = array();
 
 	// CONSTANTS.
-	$constants = 'init/constants.php';
+	$constants = rtrim(str_replace('\\', '/', dirname(__FILE__)), '/') . '/init/constants.php';
 	file_exists($constants) || trigger_error('Constant declarations could not be loaded.', E_USER_ERROR);
 	require_once $constants;
 
