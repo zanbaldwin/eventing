@@ -1,18 +1,14 @@
 <?php
 
 /**
- * Eventing Framework Common Functions
+ * Common functions
  *
- * Common functions used throughout the framework.
+ * Define common helper functions that will be used throughout the framework.
  *
- * @category   Eventing
- * @package    Core
- * @subpackage common
- * @copyright  (c) 2009 - 2011 Zander Baldwin
- * @license    MIT/X11 <http://j.mp/mit-license>
- * @version    v0.4
- * @link       http://github.com/mynameiszanders/eventing
- * @since      v0.1
+ * @category	Eventing
+ * @package		Init
+ * @subpackage	Common
+ * @see			/index.php
  */
 
 	if (!defined('E_FRAMEWORK')) {
