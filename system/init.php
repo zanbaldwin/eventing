@@ -69,7 +69,7 @@
 	// Right, we have all out constants defined, with no loose variables floating
 	// about... I think we're doing pretty well! Shall we load some common
 	// functions? Let's!
-	$common = SYS . 'common' . EXT;
+	$common = SYS . 'init/common' . EXT;
 	file_exists($common) || trigger_error(
 		'Common functions could not be loaded.',
 		E_USER_ERROR
