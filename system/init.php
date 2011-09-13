@@ -6,16 +6,13 @@
  * This is where we start all our settings, libraries and other odd-jobs to get
  * the ball rolling...
  *
- * @category   Eventing
- * @package    Core
- * @subpackage init
- * @copyright  (c) 2009 - 2011 Zander Baldwin
- * @license    MIT/X11 <http://j.mp/mit-license>
- * @version    v0.4
- * @link       http://github.com/mynameiszanders/eventing
- * @since      v0.1
+ * @category	Eventing
+ * @package		Init
+ * @subpackage	Core
+ * @see			/index.php
  */
 
+	// Make sure we have everything to start initialising the framework with, so we can run the application.
 	defined('E_FRAMEWORK') || trigger_error(
 		'E_FRAMEWORK has not been defined.',
 		E_USER_ERROR
@@ -29,6 +26,7 @@
 		E_USER_ERROR
 	);
 
+	// Set the defaults for the user index config array.
 	$main_config = array(
 		'config_type'     => 'array',
 		'content_folder'  => 'public',
@@ -52,107 +50,8 @@
 	@extract($main_config);
 	$c = array();
 
-	// We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's
-	// don't set this *cough* Windows *cough*
-	if(!isset($_SERVER['DOCUMENT_ROOT'])) {
-		if(isset($_SERVER['SERVER_SOFTWARE'])
-		   && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === 0
-		) {
-			$path_length = strlen($_SERVER['PATH_TRANSLATED'])
-						 - strlen($_SERVER['SCRIPT_NAME']);
-			$_SERVER['DOCUMENT_ROOT'] = rtrim(
-				substr($_SERVER['PATH_TRANSLATED'], 0, $path_length),
-				'\\'
-			);
-		}
-	}
-
-	// File and System Constants.
-	$c['config'] = strtolower($config_type) == 'ini' ? 'ini' : 'array';
-	$c['self'] = basename($main_file);
-	$c['ext'] = explode('.', $c['self']);
-	$c['ext'] = '.' . end($c['ext']);
-
-	// URL Constants.
-	$c['server'] = (isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)
-		? 'https://'.$_SERVER['SERVER_NAME']
-		: 'http://'.$_SERVER['SERVER_NAME'];
-	$c['url'] = preg_replace(
-		'|/+|',
-		'/',
-		'/' . trim(
-			str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])),
-			'/'
-		) . '/'
-	);
-	$c['baseurl']  = $c['server'].$c['url'];
-
-	// Directory Constants.
-	$c['basepath'] = rtrim(
-		str_replace('\\', '/', realpath(dirname($main_file))),
-		'/'
-	) . '/';
-	$c['sys'] = rtrim(
-		str_replace('\\', '/', realpath($system_folder)),
-		'/'
-	) . '/';
-	$c['app'] = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
-	$c['mod'] = realpath($modules_folder);
-	$c['mod'] = is_string($c['mod'])
-		? rtrim(str_replace('\\', '/', $c['mod']), '/') . '/'
-		: null;
-	$c['contentpath'] = rtrim(
-		str_replace('\\', '/', realpath($content_folder)),
-		'/'
-	) . '/';
-	// Check that the content directory is a sub-directory of the web root. If it
-	// is not, set it as null.
-	$c['content'] = null;
-	if(is_string($_SERVER['DOCUMENT_ROOT'])) {
-		$len = strlen($_SERVER['DOCUMENT_ROOT']);
-		if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT']) {
-			$c['content'] = trim(substr($c['contentpath'], $len), '/');
-			$c['content'] = $c['content']
-				? '/' . $c['content'] . '/'
-				: '/';
-			$c['content'] = $c['server'] . $c['content'];
-		}
-	}
-	// If the contenturl cannot be established, or it is outside the web root,
-	// there is no point having the content path.
-	if(is_null($c['content'])) {
-		$c['contentpath'] = null;
-	}
-
-	// Define our list of namespaces used throughout our framework.
-	$c['ns']			= 'Eventing';
-	$c['nslibrary']		= 'Library';
-	$c['nscontroller']	= 'Application';
-	$c['nsmodel']		= 'Model';
-	$c['nsmodule']		= 'Module';
-
-	// Define a PCRE RegEx for a valid label in PHP. This check a string to make
-	// sure that it follows the same syntax as variables, functions and class
-	// names.
-	$c['validlabel']	= '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
-
-	// Do we want to run an instance of the framework with stripped down
-	// functionality, to make it faster and use less resources?
-	$c['skeleton']		= $skeleton ? true : false;
-
-	// All our constants are really great, but they're a little soft at the
-	// moment... Shall we make them hardcore?
-	foreach ($c as $name => $const) {
-		$name = strtoupper($name);
-		defined($name) || define($name, $const);
-	}
-
-	// You know what? I've had enough of you lot... Yeah, you heard me! Get lost!
-	unset(
-		$main_config, $user_config, $key, $value, $system_folder, $default_app,
-		$content_folder, $skeleton_mode, $config_type, $c, $name, $const,
-		$modules_folder
-	);
+	// CONSTANTS.
+	require_once "init/constants.php";
 
 	/**
 	 * Namespace String
