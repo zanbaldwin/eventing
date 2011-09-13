@@ -25,64 +25,59 @@
 		);
 	}
 
-	require_once "common/error_handler.php";
-
 	// This is against standard practice, to set error reporting to full, especially
 	// for production, but in truth, if you don't want errors coming up in your
 	// applications, start writing better code!
 	error_reporting(-1);
 	ini_set('display_errors', 1);
 
+	// Define a list of functions that should be loaded.
+	$common_functions = array(
+		'error_handler',
+		'binary_parts',
+		'ns',
+		'load_class',
+		'getinstance',
+		'bool',
+		'bl',
+		'get_config',
+		'c',
+		'filter_path',
+		'show_error',
+		'show_404',
+		'show_deny',
+		'show_teapot',
+		'show_doc',
+		'uri',
+		'a',
+		'theme_path',
+		'get_themes',
+		'content',
+		'redirect',
+		'vardump',
+		'xplode',
+		'elapsed_time',
+		'copyright',
+	);
+
+	// Iterate through the list of functions and load them. If any of them do not exist, terminate the application.
+	foreach($common_functions as $function) {
+		$function_file = SYS . 'init/common/' . $function . EXT;
+		file_exists($function_file) || trigger_error(
+			'Unable to load common function "'. $function . '". Terminating application.',
+			E_USER_ERROR
+		);
+		require_once $function_file;
+	}
+
+	/**
+	 * Post loading logic
+	 *
+	 * Any logic that requires the common functions to be loaded should be declared here.
+	 */
+
 	// Set PHP's error handler to the Eventing error handler.
 	set_error_handler('eventing_error_handler');
-
-	require_once "common/binary_parts.php";
-
-	require_once "common/ns.php";
-
-	require_once "common/load_class.php";
-
-	require_once "common/getinstance.php";
-
-	require_once "common/bool.php";
-
-	require_once "common/bl.php";
-
-	require_once "common/get_config.php";
-
-	require_once "common/c.php";
-
-	require_once "common/filter_path.php";
-
-	require_once "common/show_error.php";
-
-	require_once "common/show_404.php";
-
-	require_once "common/show_deny.php";
-
-	require_once "common/show_teapot.php";
-
-	require_once "common/show_doc.php";
-
-	require_once "common/uri.php";
-
-	require_once "common/a.php";
-
-	require_once "common/theme_path.php";
-
-	require_once "common/get_themes.php";
-
-	require_once "common/content.php";
-
-	require_once "common/redirect.php";
-
-	require_once "common/vardump.php";
-
-	require_once "common/xplode.php";
-
-	require_once "common/elapsed_time.php";
-
-	require_once "common/copyright.php";
 
 	// Define the default suffix, so that we know what to use incase one isn't
 	// given in the application URI or any eURI's.
