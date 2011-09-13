@@ -9,8 +9,8 @@
  * @category   Eventing
  * @package    Core
  * @subpackage init
- * @copyright  (c) 2009 - 2011 Alexander Baldwin
- * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
+ * @copyright  (c) 2009 - 2011 Zander Baldwin
+ * @license    MIT/X11 <http://j.mp/mit-license>
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
  * @since      v0.1
