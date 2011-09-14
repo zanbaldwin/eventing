@@ -14,7 +14,7 @@
 
 	/*
 	 * Prerequisites
-	 * -------------
+	 * =============
 	 * Make sure we have everything to start initialising the framework with, so we can run the application. This is
 	 * mainly just the index file reference, the correct PHP version, error reporting, etc.
 	 */
