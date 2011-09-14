@@ -11,6 +11,11 @@
  * @see			/index.php
  */
 
+	if (!defined('E_FRAMEWORK')) {
+		headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
+		exit('Direct script access is disallowed.');
+	}
+
 	$c = array();
 
 	// We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's don't set this *cough* Windows *cough*.
