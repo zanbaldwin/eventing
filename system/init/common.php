@@ -16,41 +16,15 @@
 		exit('Direct script access is disallowed.');
 	}
 
-	// Define a list of functions that should be loaded.
-	$common_functions = array(
-		'error_handler',
-		'binary_parts',
-		'ns',
-		'load_class',
-		'getinstance',
-		'get_config',
-		'c',
-		'filter_path',
-		'show_error',
-		'show_404',
-		'show_deny',
-		'show_teapot',
-		'show_doc',
-		'uri',
-		'a',
-		'theme_path',
-		'get_themes',
-		'content',
-		'redirect',
-		'vardump',
-		'xplode',
-		'elapsed_time',
-		'copyright',
-	);
-
-	// Iterate through the list of functions and load them. If any of them do not exist, terminate the application.
+	// Define a list of functions that should be loaded from the common functions directory.
+	$common_functions = glob(SYS . 'init/common/*' . EXT);
+	// Iterate through the list, and terminate the application if any of them cannot be loaded.
 	foreach($common_functions as $function) {
-		$function_file = SYS . 'init/common/' . $function . EXT;
-		file_exists($function_file) || trigger_error(
-			'Unable to load common function "'. $function . '". Terminating application.',
+		file_exists($function) || !is_readable($function) || trigger_error(
+			'Unable to load common function "' . basename($function, EXT) . '". Terminating application.',
 			E_USER_ERROR
 		);
-		require_once $function_file;
+		require_once $function;
 	}
 
 	/**
