@@ -25,11 +25,11 @@
 		 * @param integer $int
 		 * @return array|false
 		 */
-		function binary_parts((int) $int) {
-			if($int < 0) {
+		function binary_parts($int) {
+			if(!is_int($int) || $int < 0) {
 				return false;
 			}
-			$arr = str_split(decbin((int) $int));
+			$arr = str_split(decbin($int));
 			$arr = array_reverse($arr);
 			$count = count($arr);
 			$parts = array();
