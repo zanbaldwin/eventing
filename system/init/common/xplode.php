@@ -18,8 +18,7 @@
 		/**
 		 * Xplode
 		 *
-		 * Same as the PHP explode() function, except if the second paramter is
-		 * an empty string it will return an empty
+		 * Same as the PHP explode() function, except if the second paramter is an empty string it will return an empty
 		 * array, instead of an array containing an empty string.
 		 *
 		 * @param string $delimiter
