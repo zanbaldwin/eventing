@@ -109,14 +109,17 @@
 	 * We have constants and functions. Now we need some higher-level, advanced functionality. We need libraries; big,
 	 * juicy libraries. The ones loaded here are the ones required for any application request. If you wish to go into
 	 * specific functionality, load the extra libraries in your controllers or autoload them.
+	 * Unless we want to assign the library to a variable to use, such as the router, specify bool(false) as the second
+	 * parameter to prevent the function from creating an instance of the class. This would prevent the framework from
+	 * working in most cases.
 	 */
 
 	// Firstly, we want the singleton "Library" library. This forces you to grab existing instances of Eventing
-	// libraries, rather than create new ones each time.
+	// libraries, rather than create new ones each time. We must specify false; we can't load an instance of an abstract
+	// class.
 	load_class('library', false);
-	// Load both Controller and Module class definitions, because we don't know at
-	// this point whether we are loading a controller from the main application or
-	// a module.
+	// Load both Controller and Module class definitions, because we don't know at this point whether we are loading a
+	// controller from the main application or a module.
 	// Load the Controller class definition. We automatically assume that a request wants to route to a controller,
 	// rather than a page. However, load the Module class definition (if we are not in skeleton mode) anyway.
 	load_class('controller', false);
