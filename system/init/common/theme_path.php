@@ -18,8 +18,8 @@
 		/**
 		 * Theme Path
 		 *
-		 * Specify a theme and will return the absolute path to the theme directory.
-		 * Will return false if the theme directory does not exist.
+		 * Returns an absolute path to the specified theme, providing it exists, or the theme container directory if
+		 * boolean(true) is passed. All other instances return false.
 		 *
 		 * @access public
 		 * @param string $theme
