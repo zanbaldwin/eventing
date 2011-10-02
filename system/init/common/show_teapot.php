@@ -30,8 +30,8 @@
 					'http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol',
 					'HTCPCP'
 				)
-				. ' server you requested a page from is a teapot, the entity may be short '
-				. 'or stout. Please '
+				. ' server you requested a page from is a teapot, the entity may be short'
+				. ' or stout. Please '
 				. a(
 					'coffee://' . $_SERVER['SERVER_NAME'] . '/brew/',
 					'brew yourself a coffee'
