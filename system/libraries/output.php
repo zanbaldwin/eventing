@@ -193,16 +193,8 @@
 			if(!is_string($output)) {
 				return false;
 			}
-			if(!is_int($precision)) {
-				$precision = 4;
-			}
-			$elapsed_time = round(microtime(true) - E_FRAMEWORK, $precision);
-			$output = str_replace('{elapsed_time}', $elapsed_time, $output);
-			$memory_usage = round(
-				(memory_get_usage() - E_MEMORY) / pow(1024, 2),
-				$precision
-			) . ' Mb';
-			$output = str_replace('{memory_usage}', $memory_usage, $output);
+			$output = str_replace('{elapsed_time}', elapsed_time(), $output);
+			$output = str_replace('{memory_usage}', memory_usage(), $output);
 			return $output;
 		}
 
