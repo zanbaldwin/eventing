@@ -29,10 +29,12 @@
 		 */
 		function show_doc($error_number) {
 			$file = theme_path('errors') . (string) $error_number . EXT;
-			if(headers_sent() || !file_exists($file)) {
-				return false;
+			if(file_exists($file) && !headers_sent()) {
+				header('', true, (int) $error_number);
+				require $file;
+				exit;
 			}
-			require $file;
-			exit;
+			$header = $error_number . ' Document does not exist';
+			show_error($header, $header);
 		}
 	}
