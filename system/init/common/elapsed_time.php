@@ -35,13 +35,6 @@
 					? (float) preg_replace($regex, '$2.$1', $start)
 					: false;
 			}
-			// We should also check the end time, because microtime(true) will
-			// return a string is PHP is less than 5.
-			if (is_string($end)) {
-				$end = preg_match($regex, $end)
-					? (float) preg_replace($regex, '$2.$1', $end)
-					: false;
-			}
 			if (!is_float($start) || !is_float($end)) {
 				return false;
 			}
