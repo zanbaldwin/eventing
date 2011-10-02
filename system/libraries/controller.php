@@ -48,8 +48,7 @@
 			$loadobj = load_class($this->loader);
 			if(!is_object($loadobj)) {
 				show_error(
-					'Framework application dependancy "Loader" class does not exist.',
-					'500 Framework Core Error'
+					'Framework application dependancy "Loader" class does not exist.'
 				);
 			}
 			// Set the Framework core loader to a property of the super object. If the
@@ -63,8 +62,7 @@
 			if(!method_exists($this->{$this->loader}, 'library')) {
 				show_error(
 					'Framework application dependancy "Loader" class missing library '
-					. 'method.',
-					'500 Framework Core Error'
+					. 'method.'
 				);
 			}
 			// Loop through all the core required libraries and load them using the
