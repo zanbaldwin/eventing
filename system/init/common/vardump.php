@@ -18,8 +18,7 @@
 		/**
 		 * Vardump
 		 *
-		 * Same as the PHP var_dump() function, except it returns the value, instead
-		 * of dumping it to the output.
+		 * Same as the PHP var_dump() function, except it returns the value, instead of dumping it to the output.
 		 *
 		 * @param mixed $var
 		 * @return string
