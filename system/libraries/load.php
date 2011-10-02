@@ -323,11 +323,11 @@ class load0 extends library
     ? $view
     : APP . 'themes/' . $theme . '/' . $view . EXT;
     unset($view, $theme);
-    if (!file_exists($_E_Load_View_file)) {
+    if(!file_exists($_E_Load_View_file)) {
       return false;
     }
     ob_start();
-    if (is_array($_E_Load_View_data)) {
+    if(is_array($_E_Load_View_data)) {
       // Remove as many variables as possible.
       unset($theme, $view);
       extract($_E_Load_View_data, EXTR_SKIP);

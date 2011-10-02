@@ -9,17 +9,16 @@
  * @see			/index.php
  */
 
-	if (!defined('E_FRAMEWORK')) {
+	if(!defined('E_FRAMEWORK')) {
 		headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
 		exit('Direct script access is disallowed.');
 	}
 
-	if (!function_exists('eventing_error_handler')) {
+	if(!function_exists('eventing_error_handler')) {
 		/**
 		 * Eventing Error Handler
 		 *
-		 * Custom error handler for error's thrown by PHP or ones that have been
-		 * triggered with trigger_error().
+		 * Custom error handler for error's thrown by PHP or ones that have been triggered with trigger_error().
 		 *
 		 * @access	public
 		 * @param	integer $err
