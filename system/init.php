@@ -114,18 +114,22 @@
 	 * working in most cases.
 	 */
 
-	// Firstly, we want the singleton "Library" library. This forces you to grab existing instances of Eventing
-	// libraries, rather than create new ones each time. We must specify false; we can't load an instance of an abstract
-	// class.
-	load_class('library', false);
-	// Load both Controller and Module class definitions, because we don't know at this point whether we are loading a
-	// controller from the main application or a module.
-	// Load the Controller class definition. We automatically assume that a request wants to route to a controller,
-	// rather than a page. However, load the Module class definition (if we are not in skeleton mode) anyway.
-	load_class('controller', false);
-	SKELETON || load_class('module', false);
-	// Load the model library, so it can be extended when we load a model. Used for both controllers and pages.
-	load_class('model', false);
+	// Define the core libraries that have to be loaded, the library library MUST be the FIRST library declared - all others depend on it.
+	$sponge = array('library', 'controller', 'model');
+	// Define the libraries that are required, but are not necessary for the bare minimum to run the framework.
+	$jam = array('module', 'database');
+	// Image the first lot of libraries as Victoria sponge; it's not a cake without cake. The next lot of arrays are the
+	// jam, they just make it that much nicer to eat, but isn't a necessity. Any libraries loaded from within the
+	// application controllers themselves are the icing and the cherry on top.
+	foreach($sponge as $lib) {
+		load_class($lib, false);
+	}
+	if(!SKELETON) {
+		foreach($jam as $lib) {
+			load_class($lib, false);
+		}
+	}
+
 	// Load the Router library and grab an instance. This library performs the job of URI and Router library in one.
 	$r = load_class('router');
 
@@ -207,8 +211,11 @@
 	 * show a 404 page.
 	 */
 
-	else {
+	elseif(!SKELETON) {
 		$E->load->module('pages')->load($r->ruri_string()) || show_404();
+	}
+	else {
+		show_404();
 	}
 
 	/*
