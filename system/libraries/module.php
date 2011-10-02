@@ -24,7 +24,6 @@
 	class module extends library {
 
 		protected function __construct() {
-			parent::__construct();
 			// Load the libraries that need separate instances for separate modules.
 			$libs = array('input');
 			foreach($libs as $lib) {
