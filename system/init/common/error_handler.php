@@ -49,8 +49,9 @@
 			// Define which error types we will account for.
 			$trigger = c('error_types_trigger');
 			if(!is_int($trigger)) {
-				// The default.
-				$trigger = 17237;
+				// If a value has not been set, default to the following errors:
+				// Error, Warning, User Error, User Warning, Deprecated and User Deprecated.
+				$trigger = 25347;
 			}
 			$triggers = binary_parts($trigger);
 			if(!in_array($err, $triggers)) {
@@ -58,9 +59,9 @@
 			}
 			// Build the error overwrite data array.
 			$error = array(
-				'title'    => "Error {$err} ({$types[$err]})",
-				'file'     => $file,
-				'line'     => $line
+				'title'	=> 'Error ' . $err . ' (' . $types[$err] . ').',
+				'file'	=> $file,
+				'line'	=> $line,
 			);
 			// Show an error!
 			show_error($msg, '500 Internal Server Error', $error);
