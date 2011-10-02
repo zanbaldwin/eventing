@@ -25,7 +25,7 @@
 		 * @param  string|float $start
 		 * @return false|float
 		 */
-		function elapsed_time($start) {
+		function elapsed_time($start = E_FRAMEWORK) {
 			// Grab the time now, so we can compare.
 			$end = microtime(true);
 			// The user probably passed the microtime as a string.
