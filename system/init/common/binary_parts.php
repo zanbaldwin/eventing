@@ -25,12 +25,8 @@
 		 * @param integer $int
 		 * @return array|false
 		 */
-		function binary_parts($int) {
-			if(!is_int($int)
-				|| (!is_numeric($int)
-				|| !preg_match('|^[0-9]+$|', $int))
-				|| $int < 0
-			) {
+		function binary_parts((int) $int) {
+			if($int < 0) {
 				return false;
 			}
 			$arr = str_split(decbin((int) $int));
