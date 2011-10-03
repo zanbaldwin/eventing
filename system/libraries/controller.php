@@ -42,8 +42,6 @@
 			if(!is_object(self::$_instance)) {
 				self::$_instance =& $this;
 			}
-			// Define the core minimal required libraries that the application needs to run.
-			$libs = array('router', 'input', 'output');
 			// Initialise the Framework's core loading class.
 			$loadobj = load_class($this->loader);
 			if(!is_object($loadobj)) {
@@ -61,15 +59,29 @@
 			// it.
 			if(!method_exists($this->{$this->loader}, 'library')) {
 				show_error(
-					'Framework application dependancy "Loader" class missing library '
-					. 'method.'
+					'Framework application dependancy "Loader" class missing library method.'
 				);
 			}
+			// Define the core minimal required libraries that the application needs to run.
+			$libs = array('router', 'input', 'output');
 			// Loop through all the core required libraries and load them using the
 			// Framework Loader we just set.
 			foreach($libs as $name => $library) {
 				$this->{$this->loader}->library($library, $name);
 			}
+			SKELETON || $this->_autoload();
+		}
+
+		/**
+		 * Autoloader
+		 *
+		 * Take the user setting from the autoload config file and load them into the super-object.
+		 *
+		 * @access private
+		 * @return void
+		 */
+		private function _autoload() {
+			$autoload = get_config('autoload');
 		}
 
 		/**
