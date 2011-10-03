@@ -19,7 +19,4 @@
 	}
 
 	abstract class database extends library {
-
-		protected $driver = null;
-
 	}
