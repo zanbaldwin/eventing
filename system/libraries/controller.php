@@ -46,6 +46,7 @@
 			$loadobj = load_class($this->loader);
 			if(!is_object($loadobj)) {
 				show_error(
+					'',
 					'Framework application dependancy "Loader" class does not exist.'
 				);
 			}
@@ -59,6 +60,7 @@
 			// it.
 			if(!method_exists($this->{$this->loader}, 'library')) {
 				show_error(
+					'',
 					'Framework application dependancy "Loader" class missing library method.'
 				);
 			}

@@ -21,22 +21,14 @@
 		 * Show the HTTP Teapot error according to RFC2324.
 		 *
 		 * @access public
-		 * @return exit
+		 * @return void
 		 */
 		function show_teapot() {
-			show_doc(418) || show_error(
-				'The '
-				. a(
-					'http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol',
-					'HTCPCP'
-				)
-				. ' server you requested a page from is a teapot, the entity may be short'
-				. ' or stout. Please '
-				. a(
-					'coffee://' . $_SERVER['SERVER_NAME'] . '/brew/',
-					'brew yourself a coffee'
-				) . '!',
-				'418 I\'m a teapot'
+			$htcpcp = a('http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol', 'HTCPCP');
+			$coffee = a('coffee://' . SERVER . '/brew/', 'brew yourself a coffee');
+			show_error(
+				'418 I Am A Teapot',
+				'The ' . $htcphp . ' server you requested a page from is a teapot, the entity may be short or stout. Please ' . $coffee . '!'
 			);
 		}
 	}

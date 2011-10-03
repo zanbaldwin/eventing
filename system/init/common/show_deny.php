@@ -18,13 +18,16 @@
 		/**
 		 * Show Deny
 		 *
-		 * Calls show_doc(403), trying to find a user error document. If this fails,
-		 * default to the not-so-pretty show_error().
+		 * Shortcut function to call the show_error() function, to either display an error document, or if one does not
+		 * exist, display an XML error.
+		 *
+		 * @access public
+		 * @return void
 		 */
 		function show_deny() {
-			show_doc(403) || show_error(
-				'You do not have sufficient clearance to view this page.',
-				'403 Forbidden'
+			show_error(
+				'403 Forbidden',
+				'You do not have sufficient clearance to view this page.'
 			);
 		}
 	}

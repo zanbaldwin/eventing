@@ -31,8 +31,8 @@
 			$file = APP . 'config/' . $config_file;
 			if(CONFIG == 'ini') {
 				function_exists('parse_ini_file') || show_error(
-					'Cannot retrieve config settings. INI file parser does not exist.',
-					500
+					'',
+					'Cannot retrieve config settings. INI file parser does not exist.'
 				);
 				$file .= '.ini';
 				if(!file_exists($file)) {

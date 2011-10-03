@@ -63,7 +63,8 @@
 				'file'	=> $file,
 				'line'	=> $line,
 			);
+			$msg = "Error {$err} ({$types[$err]}) at line {$line} in \"{$file}\": {$msg}";
 			// Show an error!
-			show_error($msg, '500 Internal Server Error', $error);
+			show_error('', $msg);
 		}
 	}
