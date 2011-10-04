@@ -48,8 +48,6 @@
 					$this->globals[$name][$var] = $val;
 				}
 			}
-			// Set all the global variables to empty arrays, this stops users accessing unfiltered input data.
-			$_GET = $_POST = $_COOKIE = $_ENV = $_SESSION = array();
 		}
 
 		private function preset_cookies() {
