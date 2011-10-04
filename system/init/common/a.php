@@ -87,13 +87,17 @@
 				if($uri->query) {
 					// If the query string data from the URI function is a string, it is referencing that we should grab
 					// the query data from the options array.
-					if(is_string($uri->query) && isset($options[$uri->query]) && is_array($options[$uri->query])) {
-						$query = array_merge($query, $options[$uri->query]);
-					}
-					// Unset the query data in the options array, regardless of what data type it is, to prevent it from
-					// appearing in the HTML tag as an attribute.
 					if(is_string($uri->query) && isset($options[$uri->query])) {
+						if(is_array($options[$uri->query])) {
+							$query = array_merge($query, $options[$uri->query]);
+						}
+						// Unset the query data in the options array, regardless of what data type it is, to prevent it
+						// from appearing in the HTML tag as an attribute.
 						unset($options[$uri->query]);
+					}
+					// If the query data from the eURI object is an array, merge it with the one we already have.
+					if(is_array($uri->query)) {
+						$query = array_merge($query, $uri->query);
 					}
 				}
 				$query = count($query)
@@ -103,13 +107,16 @@
 				$fragment = $uri->fragment
 					? '#' . $uri->fragment
 					: null;
-				// Rebuild our URL. If the $path specified that it was not an absolute URL, and the module and segments
-				// are not present, disregard the $domain part. Using just a query string and/or fragment references the
-				// current request segments again anyway. Else, build the whole thing.
-				$path = !$uri->absolute && !$application && ($query || $fragment)
+				// Rebuild our URL.
+				// Sometimes we only want to use the query and fragment pieces, as they refer to the current request
+				// anyway. However, we only want this to happen if the eURI was not absolute, there were no references
+				// to a different application route (module, segments and suffix), that at least either the query or
+				// fragment is present (an empty URL will refer to the directory this pseudo-file request supposidly
+				// resides in), and that the query string WAS specified in the $path (that it hasn't been added in by
+				// the save_gets feature).
+				$path = !$uri->absolute && !$application && ($query || $fragment) && $path != ''
 					? $query . $fragment
 					: $domain . $application . $query . $fragment;
-				#$path = $domain . $application . $query . $fragment;
 			}
 			/* *****
 			 * Begin Section: If there's a title, wrap it in an HTML anchor tag.
