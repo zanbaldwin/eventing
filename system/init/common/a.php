@@ -34,127 +34,140 @@
 		 * @return string|false
 		 */
 		function a($path, $title = false, $options = array()) {
+			// Create a container for URL's that have already been wrapped in anchor tags.
 			static $used_urls = array();
 			if(!is_string($path)) {
-				return false;
+				// We return null in case the return value does not get checked before being outputed as a string. Null evaluates to an empty string, whereas false evaluates to "0".
+				return null;
 			}
-			// Set the optional parameters to safe values.
+			// Make sure the options array passed is actually an array. Force it's hand.
 			$options = (array) $options;
-			$title = !is_string($title) || !$title ? false : $title;
-			// If $path is a reference to a link inside the links configuration file,
-			// then grab the shortcut name, and fetch it from the config array.
-			$shortcut_regex = '#^~('.VALIDLABEL.')$#';
+			/* *****
+			 * Being Section: Shortcut Expanding
+			 */
+			$shortcut_regex = '/^~(' . VALIDLABEL . ')$/';
 			if(preg_match($shortcut_regex, $path, $matches)) {
-				$link = c($matches[1], 'links');
-				if(!is_string($link)) {
-					return false;
+				$path = c($matches[1], 'links');
+				if(!is_string($path)) {
+					return null;
 				}
-				$path = $link;
 			}
-			// Check that the $path is not an absolute URL. If not, then treat $path
-			// as an Eventing-style URI.
+			/* *****
+			 * Begin Section: Not an absolute URL, parse as an eURI.
+			 */
 			if(!filter_var($path, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
-				$data = uri($path);
-				if(!is_object($data)) {
-					return false;
+				// Convert the $path string into an eURI object to work on.
+				$uri = uri($path);
+				if(!is_object($uri)) {
+					return null;
 				}
-				// Determine how our URL should reference the domain and application
-				// directory.
-				$server = ($data->absolute ? BASEURL : URL)
-					. (!c('mod_rewrite')
-					&& ($data->module || $data->segments)
-						? SELF . '/'
-						: '');
-				// Build the URL part that gets used by the application for routing.
-				$application = ltrim(
-					($data->module              ? $data->module . '@' : '')
-					. $data->segments
-					. $data->suffix,
-					'/'
-				);
-				// Build the query string depending on what source we are going to use.
-				$query = '';
-				if($data->query) {
-					// If the query data returned is a string, it means that it's a
-					// placeholder for a query array held in the $options array.
-					if(is_string($data->query)
-						&& isset($options[$data->query])
-						&& is_array($options[$data->query])
-					) {
-						$query_identifier = $data->query;
-						$data->query = $options[$data->query];
-						unset($options[$query_identifier], $query_identifier);
-					}
-					// Now we have satisfied the query placeholder, check that the query
-					// data is an array ready to be made into a query string.
-					if(is_array($data->query)) {
-						$query = '?' . http_build_query($data->query, null, '&');
+				// Determine how our URL shoudl reference the domain and application directory.
+				$domain = $uri->absolute
+					? BASEURL
+					: URL;
+				if(!c('mod_rewrite') && ($uri->module || $uri->segments)) {
+					$domain .= SELF . '/';
+				}
+				// Build the URL segment part that gets used by the application for routing.
+				$application = ltrim($uri->segments . $uri->suffix, '/');
+				if($uri->module) {
+					$application = $uri->module . '@' . $application;
+				}
+				// Build the query string from saved vars from the current request, mashed up with the query string
+				// passed to this function, either in the options array, or directly in the $path string.
+				$query = array();
+				// Compile a list of query string variables that should be persisted, as set in the configuration file.
+				if(is_array($save_gets = c('save_gets'))) {
+					foreach($save_gets as $save_var) {
+						if(isset($_GET[$save_var])) {
+							$query[$save_var] = $_GET[$save_var];
+						}
 					}
 				}
-				// Include a URL fragment if one has been set.
-				$fragment = $data->fragment ? '#' . $data->fragment : '';
-				// Rebuild our path from the URL parts we just created from the string
-				// that was originally passed to the function. If only the fragment was
-				// passed, then only use the fragment part, as passing more than that
-				// will make the page reload. Fragment is usually intended for internal
-				// page navigation or Javascript, neither of which want the page to
-				// reload.
-				$uri = $application . $query . $fragment;
-				if($path != '#') {
-					$path = substr($uri, 0, 1) == '#' && !$data->absolute
-						? $fragment
-						: $server . $uri;
+				if($uri->query) {
+					// If the query string data from the URI function is a string, it is referencing that we should grab
+					// the query data from the options array.
+					if(is_string($uri->query) && isset($options[$uri->query]) && is_array($options[$uri->query])) {
+						$query = array_merge($query, $options[$uri->query]);
+					}
+					// Unset the query data in the options array, regardless of what data type it is, to prevent it from
+					// appearing in the HTML tag as an attribute.
+					if(is_string($uri->query) && isset($options[$uri->query])) {
+						unset($options[$uri->query]);
+					}
 				}
+				$query = count($query)
+					? '?' . http_build_query($query, null, '&')
+					: null;
+				// After the query goes the fragment. Build it if it has been set.
+				$fragment = $uri->fragment
+					? '#' . $uri->fragment
+					: null;
+				// Rebuild our URL. If the $path specified that it was not an absolute URL, and the module and segments
+				// are not present, disregard the $domain part. Using just a query string and/or fragment references the
+				// current request segments again anyway. Else, build the whole thing.
+				$path = !$uri->absolute && !$application && ($query || $fragment)
+					? $query . $fragment
+					: $domain . $application . $query . $fragment;
+				#$path = $domain . $application . $query . $fragment;
 			}
-			// The path is now a valid URL!
-			// Check that we haven't already used the URL already. If we have, add a
-			// rel="nofollow" to stop search engine crawlers thinking we're trying to
-			// spam them.
-			if(in_array($path, $used_urls)) {
-				if(isset($options['rel'])) {
-					if(!is_array($options['rel'])) {
-						$rels = xplode(' ', (string) $options['rel']);
+			/* *****
+			 * Begin Section: If there's a title, wrap it in an HTML anchor tag.
+			 */
+			if(is_string($title)) {
+				// If we have already used this URL in another anchor tag on the same request, add a rel="nofollow"
+				// attribute to it, to stop search engine crawlers thinking we're spamming their sexy asses. I'm looking
+				// at you, Google. Please note that we are removing the fragment from the URL, because the same URL with
+				// a different fragment IS STILL THE SAME URL.
+				$hard_url = ($pos = strpos($path, '#')) !== false
+					? substr($path, 0, $pos)
+					: $path;
+				if($hard_url && in_array($hard_url, $used_urls)) {
+					if(isset($options['rel'])) {
+						if(!is_array($options['rel'])) {
+							$rels = xplode(' ', (string) $options['rel']);
+						}
+						if(!in_array('nofollow')) {
+							$rels[] = 'nofollow';
+						}
+						$options['rel'] = implode(' ', $rels);
 					}
-					if(!in_array('nofollow', $rels)) {
-						$rels[] = 'nofollow';
+					else {
+						$options['rel'] = 'nofollow';
 					}
-					$options['rel'] = implode(' ', $rels);
 				}
 				else {
-					$options['rel'] = 'nofollow';
+					$used_urls[] = $hard_url;
 				}
-			}
-			elseif($title) {
-				$used_urls[] = $path;
-			}
-			// If the title evaluates to true, it means we have a valid string (we
-			// have already done checks on it). We want to wrap the URL in an anchor
-			// tag, and add a title and attributes.
-			if($title) {
-				// Compile the options string from the array passed in the third
-				// parameter.
-				$o = '';
+				// Every anchor tag should have a title attribute. If one is not specified in the options array, use the
+				// title as the title. Simple, eh? True, we could get image tags as the title, but hey, if that happens
+				// just grab your handbag, whack in a brick, and hit your front-end developer with it :)
+				if(!isset($options['title'])) {
+					$options['title'] = $title;
+				}
+				// Now we want to build our attributes from reading each entry in the options array.
+				$attributes = '';
 				foreach($options as $attr => $value) {
-					// We do not want our href attribute being overwritten, else there
-					// would be no point in having the first parameter!
-					if($attr == 'href') {
+					// If the attribute name is not a string, then we can use it. More importantly we DO NOT want to
+					// overwrite our href attribute. There would be no point in the first parameter of this function
+					// otherwise!
+					if(!is_string($attr) || $attr == 'href') {
 						continue;
 					}
-					// If the attribute isn't a string, then it can't go in the HTML tag.
-					if(is_string($attr)) {
-						// If the value is an array (such as an array of rel tags or class
-						// names), implode them into a space-separated string.
-						if(is_array($value)) {
-							$value = implode(' ', $value);
-						}
-						$o .= ' ' . $attr . '="' . htmlentities((string) $value) . '"';
-					}
+					// Force the value to be a string. Bit pointless in an HTML tag otherwise?
+					$value = is_array($value)
+						? implode(' ', $value)
+						: (string) $value;
+					$attributes .= ' ' . $attr . '="' . htmlentities($value) . '"';
 				}
-				// Build our HTML tag.
-				$path = '<a href="' . htmlentities($path) . '"' . $o . '>'
-				. $title
-				. '</a>';
+				// Build our final HTML anchor tag... Come on, altogether now!
+				$path = '<a href="' . htmlentities($path) . '"' . $attributes . '>' . $title . '</a>';
 			}
-			return $path;
+			/* *****
+			 * End Function: Everything has been calculated, compiled and cuddled. Return the $path (which may now be an
+			 * HTML anchor tag, so not technically a path anymore, but we love it exactly the same. Don't we
+			 * snugglebuttons?)
+			 */
+			 return $path;
 		}
 	}
