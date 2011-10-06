@@ -60,7 +60,7 @@
 			$libs = array('router', 'input', 'output');
 			// Loop through all the core required libraries and load them using the
 			// Framework Loader we just set.
-			foreach($libs as $name => $library) {
+			foreach($libs as $library) {
 				$this->$loader->library($library);
 			}
 			SKELETON || $this->_autoload();
