@@ -69,7 +69,7 @@
 			if(!class_exists($class)) {
 				return false;
 			}
-			$objects[$class] = isset($class::$_instance) && is_object($class::$_instance)
+			$objects[$class] = isset($class::$_instance) && is_a($class::$_instance, $class)
 				? $class::$_instance
 				: new $class;
 			return $objects[$class];
