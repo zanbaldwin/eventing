@@ -2,11 +2,9 @@ Eventing PHP Framework ![Project Status](http://stillmaintained.com/mynameiszand
 ======================
 
 Eventing is a PHP framework by [Zander Baldwin][1] based on the HMVC design pattern, licensed under the [MIT/X11][2].
-At the core, the basic structure is similar to [CodeIgniter][3] (the early core libraries were inspired by Codeigniter's design), but the framework boasts features such as modules, namespaces, multiple URL suffixes, a moderately advanced theme templating system, etc.
+At the core, the basic structure is similar to [CodeIgniter][3] (the early core libraries were inspired by Codeigniter's design), but the framework boasts features such as modules, namespaces, multiple URL suffixes, a moderately advanced theme templating system, etc. This project is now being managed under the [Git Flow model][6].
 
-The Eventing Framework, at this moment in time, is now the base for the [LessHub project][5] server-side framework. The repository has been transferred from [Zander's account][1] to [LessHub's][5] on GitHub and it is now being managed under the [Git Flow model][6].
-
-Eventing requires [PHP version 5.3][4] or greater.
+The Eventing Framework, at this moment in time, is now the base for the [LessHub project][5] server-side framework, and required PHP version [5.3][4] or greater.
 
 Enjoy!
 
