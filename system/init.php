@@ -118,8 +118,8 @@
 	$sponge = array('library', 'controller', 'model');
 	// Define the libraries that are required, but are not necessary for the bare minimum to run the framework.
 	$jam = array('module', 'database');
-	// Image the first lot of libraries as Victoria sponge; it's not a cake without cake. The next lot of arrays are the
-	// jam, they just make it that much nicer to eat, but isn't a necessity. Any libraries loaded from within the
+	// Imagine the first lot of libraries as Victoria sponge; it's not a cake without cake. The next lot of arrays are
+	// the jam, they just make it that much nicer to eat, but isn't a necessity. Any libraries loaded from within the
 	// application controllers themselves are the icing and the cherry on top.
 	foreach($sponge as $lib) {
 		load_class($lib, false);

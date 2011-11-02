@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /**
  * Common function
@@ -19,7 +19,7 @@
 		 * Get Instance
 		 *
 		 * Global version of the getInstance method in libraries, returns an
-		 * instance of the super (core) object.
+		 * instance of the super/core (controller) object.
 		 *
 		 * @access public
 		 * @return object
