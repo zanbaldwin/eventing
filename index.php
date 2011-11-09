@@ -17,8 +17,8 @@
  * @author		Zander Baldwin
  * @copyright	(c) 2009 - 2011 Zander Baldwin
  * @license		MIT/X11 <http://j.mp/mit-license>
- * @link		http://github.com/lesshub/eventing
- * @version		$VERSION
+ * @link		http://github.com/mynameiszanders/eventing
+ * @version		1.0
  */
 
 	/**
