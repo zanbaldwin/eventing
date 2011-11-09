@@ -184,18 +184,13 @@
 	}
 
 	/*
-	 * Eventing super object
-	 * =====================
-	 * Load the Eventing super-object so we can use libraries like Load and Output.
-	 */
-
-	$E =& getInstance();
-
-	/*
 	 * Load controller
 	 * ===============
 	 * If the application request was for a controller, the class would have already been loaded into PHP's memory. Grab
 	 * an instance of it and run the method.
+	 * IMPORTANT! The global getInstance() function MUST NOT be called before the getInstance() method has been called
+	 * on the controller. This will create two seperate instances; one for the controller, and another that the
+	 * libraries will be loaded onto!
 	 */
 
 	if($controller) {
@@ -212,7 +207,7 @@
 	 */
 
 	elseif(!SKELETON) {
-		$E->load->module('pages')->load($r->ruri_string()) || show_404();
+		getInstance()->load->module('pages')->load($r->ruri_string()) || show_404();
 	}
 	else {
 		show_404();
@@ -225,7 +220,7 @@
 	 * the last thing to do before terminating.
 	 */
 
-	$E->output->display();
+	getInstance()->output->display();
 
 	# =================================================== #
 	#   _  _________ _    ___   ______          _____ _   #
