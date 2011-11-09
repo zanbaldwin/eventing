@@ -1,7 +1,13 @@
-﻿(function($) {
+﻿(function(undefined) {
 
-  $(document).ready(function() {
+	var document	= this.document,
+		$			= this.jQuery;
+	if(typeof $ !== "function") {
+		return false;
+	}
 
-  });
+	$(document).ready(function() {
+		// DOM Loaded. Do your stuff.
+	});
 
-})(jQuery);
+}).call(this);

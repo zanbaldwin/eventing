@@ -11,7 +11,7 @@
  * @category   Eventing
  * @package    Libraries
  * @subpackage load
- * @copyright  (c) 2009 - 2011 Alexander Baldwin
+ * @copyright  (c) 2009 - 2011 Zander Baldwin
  * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
  * @version    v0.4
  * @link       http://github.com/mynameiszanders/eventing
@@ -67,45 +67,55 @@
       return true;
     }
 
-    /**
-     * Load Library
-     *
-     * @access public
-     * @param string $library
-     * @param string $name
-     * @return boolean
-     */
-    public function library($library, $name = false) {
-      if(!is_string($library)) {
-        return false;
-      }
-      $library = trim(filter_path($library), '/');
-      // If a valid name has not been set, use the library name.
-      if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
-        $name = xplode('/', $library);
-        $name = end($name);
-        // If the library name itself is not a valid label, return false.
-        if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
-          return false;
-        }
-      }
-      $name = strtolower($name);
-      // If the library has already been loaded (or another by the same name),
-      // return true to state that it is loaded.
-      if(isset($this->E->$name)) {
-        return true;
-      }
-      // Since the library has not already been loaded, grab an instance of it
-      // via the load_class() common function.
-      $lib = load_class($library);
-      // If the library does not exist, do the obvious.
-      if(!is_object($lib)) {
-        return false;
-      }
-      // Add the library onto the super-object.
-      $this->E->$name = $lib;
-      return true;
-    }
+    	/**
+    	 * Load library
+    	 *
+    	 * Load a library into the super-object controller.
+    	 *
+    	 * @access public
+    	 * @param string $library
+    	 * @param string $name
+    	 * @param boolean $overwrite
+    	 * @return boolean
+    	 */
+    	public function library($library, $name = false, $overwrite = false) {
+    		if(!is_string($library)) {
+    			return false;
+    		}
+    		$library = trim(filter_path($library), '/');
+    		$lib_name = xplode('/', $library);
+    		$lib_name = strtolower(end($lib_name));
+
+    		// If the library name is not valid, there is no point continuing.
+    		if(!preg_match('/^' . VALIDLABEL . '$/', $lib_name)) {
+    			return false;
+    		}
+    		// Also, if a valid name for the library container has not been set, use the library name as default.
+    		if(!is_string($name) || !preg_match('/^' . VALIDLABEL . '$/', $name)) {
+    			$name = $lib_name;
+    		}
+    		// Grab an instance of the library, and make sure that the library exists.
+    		$library = load_class($library);
+    		if(!is_object($library)) {
+    			return false;
+    		}
+    		// Now, we have some extra checks if something has already been set in the place of $name.
+    		if(isset($this->E->$name)) {
+    			// If the library has already been set (the objects are the same), then we don't need to do anything.
+    			// Just return bool(true).
+    			if($library == $this->E->$name) {
+    				return true;
+    			}
+    			// If they are different, return failure - bool(false) - if we do not want to overwrite. Otherwise, if
+				// we do, just carry on.
+    			if(!$overwrite) {
+    				return false;
+    			}
+    		}
+    		// Set the library to the $name container in the super-object controller, and return bool(true).
+			$this->E->$name = $library;
+    		return true;
+    	}
 
     /**
      * Load Model
@@ -153,7 +163,7 @@
       $controller = ns(NS, NSLIBRARY) . 'controller';
       $controller::setModel($name, $model);
       // If specified, create a super property for the model.
-      if(bool($super) && !isset($this->E->$name)) {
+      if($super && !isset($this->E->$name)) {
         $this->E->$name = $model;
       }
       return true;
@@ -323,11 +333,11 @@ class load0 extends library
     ? $view
     : APP . 'themes/' . $theme . '/' . $view . EXT;
     unset($view, $theme);
-    if (!file_exists($_E_Load_View_file)) {
+    if(!file_exists($_E_Load_View_file)) {
       return false;
     }
     ob_start();
-    if (is_array($_E_Load_View_data)) {
+    if(is_array($_E_Load_View_data)) {
       // Remove as many variables as possible.
       unset($theme, $view);
       extract($_E_Load_View_data, EXTR_SKIP);

@@ -11,8 +11,7 @@ Eventing requires [PHP version 5.3][4] or greater.
 Enjoy!
 
 [1]: http://github.com/mynameiszanders "Zander Baldwin on GitHub"
-[2]: http://www.opensource.org/licenses/mit-license.php
-     "Massachusetts Institute of Technology License on the Open Source Initiative"
+[2]: http://j.mp/mit-license "Massachusetts Institute of Technology License on the Open Source Initiative"
 [3]: http://codeigniter.com/ "CodeIgniter open source Web Application Framework"
 [4]: http://php.net/releases/5_3_0.php "PHP 5.3.0 Release Announcement"
 [5]: https://github.com/lesshub "LessHub project on GitHub"

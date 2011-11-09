@@ -75,10 +75,10 @@ accessible from the super object like so...
 
     $this->load->library('system_library');
     $this->system_library->some_method();
-    
+
     $this->load->model('some_model');
     $this->model('some_model')->some_method();
-    
+
     // Unlike CodeIgniter, the view loader returns the output rather than add
     // it to the Output library, this due to the integration with the Template
     // library.
@@ -89,10 +89,10 @@ properties, though this can be overwritten (via the second parameter); models
 should be returned from the `model()` method of the [Core][7] library.
 
     $this->load->module('some_module');
-    
+
     $this->module('some_module')->library('some_library');
     $this->module('some_module')->some_library->some_method();
-    
+
     $this->module('some_module')->model('some_model')->some_method();
 
 ## URLs
@@ -182,7 +182,7 @@ Modules should be accessed from a controller, ideally like:
     $this->load->module('module_name');
     $module = $this->module('module_name');
     $module->run('controller/method', $data);
-    
+
     // For example:
     $this->load->module('image');
     $data = array(
@@ -198,11 +198,11 @@ Modules should be accessed from a controller, ideally like:
 [1]: http://en.wikipedia.org/wiki/Libjpeg "libjpeg on Wikipedia"
 [2]: http://www.ubuntu.com/ "Ubuntu Linux Distrobution"
 [3]: http://yorba.org/shotwell/ "Shotwell: Open source photo manager for GNOME"
-[4]: https://github.com/mynameiszanders/eventing/blob/master/system/common.php
-     "Common functions (mynameiszanders/eventing@master)"
-[5]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/router.php
-     "Router library (mynameiszanders/eventing@master)"
-[6]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/input.php
-     "Input library (mynameiszanders/eventing@master)"
-[7]: https://github.com/mynameiszanders/eventing/blob/master/system/libraries/core.php
-     "Core library (mynameiszanders/eventing@master)"
+[4]: https://github.com/lesshub/eventing/blob/master/system/common.php
+     "Common functions (lesshub/eventing@master)"
+[5]: https://github.com/lesshub/eventing/blob/master/system/libraries/router.php
+     "Router library (lesshub/eventing@master)"
+[6]: https://github.com/lesshub/eventing/blob/master/system/libraries/input.php
+     "Input library (lesshub/eventing@master)"
+[7]: https://github.com/lesshub/eventing/blob/master/system/libraries/core.php
+     "Core library (lesshub/eventing@master)"

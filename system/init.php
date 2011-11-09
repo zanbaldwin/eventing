@@ -6,242 +6,228 @@
  * This is where we start all our settings, libraries and other odd-jobs to get
  * the ball rolling...
  *
- * @category   Eventing
- * @package    Core
- * @subpackage init
- * @copyright  (c) 2009 - 2011 Alexander Baldwin
- * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
- * @version    v0.4
- * @link       http://github.com/mynameiszanders/eventing
- * @since      v0.1
+ * @category	Eventing
+ * @package		Init
+ * @subpackage	Core
+ * @see			/index.php
  */
 
-  defined('E_FRAMEWORK') || trigger_error(
-    'E_FRAMEWORK has not been defined.',
-    E_USER_ERROR
-  );
-  isset($main_file) || trigger_error(
-    'Main file is not specified.',
-    E_USER_ERROR
-  );
-  file_exists($main_file) || trigger_error(
-    'The main file does not exist.',
-    E_USER_ERROR
-  );
+	/*
+	 * Prerequisites
+	 * =============
+	 * Make sure we have everything to start initialising the framework with, so we can run the application. This is
+	 * mainly just the index file reference, the correct PHP version, error reporting, etc.
+	 */
 
-  $main_config = array(
-    'config_type'     => 'array',
-    'content_folder'  => 'public',
-    'default_app'     => 'app',
-    'modules_folder'  => 'modules',
-    'system_folder'   => 'system',
-    'skeleton'        => false,
-  );
+	defined('E_FRAMEWORK') || trigger_error(
+		'E_FRAMEWORK has not been defined.',
+		E_USER_ERROR
+	);
+	isset($main_file) || trigger_error(
+		'Main file is not specified.',
+		E_USER_ERROR
+	);
+	file_exists($main_file) || trigger_error(
+		'The main file does not exist.',
+		E_USER_ERROR
+	);
 
-  // Incorporate the user's settings into the default settings. We trust the
-  // user to have all the right stuff there... Well, almost...
-  if(is_array($user_config)) {
-    foreach ($user_config as $key => $value) {
-      if(array_key_exists($key, $main_config)) {
-        $main_config[$key] = is_string($value) ? strtolower($value) : $value;
-      }
-    }
-  }
+	// This framework now requires PHP5.3 for quite a lot of functionality. If we are running anything less, terminate.
+	if(PHP_VERSION_ID < 50300) {
+		trigger_error('This installation of PHP is running version ' . PHP_VERSION . ', but this framework requires version 5.3.0 or greater.', E_USER_ERROR);
+	}
 
-  // Bring them... ALIVE!!!
-  @extract($main_config);
-  $c = array();
+	// This is against standard practice, to set error reporting to full, especially for production. However, the truth
+	// of the matter is, if you don't want errors coming up in your applications, start writing better code!
+	error_reporting(-1);
+	ini_set('display_errors', 1);
 
-  // We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's
-  // don't set this *cough* Windows *cough*
-  if(!isset($_SERVER['DOCUMENT_ROOT'])) {
-    if(isset($_SERVER['SERVER_SOFTWARE'])
-       && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === 0
-    ) {
-      $path_length = strlen($_SERVER['PATH_TRANSLATED'])
-                   - strlen($_SERVER['SCRIPT_NAME']);
-      $_SERVER['DOCUMENT_ROOT'] = rtrim(
-        substr($_SERVER['PATH_TRANSLATED'], 0, $path_length),
-        '\\'
-      );
-    }
-  }
+	/*
+	 * Directory structure and preferences
+	 * ===================================
+	 * Merge the users index configuration with the defaults defined here and extract for use later. Well, not later,
+	 * we're actually going to be using them next...
+	 * We supply defaults because we don't trust the user to be able to keep the settings, or to not add any of their own.
+	 */
 
-  // File and System Constants.
-  $c['config'] = strtolower($config_type) == 'ini' ? 'ini' : 'array';
-  $c['self'] = basename($main_file);
-  $c['ext'] = explode('.', $c['self']);
-  $c['ext'] = '.' . end($c['ext']);
+	$main_config = array(
+		'config_type'     => 'array',
+		'content_folder'  => 'public',
+		'default_app'     => 'app',
+		'modules_folder'  => 'modules',
+		'system_folder'   => 'system',
+		'skeleton'        => false,
+	);
+	if(is_array($user_config)) {
+		foreach ($user_config as $key => $value) {
+			if(array_key_exists($key, $main_config)) {
+				$main_config[$key] = is_string($value) ? strtolower($value) : $value;
+			}
+		}
+	}
 
-  // URL Constants.
-  $c['server'] = (isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)
-               ? 'https://'.$_SERVER['SERVER_NAME']
-               : 'http://'.$_SERVER['SERVER_NAME'];
-  $c['url'] = preg_replace(
-    '|/+|',
-    '/',
-    '/' . trim(
-      str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])),
-    '/'
-    ) . '/'
-  );
-  $c['baseurl']  = $c['server'].$c['url'];
+	// Bring them... ALIVE!!!
+	@extract($main_config);
 
-  // Directory Constants.
-  $c['basepath'] = rtrim(
-    str_replace('\\', '/', realpath(dirname($main_file))),
-    '/'
-  ) . '/';
-  $c['sys'] = rtrim(
-    str_replace('\\', '/', realpath($system_folder)),
-    '/'
-  ) . '/';
-  $c['app'] = rtrim(str_replace('\\', '/', realpath($default_app)), '/') . '/';
-  $c['mod'] = realpath($modules_folder);
-  $c['mod'] = is_string($c['mod'])
-                ? rtrim(str_replace('\\', '/', $c['mod']), '/') . '/'
-                : null;
-  $c['contentpath'] = rtrim(
-    str_replace('\\', '/', realpath($content_folder)),
-    '/'
-  ) . '/';
-  // Check that the content directory is a sub-directory of the web root. If it
-  // is not, set it as null.
-  $c['content'] = null;
-  if(is_string($_SERVER['DOCUMENT_ROOT'])) {
-    $len = strlen($_SERVER['DOCUMENT_ROOT']);
-    if(substr($c['contentpath'], 0, $len) == $_SERVER['DOCUMENT_ROOT']) {
-      $c['content'] = trim(substr($c['contentpath'], $len), '/');
-      $c['content'] = $c['content']
-                    ? '/' . $c['content'] . '/'
-                    : '/';
-      $c['content'] = $c['server'] . $c['content'];
-    }
-  }
-  // If the contenturl cannot be established, or it is outside the web root,
-  // there is no point having the content path.
-  if(is_null($c['content'])) {
-    $c['contentpath'] = null;
-  }
+	/*
+	 * Constants
+	 * =========
+	 * Calculate the system-side constants based upon environmental variables and the values previously extracted from
+	 * the index configuration.
+	 */
 
-  // Define our list of namespaces used throughout our framework.
-  $c['ns']            = 'Eventing';
-  $c['nslibrary']     = 'Library';
-  $c['nscontroller']  = 'Application';
-  $c['nsmodel']       = 'Model';
-  $c['nsmodule']      = 'Module';
+	$constants = rtrim(str_replace('\\', '/', dirname(__FILE__)), '/') . '/init/constants.php';
+	file_exists($constants) || trigger_error('Constant declarations could not be loaded.', E_USER_ERROR);
+	require_once $constants;
 
-  // Define a PCRE RegEx for a valid label in PHP. This check a string to make
-  // sure that it follows the same syntax as variables, functions and class
-  // names.
-  $c['validlabel']    = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+	/*
+	 * Common functions
+	 * ================
+	 * Since we have all our constants defined with any loose variables floating around dealt with, load the small-ish
+	 * set of common functions into the global namespace so they can be used throught the entire framework and
+	 * application.
+	 */
 
-  // Do we want to run an instance of the framework with stripped down
-  // functionality, to make it faster and use less resources?
-  $c['skeleton']      = $skeleton ? true : false;
+	$common = SYS . 'init/common' . EXT;
+	file_exists($common) || trigger_error('Common functions could not be loaded.', E_USER_ERROR);
+	require_once $common;
 
-  // All our constants are really great, but they're a little soft at the
-  // moment... Shall we make them hardcore?
-  foreach ($c as $name => $const) {
-    $name = strtoupper($name);
-    defined($name) || define($name, $const);
-  }
+	/*
+	 * Unset variables
+	 * ===============
+	 * Remove any variables that we are no longer going to use. They will just clog up the global namespace.
+	 */
 
-  // You know what? I've had enough of you lot... Yeah, you heard me! Get lost!
-  unset(
-    $main_config, $user_config, $key, $value, $system_folder, $default_app,
-    $content_folder, $skeleton_mode, $config_type, $c, $name, $const,
-    $modules_folder
-  );
+	unset(
+		$common, $common_functions, $constants, $default_timezone, $function, $function_file, $init, $len, $main_file,
+		$s, $skeleton
+	);
 
-  /**
-   * Namespace String
-   *
-   * @access public
-   * @params strings
-   * @return string
-   */
-  if(!function_exists('ns')) {
-    function ns() {
-      return '\\' . implode('\\', func_get_args()) . '\\';
-    }
-  }
+	/*
+	 * Libraries
+	 * =========
+	 * We have constants and functions. Now we need some higher-level, advanced functionality. We need libraries; big,
+	 * juicy libraries. The ones loaded here are the ones required for any application request. If you wish to go into
+	 * specific functionality, load the extra libraries in your controllers or autoload them.
+	 * Unless we want to assign the library to a variable to use, such as the router, specify bool(false) as the second
+	 * parameter to prevent the function from creating an instance of the class. This would prevent the framework from
+	 * working in most cases.
+	 */
 
-  // Right, we have all out constants defined, with no loose variables floating
-  // about... I think we're doing pretty well! Shall we load some common
-  // functions? Let's!
-  $common = SYS . 'common' . EXT;
-  file_exists($common) || trigger_error(
-    'Common functions could not be loaded.',
-    E_USER_ERROR
-  );
-  require_once $common;
+	// Define the core libraries that have to be loaded, the library library MUST be the FIRST library declared - all others depend on it.
+	$sponge = array('library', 'controller', 'model');
+	// Define the libraries that are required, but are not necessary for the bare minimum to run the framework.
+	$jam = array('module', 'database');
+	// Imagine the first lot of libraries as Victoria sponge; it's not a cake without cake. The next lot of arrays are
+	// the jam, they just make it that much nicer to eat, but isn't a necessity. Any libraries loaded from within the
+	// application controllers themselves are the icing and the cherry on top.
+	foreach($sponge as $lib) {
+		load_class($lib, false);
+	}
+	if(!SKELETON) {
+		foreach($jam as $lib) {
+			load_class($lib, false);
+		}
+	}
 
-  // Cool. We have functions. Now we want libraries! Big, fat, juicy libraries!
+	// Load the Router library and grab an instance. This library performs the job of URI and Router library in one.
+	$r = load_class('router');
 
-  // Firstly, we want the Singleton and Library libraries. These are the classes
-  // that force you to grab existing instances of Eventing libraries, rather
-  // than create new ones.
-  load_class('library', false);
-  // Load both Controller and Module class definitions, because we don't know at
-  // this point whether we are loading a controller from the main application or
-  // a module.
-  load_class('controller', false);
-  // If we are in skeleton mode, don't enable the use of modules.
-  SKELETON || load_class('module', false);
-  // Load the model library, so it can be extended when we load a model.
-  load_class('model', false);
-  // Load the Router library and grab an instance.
-  $r = load_class('router');
+	/*
+	 * Load required modules
+	 * =====================
+	 * Load any modules that will be used by the applications for either controllers or pages. If they are specific to
+	 * one or the other, load them when we have figured out what is being loaded.
+	 */
 
-  // We want to know what request this application is meant to serve!
-  if(!is_object($r) || !$r->valid || $r->module()) {
-    show_404();
-  }
+	// Load the registry module.
 
-  // Make sure that the path has been set, and then include the controller file.
-  $r->path() && require_once $r->path();
+	/*
+	 * Valid request
+	 * =============
+	 * If the application request is not valid (eg. malformed URL), they show a 404 error immediately.
+	 */
 
-  // Make sure the controller class exists.
-  class_exists($r->controller()) || show_404();
+	if(!is_object($r) || !$r->valid) {
+		show_404();
+	}
 
-  // Check that the action we want to call exists.
-  method_exists($r->controller(), $r->method())
-    || in_array($r->method(), get_class_methods($r->controller()), true)
-    || show_404();
+	/*
+	 * Static or dynamic?
+	 * ==================
+	 * We need to determine whether the request is for a controller (dynamic) or a potential page (static). We
+	 * automatically assume that it is for a controller and then fallback to the Pages module when any of the following
+	 * criteria are not met:
+	 *	- The Router is an object.
+	 *	- The route is valid.
+	 *	- The request is not for a module.
+	 *	- The path, controller and method are all strings.
+	 *	- The path exists, as does the controller class.
+	 *	- The method is a public method of the controller class.
+	 */
 
-  // Now check if the action we want to call is public. This requires the use of
-  // PHP's Reflection extension. It's not essential, so carry on if it doesn't
-  // exist. It's just a little more friendly to show our custom 404 page than
-  // the user get a fatal error stating the ReflectionMethod class does not
-  // exist.
-  if(!SKELETON && class_exists('\\ReflectionMethod')) {
-    $reflection = new \ReflectionMethod($r->controller(), $r->method());
-    $reflection->isPublic() || show_404();
-  }
+	$controller = !$r->module()
+		&& is_string($r->path())
+		&& is_string($r->controller())
+		&& is_string($r->method())
+		&& file_exists($r->path());
+	if($controller) {
+		require_once $r->path();
+		$c = $r->controller();
+		$m = $r->method();
+		$reflection = new \ReflectionMethod($c, $m);
+		$controller = class_exists($c)
+			&& (method_exists($c, $m)
+				|| in_array($m, get_class_methods($c, true))
+			)
+			&& $reflection->isPublic();
+	}
 
-  $c = $r->controller();
-  $m = $r->method();
+	/*
+	 * Load controller
+	 * ===============
+	 * If the application request was for a controller, the class would have already been loaded into PHP's memory. Grab
+	 * an instance of it and run the method.
+	 * IMPORTANT! The global getInstance() function MUST NOT be called before the getInstance() method has been called
+	 * on the controller. This will create two seperate instances; one for the controller, and another that the
+	 * libraries will be loaded onto!
+	 */
 
-  // Unset all unecessary variables before we call the controller.
-  unset(
-    $common, $u, $modules, $mod, $uri_string, $uri, $segment, $r,
-    $controller_path, $controller_file
-  );
+	if($controller) {
+		$c = $c::getInstance();
+		$c->$m();
+	}
 
-  // Everything checks out as far as we can tell here. Grab a new instance of
-  // the controller, and then call the action.
-  $c = $c::getInstance();
-  $c->$m();
+	/*
+	 * Load page
+	 * =========
+	 * The application request points to a controller that does not exist. Attempt to use the Pages module to load a
+	 * static page. If a page does not exist (the Pages module returns false when trying to load the re-routed URI),
+	 * show a 404 page.
+	 */
 
-  // Right, that's everything done! Just dump the output to the client end
-  // finish the script!
-  $E =& getInstance();
-  $E->output->display();
+	elseif(!SKELETON) {
+		getInstance()->load->module('pages')->load($r->ruri_string()) || show_404();
+	}
+	else {
+		show_404();
+	}
 
-  //  _  _________ _    ___   ______          _____ _
-  // | |/ /__   __| |  | \ \ / /  _ \   /\   |_   _| |
-  // | ' /   | |  | |__| |\ V /| |_) | /  \    | | | |
-  // |  <    | |  |  __  | > < |  _ < / /\ \   | | | |
-  // | . \   | |  | |  | |/ . \| |_) / ____ \ _| |_|_|
-  // |_|\_\  |_|  |_|  |_/_/ \_\____/_/    \_\_____(_)
+	/*
+	 * Display output
+	 * ==============
+	 * Now that we have either shown a controller, or a page, flush the output from the Output library to the browser as
+	 * the last thing to do before terminating.
+	 */
+
+	getInstance()->output->display();
+
+	# =================================================== #
+	#   _  _________ _    ___   ______          _____ _   #
+	#  | |/ /__   __| |  | \ \ / /  _ \   /\   |_   _| |  #
+	#  | ' /   | |  | |__| |\ V /| |_) | /  \    | | | |  #
+	#  |  <    | |  |  __  | > < |  _ < / /\ \   | | | |  #
+	#  | . \   | |  | |  | |/ . \| |_) / ____ \ _| |_|_|  #
+	#  |_|\_\  |_|  |_|  |_/_/ \_\____/_/    \_\_____(_)  #
+	#                                                     #
+	# =================================================== #
