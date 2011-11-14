@@ -175,12 +175,11 @@
 		require_once $r->path();
 		$c = $r->controller();
 		$m = $r->method();
-		$reflection = new \ReflectionMethod($c, $m);
-		$controller = class_exists($c)
-			&& (method_exists($c, $m)
-				|| in_array($m, get_class_methods($c, true))
-			)
-			&& $reflection->isPublic();
+		$controller = class_exists($c) && (method_exists($c, $m) || in_array($m, get_class_methods($c, true)));
+		if($controller) {
+			$reflection = new \ReflectionMethod($c, $m);
+			$controller = $reflection->isPublic();
+		}
 	}
 
 	/*
