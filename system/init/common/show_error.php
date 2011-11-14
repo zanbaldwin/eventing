@@ -35,7 +35,7 @@
 		function show_error($header = '', $message = false) {
 			// First parse the header from the string provided. If it is invalid, send a standard 500
 			// "the-server-screwed-up" status.
-			if(!is_string($header) || preg_match('/^([0-9]{3}) ([a-zA-Z -]+)$/', $header, $matches) || $matches[1] >= 600 || $matches[1] < 100) {
+			if(!is_string($header) || !preg_match('/^([0-9]{3}) ([a-zA-Z -]+)$/', $header, $matches) || $matches[1] >= 600 || $matches[1] < 100) {
 				$matches[1] = '500';
 				$matches[2] = 'Framework Application Error';
 				$header = $matches[1] . ' ' . $matches[2];
