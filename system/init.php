@@ -92,6 +92,8 @@
 	file_exists($common) || trigger_error('Common functions could not be loaded.', E_USER_ERROR);
 	require_once $common;
 
+echo vardump(__FILE__ . "  \n  " . __LINE__);
+
 	/*
 	 * Unset variables
 	 * ===============
