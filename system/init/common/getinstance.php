@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /**
  * Common function
