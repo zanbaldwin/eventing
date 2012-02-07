@@ -37,10 +37,11 @@
 			// Create a container for URL's that have already been wrapped in anchor tags.
 			static $used_urls = array();
 			if(!is_string($path)) {
-				// We return null in case the return value does not get checked before being outputed as a string. Null evaluates to an empty string, whereas false evaluates to "0".
+				// We return null in case the return value does not get checked before being outputed as a string. Null
+				// evaluates to an empty string, whereas false evaluates to "0".
 				return null;
 			}
-			// Make sure the options array passed is actually an array. Force it's hand.
+			// Make sure the options array passed is actually an array. Force it's hand if need be.
 			$options = (array) $options;
 			/* *****
 			 * Being Section: Shortcut Expanding
