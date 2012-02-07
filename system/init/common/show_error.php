@@ -72,6 +72,7 @@
 			}
 			// Else just print out the error in XML format, with a text/xml header.
 			else {
+				headers_sent() || header('Content-Type: text/xml');
 				echo '<?xml version="1.0" encoding="utf-8" ?>' . "\n<error>\n";
 				foreach($information as $element => $value) {
 					echo "\t<{$element}>{$value}</{$element}>\n";
