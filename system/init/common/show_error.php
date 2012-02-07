@@ -59,7 +59,7 @@
 				'line'			=> $trace[0]['line'],
 			);
 			// Try to load an error document view. This will be located in the "errors" theme directory.
-			$file = theme_path('errors') . $code . EXT;
+			$file = filter_path(theme_path('errors') . $code . EXT);
 			if(file_exists($file)) {
 				headers_sent() || header('Content-Type: text/html');
 				// Before loading the error document view, unset any variable we do not want in there.
@@ -68,7 +68,7 @@
 				// Extract the error information.
 				extract($information);
 				// Load in the error document view, like a regular view, except we don't use any output buffering.
-				require $file;
+				require ${'1file'};
 			}
 			// Else just print out the error in XML format, with a text/xml header.
 			else {
