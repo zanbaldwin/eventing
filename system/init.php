@@ -92,8 +92,6 @@
 	file_exists($common) || trigger_error('Common functions could not be loaded.', E_USER_ERROR);
 	require_once $common;
 
-echo vardump(__FILE__ . "  \n  " . __LINE__);
-
 	/*
 	 * Unset variables
 	 * ===============
@@ -116,7 +114,8 @@ echo vardump(__FILE__ . "  \n  " . __LINE__);
 	 * working in most cases.
 	 */
 
-	// Define the core libraries that have to be loaded, the library library MUST be the FIRST library declared - all others depend on it.
+	// Define the core libraries that have to be loaded, the library library MUST be the FIRST library declared - all
+	// others depend on it.
 	$sponge = array('library', 'controller', 'model');
 	// Define the libraries that are required, but are not necessary for the bare minimum to run the framework.
 	$jam = array('module', 'database');
