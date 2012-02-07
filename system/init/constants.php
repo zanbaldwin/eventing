@@ -18,7 +18,8 @@
 
 	$c = array();
 
-	// We have a dependant on $_SERVER['DOCUMENT_ROOT']. Unfortunately, some OS's don't set this *cough* Windows *cough*.
+	// We have a dependant on $_SERVER['DOCUMENT_ROOT'].
+	// Unfortunately, some OS's don't set this *cough* Windows *cough*.
 	if(!isset($_SERVER['DOCUMENT_ROOT'])) {
 		if(isset($_SERVER['SERVER_SOFTWARE'])
 		   && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === 0
@@ -111,6 +112,10 @@
 		$name = strtoupper($name);
 		defined($name) || define($name, $const);
 	}
+
+	// This is more a helper than for functionality. Define a constant for the correct newline. Some operating systems
+	// use "\r\n", instead of just "\n".
+	defined('NL') || define('NL', "\n");
 
 	// You know what? I've had enough of you lot... Yeah, you heard me! Get lost!
 	unset(
