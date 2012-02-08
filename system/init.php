@@ -207,7 +207,14 @@
 	 */
 
 	elseif(!SKELETON) {
-		getInstance()->load->module('pages')->load($r->ruri_string()) || show_404();
+		// Can you load modules?
+		// Does the Pages module exist?
+		// Load the Pages module: Pages = getInstance()->load->module('pages');
+		// Does the Pages::load() method exist?
+		// If so, load the re-routed URI string: Pages::load($r->ruri_string());
+		// Else show a 404 page.
+		# For now, the pages module does not exist, so just show a 404 page.
+		show_404();
 	}
 	else {
 		show_404();
