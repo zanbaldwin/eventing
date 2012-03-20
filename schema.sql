@@ -9,6 +9,13 @@ CREATE TABLE pages (
     blacklist   BIT(1),         -- 1 means black list, 0 means black list, null means public.
 );
 
+CREATE TABLE heirachy (
+    id          CHAR(40)        NOT NULL UNIQUE,
+    route       TEXT            NOT NULL UNIQUE,
+    page_id     CHAR(40)        NOT NULL,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE page_revisions (
     id          CHAR(40)        NOT NULL UNIQUE,
     page        CHAR(40)        NOT NULL,
@@ -18,22 +25,25 @@ CREATE TABLE page_revisions (
     content     TEXT,
 );
 
--- Users
-    -- id, username, hash, group.
+CREATE TABLE users (
+    id          CHAR(40)        NOT NULL UNIQUE,
+    machine     VARCHAR(255)    NOT NULL UNIQUE,
+    human       VARCHAR(255)    NOT NULL,
+    hash        CHAR(40)        NOT NULL,
+    group       CHAR(40)        NOT NULL,
+    PRIMARY KEY (id)
+);
 
--- Groups
+CREATE TABLE groups (
+    id          CHAR(40)        NOT NULL UNIQUE,
+    machine     VARCHAR(255)    NOT NULL UNIQUE, -- Do we need this?
+    human       VARCHAR(255)    NOT NULL,
+);
 
 -- White listing or blacklisting pages from groups.
 CREATE TABLE group_pages (
     id          CHAR(40)        NOT NULL UNIQUE,
     group       CHAR(40)        NOT NULL,
     page        CHAR(40)        NOT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE heirachy (
-    id          CHAR(40)        NOT NULL UNIQUE,
-    route       TEXT            NOT NULL UNIQUE,
-    page_id     CHAR(40)        NOT NULL,
     PRIMARY KEY (id)
 );
