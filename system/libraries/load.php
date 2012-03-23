@@ -118,6 +118,21 @@
 		}
 
 		/**
+		 * Load Database
+		 *
+		 * @access public
+		 * @return boolean
+		 */
+		public function database($details = array()) {
+			$details = (object) array(
+				'host' => isset($details['host']) ? $details['host'] : c('db_host'),
+				'name' => isset($details['name']) ? $details['name'] : c('db_name'),
+				'user' => isset($details['user']) ? $details['user'] : c('db_user'),
+				'pass' => isset($details['pass']) ? $details['pass'] : c('db_pass'),
+			);
+		}
+
+		/**
 		 * Load Model
 		 *
 		 * @access public
