@@ -190,8 +190,7 @@
 			}
 			$model = $model::getInstance();
 			// Save the model to the super models array in the controller.
-			$controller = ns(NS, NSLIBRARY) . 'controller';
-			$controller::setModel($name, $model);
+			$this->E->model($name, $model, true);
 			// If specified, create a super property for the model.
 			if($super && !isset($this->E->$name)) {
 				$this->E->$name = $model;
