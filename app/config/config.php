@@ -42,9 +42,9 @@
 
 		// Database Preferences:
 		'db_host' => 'localhost',
-		'db_user' => 'eventing_app',
-		'db_pass' => 'eventing_iscoollike',
-		'db_name' => 'eventing_db',
+		'db_user' => 'root',
+		'db_pass' => '',
+		'db_name' => 'eventing',
 
 		// HTTP Digest Authentication
 		'default_realm' => 'Eventing',
