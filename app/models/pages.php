@@ -7,14 +7,15 @@
      */
 	class pages extends \Eventing\Library\model {
 
-        protected $db;
+        protected $E, $db;
 
 		public function __construct() {
 			parent::__construct();
+			$this->E =& getInstance();
             // Load the database settings because we require database access. It's a model after all.
-            $this->db = $this->load->database();
+            $this->db = $this->E->load->database();
 		}
-        
+
         public function page_exists($page) {
         }
 
@@ -22,6 +23,6 @@
         }
 
 	}
-    
+
     class pages_pageobject {
     }
