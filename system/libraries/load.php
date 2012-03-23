@@ -27,7 +27,7 @@
 
 	class load extends library {
 
-		protected $E;
+		protected $E, $db_connection;
 
 		/**
 		 * Constructor Method
@@ -124,12 +124,27 @@
 		 * @return boolean
 		 */
 		public function database($details = array()) {
+			// If we have already attempted a database connection, then return what we resulted in.
+			if(!is_null($this->db_connection)) {
+				return is_object($this->db_connection)
+					? $this->db_connection
+					: false;
+			}
 			$details = (object) array(
 				'host' => isset($details['host']) ? $details['host'] : c('db_host'),
 				'name' => isset($details['name']) ? $details['name'] : c('db_name'),
 				'user' => isset($details['user']) ? $details['user'] : c('db_user'),
 				'pass' => isset($details['pass']) ? $details['pass'] : c('db_pass'),
 			);
+			$mysql_dsn = 'mysql:host=' . $details->host . ';dbname=' . $details->name;
+			try {
+				$this->db_connection = new \PDO($mysql_dsn, $details->user, $details->pass);
+			}
+			catch(PDOException $e) {
+				$this->db_connection = false;
+				return false;
+			}
+			return $this->db_connection;
 		}
 
 		/**
@@ -149,7 +164,7 @@
 			// If a valid name has not been set, use the model name.
 			if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
 				$name = xplode('/', $model);
-				$name = end(model);
+				$name = end($name);
 				// If the model name itself is not a valid label, return false.
 				if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
 					return false;
