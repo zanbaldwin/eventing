@@ -1,232 +1,232 @@
 <?php
 
-/**
- * Eventing Framework Loader Library
- *
- * Eventing PHP Framework by Alexander Baldwin (zanders [at] zafr [dot] net).
- * http://eventing.zafr.net/
- * The Eventing Framework is an object-orientated PHP Framework, designed to rapidly build applications.
- * This is where we start all our settings, libraries and other odd-jobs to get the ball rolling...
- *
- * @category   Eventing
- * @package    Libraries
- * @subpackage load
- * @copyright  (c) 2009 - 2011 Zander Baldwin
- * @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
- * @version    v0.4
- * @link       http://github.com/mynameiszanders/eventing
- * @since      v0.1
- */
+	/**
+	* Eventing Framework Loader Library
+	*
+	* Eventing PHP Framework by Alexander Baldwin (zanders [at] zafr [dot] net).
+	* http://eventing.zafr.net/
+	* The Eventing Framework is an object-orientated PHP Framework, designed to rapidly build applications.
+	* This is where we start all our settings, libraries and other odd-jobs to get the ball rolling...
+	*
+	* @category   Eventing
+	* @package    Libraries
+	* @subpackage load
+	* @copyright  (c) 2009 - 2011 Zander Baldwin
+	* @license    http://www.opensource.org/licenses/mit-license.php MIT/X11 License
+	* @version    v0.4
+	* @link       http://github.com/mynameiszanders/eventing
+	* @since      v0.1
+	*/
 
-  namespace Eventing\Library;
+	namespace Eventing\Library;
 
-  if(!defined('E_FRAMEWORK')) {
-    headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
-    exit('Direct script access is disallowed.');
-  }
+	if(!defined('E_FRAMEWORK')) {
+		headers_sent() || header('HTTP/1.1 404 Not Found', true, 404);
+		exit('Direct script access is disallowed.');
+	}
 
-  class load extends library {
+	class load extends library {
 
-    protected $E;
+		protected $E;
 
-    /**
-     * Constructor Method
-     *
-     * @access protected
-     * @return void
-     */
-    protected function __construct() {
-      $this->E =& getInstance();
-    }
+		/**
+		 * Constructor Method
+		 *
+		 * @access protected
+		 * @return void
+		 */
+		protected function __construct() {
+			$this->E =& getInstance();
+		}
 
-    /**
-     * Autoload
-     *
-     * @access public
-     * @return boolean
-     */
-    public function autoload() {
-      // Grab the objects from the autoload.php configuration file.
-      $load = get_config('autoload');
-      if(!is_array($load)) {
-        return false;
-      }
-      // Iterate through each initial key-value pair to determine which method
-      // to invoke.
-      foreach($load as $method => $vars) {
-        // If the method does not exist, or the objects to load is not an array,
-        // move onto the next method.
-        if(!method_exists($this, $method) || !is_array($vars)) {
-          continue;
-        }
-        // Load the objects via the method specified in the array key.
-        foreach($vars as $name => $object) {
-          $this->$method($object, $name);
-        }
-      }
-      return true;
-    }
+		/**
+		 * Autoload
+		 *
+		 * @access public
+		 * @return boolean
+		 */
+		public function autoload() {
+			// Grab the objects from the autoload.php configuration file.
+			$load = get_config('autoload');
+			if(!is_array($load)) {
+				return false;
+			}
+			// Iterate through each initial key-value pair to determine which method
+			// to invoke.
+			foreach($load as $method => $vars) {
+				// If the method does not exist, or the objects to load is not an array,
+				// move onto the next method.
+				if(!method_exists($this, $method) || !is_array($vars)) {
+					continue;
+				}
+				// Load the objects via the method specified in the array key.
+				foreach($vars as $name => $object) {
+					$this->$method($object, $name);
+				}
+			}
+			return true;
+		}
 
-    	/**
-    	 * Load library
-    	 *
-    	 * Load a library into the super-object controller.
-    	 *
-    	 * @access public
-    	 * @param string $library
-    	 * @param string $name
-    	 * @param boolean $overwrite
-    	 * @return boolean
-    	 */
-    	public function library($library, $name = false, $overwrite = false) {
-    		if(!is_string($library)) {
-    			return false;
-    		}
-    		$library = trim(filter_path($library), '/');
-    		$lib_name = xplode('/', $library);
-    		$lib_name = strtolower(end($lib_name));
+		/**
+		 * Load library
+		 *
+		 * Load a library into the super-object controller.
+		 *
+		 * @access public
+		 * @param string $library
+		 * @param string $name
+		 * @param boolean $overwrite
+		 * @return boolean
+		 */
+		public function library($library, $name = false, $overwrite = false) {
+			if(!is_string($library)) {
+				return false;
+			}
+			$library = trim(filter_path($library), '/');
+			$lib_name = xplode('/', $library);
+			$lib_name = strtolower(end($lib_name));
 
-    		// If the library name is not valid, there is no point continuing.
-    		if(!preg_match('/^' . VALIDLABEL . '$/', $lib_name)) {
-    			return false;
-    		}
-    		// Also, if a valid name for the library container has not been set, use the library name as default.
-    		if(!is_string($name) || !preg_match('/^' . VALIDLABEL . '$/', $name)) {
-    			$name = $lib_name;
-    		}
-    		// Grab an instance of the library, and make sure that the library exists.
-    		$library = load_class($library);
-    		if(!is_object($library)) {
-    			return false;
-    		}
-    		// Now, we have some extra checks if something has already been set in the place of $name.
-    		if(isset($this->E->$name)) {
-    			// If the library has already been set (the objects are the same), then we don't need to do anything.
-    			// Just return bool(true).
-    			if($library == $this->E->$name) {
-    				return true;
-    			}
-    			// If they are different, return failure - bool(false) - if we do not want to overwrite. Otherwise, if
+			// If the library name is not valid, there is no point continuing.
+			if(!preg_match('/^' . VALIDLABEL . '$/', $lib_name)) {
+				return false;
+			}
+			// Also, if a valid name for the library container has not been set, use the library name as default.
+			if(!is_string($name) || !preg_match('/^' . VALIDLABEL . '$/', $name)) {
+				$name = $lib_name;
+			}
+			// Grab an instance of the library, and make sure that the library exists.
+			$library = load_class($library);
+			if(!is_object($library)) {
+				return false;
+			}
+			// Now, we have some extra checks if something has already been set in the place of $name.
+			if(isset($this->E->$name)) {
+				// If the library has already been set (the objects are the same), then we don't need to do anything.
+				// Just return bool(true).
+				if($library == $this->E->$name) {
+					return true;
+				}
+				// If they are different, return failure - bool(false) - if we do not want to overwrite. Otherwise, if
 				// we do, just carry on.
-    			if(!$overwrite) {
-    				return false;
-    			}
-    		}
-    		// Set the library to the $name container in the super-object controller, and return bool(true).
+				if(!$overwrite) {
+					return false;
+				}
+			}
+			// Set the library to the $name container in the super-object controller, and return bool(true).
 			$this->E->$name = $library;
-    		return true;
-    	}
+			return true;
+		}
 
-    /**
-     * Load Model
-     *
-     * @access public
-     * @param string $model
-     * @param string $name
-     * @param boolean $super
-     * @return boolean
-     */
-    public function model($model, $name = false, $super = false) {
-      if(!is_string($model)) {
-        return false;
-      }
-      $model = trim(filter_path($model), '/');
-      // If a valid name has not been set, use the model name.
-      if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
-        $name = xplode('/', $model);
-        $name = end(model);
-        // If the model name itself is not a valid label, return false.
-        if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
-          return false;
-        }
-      }
-      $name = strtolower($name);
-      // If the model has already been loaded (or another by the same name),
-      // return true to state that it is loaded.
-      if(isset($this->E->models[$name])) {
-        return true;
-      }
-      // Check that the model file exists.
-      if(!file_exists($file = APP . 'models/' . $model . EXT)) {
-        return false;
-      }
-      // Figure out the model class name.
-      $model = xplode('/', $model);
-      $model = ns(NS, NSMODEL) . strtolower(end($model));
-      // Get the file, and the class.
-      require_once $file;
-      if(!class_exists($model)) {
-        return false;
-      }
-      $model = $model::getInstance();
-      // Save the model to the super models array in the controller.
-      $controller = ns(NS, NSLIBRARY) . 'controller';
-      $controller::setModel($name, $model);
-      // If specified, create a super property for the model.
-      if($super && !isset($this->E->$name)) {
-        $this->E->$name = $model;
-      }
-      return true;
-    }
+		/**
+		 * Load Model
+		 *
+		 * @access public
+		 * @param string $model
+		 * @param string $name
+		 * @param boolean $super
+		 * @return boolean
+		 */
+		public function model($model, $name = false, $super = false) {
+			if(!is_string($model)) {
+				return false;
+			}
+			$model = trim(filter_path($model), '/');
+			// If a valid name has not been set, use the model name.
+			if(!is_string($name) || !preg_match('#^' . VALIDLABEL . '$#', $name)) {
+				$name = xplode('/', $model);
+				$name = end(model);
+				// If the model name itself is not a valid label, return false.
+				if(!preg_match('#^' . VALIDLABEL . '$#', $name)) {
+					return false;
+				}
+			}
+			$name = strtolower($name);
+			// If the model has already been loaded (or another by the same name),
+			// return true to state that it is loaded.
+			if(isset($this->E->models[$name])) {
+				return true;
+			}
+			// Check that the model file exists.
+			if(!file_exists($file = APP . 'models/' . $model . EXT)) {
+				return false;
+			}
+			// Figure out the model class name.
+			$model = xplode('/', $model);
+			$model = ns(NS, NSMODEL) . strtolower(end($model));
+			// Get the file, and the class.
+			require_once $file;
+			if(!class_exists($model)) {
+				return false;
+			}
+			$model = $model::getInstance();
+			// Save the model to the super models array in the controller.
+			$controller = ns(NS, NSLIBRARY) . 'controller';
+			$controller::setModel($name, $model);
+			// If specified, create a super property for the model.
+			if($super && !isset($this->E->$name)) {
+				$this->E->$name = $model;
+			}
+			return true;
+		}
 
-    /**
-     * Load Module
-     *
-     * @access public
-     * @param string $module
-     * @param string $name
-     * @param boolean $super
-     * @return boolean
-     */
-    public function module($module, $name = false, $super = false) {
-    }
+		/**
+		 * Load Module
+		 *
+		 * @access public
+		 * @param string $module
+		 * @param string $name
+		 * @param boolean $super
+		 * @return boolean
+		 */
+		public function module($module, $name = false, $super = false) {
+		}
 
-    /**
-     * Load View
-     *
-     * @access public
-     * @param string $view
-     * @param array $data
-     * @param string $theme
-     * @return false|string
-     */
-    public function view($view, $data = false, $theme = false) {
-      // Determine the theme subfolder, falling back to defaults if one has not
-      // been specified.
-      $theme = is_string($theme)
-             ? $theme
-             : (is_string($theme = c('default_theme'))
-                ? $theme
-                : 'default');
-      $theme = $theme ? trim($theme, '/') . '/' : '';
-      // Compile the view's absolute file path.
-      $view = APP . 'themes/' . $theme . $view . EXT;
-      // Return if the view does not exist, there is nothing more we can do.
-      if(!file_exists($view)) {
-        return false;
-      }
-      // Save the view's filepath to a variable who's name is not a valid label
-      // and unset all the variables we don't need so there aren't any clashes
-      // with the extract() function.
-      ${'1v'} = $view;
-      unset($view, $theme);
-      // Extract the data, if there is any.
-      if(is_array($data)) {
-        extract($data, EXTR_SKIP);
-      }
-      // Grab the contents of the view, and return the output.
-      ob_start();
-      require ${'1v'};
-      $output = ob_get_contents();
-      ob_end_clean();
-      return $output;
-    }
+		/**
+		 * Load View
+		 *
+		 * @access public
+		 * @param string $view
+		 * @param array $data
+		 * @param string $theme
+		 * @return false|string
+		 */
+		public function view($view, $data = false, $theme = false) {
+			// Determine the theme subfolder, falling back to defaults if one has not
+			// been specified.
+			$theme = is_string($theme)
+				? $theme
+				: (is_string($theme = c('default_theme'))
+					? $theme
+					: 'default');
+			$theme = $theme ? trim($theme, '/') . '/' : '';
+			// Compile the view's absolute file path.
+			$view = APP . 'themes/' . $theme . $view . EXT;
+			// Return if the view does not exist, there is nothing more we can do.
+			if(!file_exists($view)) {
+				return false;
+			}
+			// Save the view's filepath to a variable who's name is not a valid label
+			// and unset all the variables we don't need so there aren't any clashes
+			// with the extract() function.
+			${'1v'} = $view;
+			unset($view, $theme);
+			// Extract the data, if there is any.
+			if(is_array($data)) {
+				extract($data, EXTR_SKIP);
+			}
+			// Grab the contents of the view, and return the output.
+			ob_start();
+			require ${'1v'};
+			$output = ob_get_contents();
+			ob_end_clean();
+			return $output;
+		}
 
-    public function helper($helper) {
-      // Load a helper file.
-    }
+		public function helper($helper) {
+			// Load a helper file.
+		}
 
-  }
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
