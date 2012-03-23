@@ -4,16 +4,17 @@
 
     class users extends \Eventing\Library\model {
 
-        protected $db, $user_exists;
+        protected $E, $db, $user_exists;
 
 		public function __construct() {
 			parent::__construct();
+			$this->E =& getInstance();
             // Load the database settings because we require database access. It's a model after all.
-            $this->db = $this->load->database();
+            $this->db = $this->E->load->database();
             $sql = "SELECT id FROM `users` WHERE `id` = ':userstring' OR `email` = ':userstring' LIMIT 1;";
             $this->user_exists = $this->db->prepare($sql);
 		}
-        
+
         /**
          * User Exists
          *
@@ -33,7 +34,7 @@
                 return false;
             }
         }
-        
+
         /**
          * Get
          *
@@ -50,7 +51,7 @@
                 ? new users_userobject($user_id)
                 : false;
         }
-        
+
         /**
          * Get Current
          *
@@ -63,9 +64,9 @@
         }
 
 	}
-    
+
     class users_userobject {
-        
+
         /**
          * Constructor function.
          *
@@ -74,11 +75,11 @@
         public function __construct($user_id) {
             // Get database values.
             // Get groups.
-            
+
         }
-        
+
         public function can_view($page_id) {
             // Can the user view the page in question?
         }
-        
+
     }
