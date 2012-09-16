@@ -34,10 +34,10 @@
 	$user_config = array(
 		// Can be "ini" or "array". Defaults to "array".
 		'config_type'     => 'array',
-		'content_folder'  => 'public',
-		'default_app'     => 'app',
-		'modules_folder'  => 'modules',
-		'system_folder'   => 'system',
+		'content_folder'  => '../www/public',
+		'default_app'     => '../eventing/app',
+		'modules_folder'  => '../eventing/modules',
+		'system_folder'   => '../eventing/system',
 		'skeleton'        => false,
 	);
 
