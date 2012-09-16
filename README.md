@@ -1,4 +1,4 @@
-Eventing PHP Framework ![Project Status](http://stillmaintained.com/mynameiszanders/eventing.png "Project Status")
+Eventing PHP Framework
 ======================
 
 Eventing is a PHP framework by [Zander Baldwin][1] based on the HMVC design pattern, licensed under the [MIT/X11][2].
