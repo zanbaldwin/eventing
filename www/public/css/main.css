@@ -1,0 +1,103 @@
+body {
+  background-color: #FFF;
+  margin: 40px;
+  font-family: Lucida Grande, Verdana, Sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+
+.container {
+  font-size: 0.8em;
+}
+
+header {
+  margin: 0 0 1em;
+}
+
+h1, h2 {
+  font-weight: normal;
+  font-size: 1.5em;
+  color: #020;
+  margin: 0 0 16px 0;
+}
+h1 {
+  border-bottom: 1px dotted #060;
+  padding-bottom: 3px;
+}
+h2 {
+  font-size: 1.25em;
+  color: #040;
+}
+h3 {
+	display: block;
+	display: run-in;
+}
+
+section {
+  border: 1px solid #999;
+  background-color: #fff;
+  padding: 20px 20px 12px 20px;
+  margin: 0 0 1em;
+  overflow:hidden;
+  background-image: none;
+  background-color: #dff;
+
+  border-radius: 7px;
+  -webkit-box-shadow: #caa 0px 1px 8px;
+  box-shadow: #caa 0px 1px 8px;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dff), to(#fff));
+}
+
+a {
+  color: #060;
+}
+
+a:hover {
+  color: #900;
+}
+
+code {
+  font-family: Consolas,
+              "Andale Mono WT",
+              "Andale Mono",
+              "Lucida Console",
+              "Lucida Sans Typewriter",
+              "DejaVu Sans Mono",
+              "Bitstream Vera Sans Mono",
+              "Liberation Mono",
+              "Nimbus Mono L",
+               Monaco,
+              "Courier New",
+               Courier,
+               monospace;
+  font-size: 100%;
+  line-height: 100%;
+  border-left: 2px solid #ddd;
+  padding-left: 20px;
+  margin-left: 10px;
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+}
+thead td {
+  font-weight: bold;
+}
+td {
+  margin: 0;
+  padding: 5px;
+}
+h1 span, td span {
+  color: #999;
+}
+footer p {
+  margin: 0;
+  padding: 0;
+}
