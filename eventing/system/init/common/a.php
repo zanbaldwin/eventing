@@ -33,7 +33,7 @@
 		 * @param array $options
 		 * @return string|false
 		 */
-		function a($path, $title = false, $options = array()) {
+		function a($path = '', $title = false, $options = array()) {
 			// Create a container for URL's that have already been wrapped in anchor tags.
 			static $used_urls = array();
 			if(!is_string($path)) {
